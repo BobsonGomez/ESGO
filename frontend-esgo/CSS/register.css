@@ -1,0 +1,96 @@
+body {
+    margin: 0;
+    padding: 20px; /* Adds space around the box on small screens */
+    min-height: 100vh; /* Allows scrolling if the box is too tall */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f5f7fa;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 400px; /* Slightly reduced width for a cleaner look */
+    max-width: 100%; /* Ensures it fits on mobile phones */
+    background: white;
+    padding: 30px; /* Reduced padding to save vertical space */
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1); /* Slightly stronger shadow for "box" effect */
+    text-align: center;
+    border: 1px solid #e0e0e0; /* Optional: adds a subtle border definition */
+}
+
+h2 {
+    margin: 0;
+    color: #1e8ca0;
+    font-size: 26px; /* Slightly smaller header */
+    font-weight: 700;
+}
+
+p.subtitle {
+    color: #666;
+    margin-bottom: 20px; /* Reduced margin */
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 15px; /* Reduced spacing between inputs */
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+/* Styles for both Text Inputs and Dropdown */
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 10px; /* Reduced padding inside inputs */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    border-color: #1e8ca0;
+    box-shadow: 0 0 5px rgba(30, 140, 160, 0.2);
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #1e8c60;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #18724e;
+}
+
+.register {
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+.register a {
+    color: #1e8ca0;
+    text-decoration: none;
+    font-weight: bold;
+}
