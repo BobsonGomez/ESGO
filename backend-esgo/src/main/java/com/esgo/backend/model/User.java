@@ -6,6 +6,10 @@ import jakarta.persistence.*;
 // @Table tells it to name the table "users" (because 'user' is sometimes a reserved keyword in SQL)
 @Table(name = "users")
 public class User {
+    private boolean firstLogin = true;
+
+    public boolean isFirstLogin() { return firstLogin; }
+    public void setFirstLogin(boolean firstLogin) { this.firstLogin = firstLogin; }
 
     //@Id means this is the Primary Key
     // @GeneratedValue means MySQL will auto-increment this ID (1, 2, 3...)
