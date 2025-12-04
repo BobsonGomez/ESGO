@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 @Table(name = "users")
 public class User {
 
-    // @Id means this is the Primary Key
+    //@Id means this is the Primary Key
     // @GeneratedValue means MySQL will auto-increment this ID (1, 2, 3...)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,6 @@ public class User {
     private String role; // Stores "industry" or "investor"
 
     // --- GETTERS AND SETTERS ---
-    // (These are needed for Spring to read/write data to these fields)
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
