@@ -24,10 +24,10 @@ function login() {
             
             // Redirect based on role
             if (data.role === "industry") {
-                // window.location.href = "industry_dashboard.html";
                 console.log("Redirecting to Industry Dashboard...");
+                window.location.href = "industry.html"
             } else if (data.role === "investor") {
-                // window.location.href = "investor_dashboard.html";
+                window.location.href = "investor.html";
                 console.log("Redirecting to Investor Dashboard...");
             }
         } else {
