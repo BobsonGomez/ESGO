@@ -1,11 +1,29 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - ESGO</title>
+
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="CSS/industry_welcome.css">
 </head>
 <body>
-     <p>Welcome to Industry page</p>
+
+<div class="welcome-card">
+    <!-- We will inject the name here using JS -->
+    <h1 id="welcomeHeader">Welcome!</h1>
+    <p class="message">
+        Since this is your first time here, would you like to create an impact report for your industry now?
+    </p>
+
+    <div class="btn-group">
+        <button class="btn-primary" onclick="goToReport()">Yes, Create Report</button>
+        <button class="btn-secondary" onclick="skipToHome()">No, Skip for Now</button>
+    </div>
+</div>
+
+<!-- Link to the JS file -->
+<script src="SCRIPTJS/industry_welcome.js"></script>
 </body>
 </html>
