@@ -1,5 +1,5 @@
 // 1. Get the username from LocalStorage (Saved during login.js)
-const userName = localStorage.getItem("currentUser") || "User";
+const userName = localStorage.getItem("currentUser") || "error";
 document.getElementById("welcomeHeader").innerText = "Welcome, " + userName + "!";
 
 // 2. Button Logic
