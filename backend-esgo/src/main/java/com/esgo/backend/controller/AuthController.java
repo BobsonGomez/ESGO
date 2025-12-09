@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController // Tells Spring this class handles API requests (JSON)
+@RestController
 @RequestMapping("/api") // All endpoints here start with /api
 @CrossOrigin(origins = "*") // CRITICAL: Allows your HTML file to talk to this Java server
 public class AuthController {
@@ -23,7 +23,6 @@ public class AuthController {
         if (userRepository.findByUsername(user.getUsername()) != null) {
             return "Username already exists!";
         }
-
         // Save the user to MySQL
         userRepository.save(user);
         return "User registered successfully!";
@@ -34,22 +33,18 @@ public class AuthController {
     public Map<String, Object> loginUser(@RequestBody Map<String, String> loginData) {
         String username = loginData.get("username");
         String password = loginData.get("password");
-        // Find user in DB
+
         User user = userRepository.findByUsername(username);
-        // Logic Check
+
         if (user != null && user.getPassword().equals(password)) {
-            // Check the current status BEFORE updating it
-            boolean isFirstTime = user.isFirstLogin();
-            // If it was first time, mark it as visited for next time
-            if (isFirstTime) {
-                user.setFirstLogin(false);
-                userRepository.save(user);
-            }
             Map<String, Object> response = new HashMap<>();
             response.put("status", "success");
             response.put("role", user.getRole());
             response.put("fullname", user.getFullname());
-            response.put("isFirstLogin", isFirstTime); // Send this to JS
+
+            // Send the new flag status
+            response.put("hasGeneratedReport", user.hasGeneratedReport());
+
             return response;
         } else {
             Map<String, Object> response = new HashMap<>();
@@ -57,5 +52,20 @@ public class AuthController {
             response.put("message", "Invalid credentials");
             return response;
         }
+    }
+
+    // --- NEW ENDPOINT: Call this when they click "Generate Report" ---
+    @PostMapping("/report/complete")
+    public String completeReport(@RequestBody Map<String, String> data) {
+        String username = data.get("username");
+
+        User user = userRepository.findByUsername(username);
+
+        if (user != null) {
+            user.setHasGeneratedReport(true); // NOW we mark it as done
+            userRepository.save(user);
+            return "Report status updated";
+        }
+        return "User not found";
     }
 }
