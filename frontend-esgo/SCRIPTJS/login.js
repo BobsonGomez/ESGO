@@ -12,41 +12,56 @@ function login() {
         password: password
     };
 
+    // --- FIX START: correctly defined fetch request ---
     fetch("http://localhost:8080/api/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json"
+        },
         body: JSON.stringify(loginData)
     })
-        .then(response => response.json())
+        // --- FIX END ---
+
+        .then(response => {
+            // Check if the server actually responded with OK
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log("Server Response:", data); // Debugging line
+
             if (data.status === "success") {
 
-                // Save the name to LocalStorage
-                // If data.fullname is null, we use "User" as a backup
-                const nameToSave = data.fullname || "User";
-                localStorage.setItem("currentUser", nameToSave);
+                // Save info for the next pages
+                localStorage.setItem("currentUser", data.fullname || "User");
+                localStorage.setItem("currentUsername", username);
 
-                alert("Login Successful! Welcome " + nameToSave);
+                alert("Login Successful!");
 
-                //FIX 2: Check for First Login (Industry only)
                 if (data.role === "industry") {
-                    if (data.isFirstLogin) {
-                        // Go to the Welcome/Report page
-                        window.location.href = "industry_welcome.html";
+                    // LOGIC CHECK:
+                    // If hasGeneratedReport is FALSE (or null/undefined), go to Welcome
+                    if (data.hasGeneratedReport === true) {
+                        window.location.href = "industry_homepage.html"; // Dashboard
                     } else {
-                        // Go to the standard Industry Dashboard
-                        window.location.href = "industry.html";
+                        window.location.href = "industry.html"; // Welcome/Report Page
                     }
                 } else if (data.role === "investor") {
                     window.location.href = "investor.html";
+                } else {
+                    // Fallback if role is weird
+                    alert("Unknown role: " + data.role);
                 }
 
             } else {
+                // If password was wrong
                 alert("Login Failed: " + data.message);
             }
         })
         .catch(error => {
             console.error("Error:", error);
-            alert("Could not connect to server.");
+            alert("Could not connect to server. Is the Java Backend running?");
         });
 }
