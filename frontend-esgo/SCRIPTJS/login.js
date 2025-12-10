@@ -19,10 +19,7 @@ function login() {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(loginData)
-    })
-        // --- FIX END ---
-
-        .then(response => {
+    }).then(response => {
             // Check if the server actually responded with OK
             if (!response.ok) {
                 throw new Error("Network response was not ok");
@@ -33,9 +30,10 @@ function login() {
             console.log("Server Response:", data); // Debugging line
 
             if (data.status === "success") {
-
                 // Save info for the next pages
-                localStorage.setItem("currentUser", data.fullname || "User");
+                const nameToSave = data.fullname || "Error";
+                localStorage.setItem("currentUser",nameToSave);
+                localStorage.setItem("token", data.token); // <--- SAVE THE PASSPORT
                 localStorage.setItem("currentUsername", username);
 
                 alert("Login Successful!");
@@ -46,7 +44,7 @@ function login() {
                     if (data.hasGeneratedReport === true) {
                         window.location.href = "industry_homepage.html"; // Dashboard
                     } else {
-                        window.location.href = "industry.html"; // Welcome/Report Page
+                        window.location.href = "industry_welcome.html"; // Welcome/Report Page
                     }
                 } else if (data.role === "investor") {
                     window.location.href = "investor.html";

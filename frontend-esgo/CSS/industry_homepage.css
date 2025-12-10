@@ -1,0 +1,298 @@
+/* --- General Setup --- */
+:root {
+    --primary-green: #108a55;
+    --primary-green-hover: #0d7045;
+    --bg-color: #f8fafc;
+    --border-color: #e2e8f0;
+    --text-dark: #1e293b;
+    --text-muted: #64748b;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-dark);
+}
+
+* { box-sizing: border-box; }
+
+/* --- Navbar --- */
+.navbar {
+    background: white;
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.brand h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-green);
+    margin: 0;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.welcome-text {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.btn-logout {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: hsl(0, 100%, 70%);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-logout:hover {
+    background-color: darkred;
+}
+
+/* --- Layout --- */
+.main-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* --- Shared Card Style --- */
+.card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+/* --- Stats Row --- */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.stat-info .label {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin: 0 0 8px 0;
+}
+
+.stat-info .value {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Optional: Makes icon background round if added */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.green-icon { color: var(--primary-green); }
+.green-arrow { color: var(--primary-green); }
+.green-chart { color: var(--primary-green); }
+
+/* --- Form Section --- */
+.form-card {
+    margin-bottom: 40px;
+}
+
+.form-header {
+    margin-bottom: 24px;
+}
+
+.form-header h2 {
+    font-size: 22px;
+    margin: 0 0 8px 0;
+}
+
+.form-header p {
+    color: var(--text-muted);
+    margin: 0;
+    font-size: 14px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-dark);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-group textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--primary-green);
+}
+
+/* Upload Button */
+.btn-upload {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-dark);
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 24px;
+    transition: background 0.2s;
+}
+
+.btn-upload:hover {
+    background-color: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 16px;
+}
+
+.btn-generate {
+    flex: 1;
+    background-color: var(--primary-green);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.btn-generate:hover { background-color: var(--primary-green-hover); }
+
+.btn-download {
+    flex: 1;
+    background-color: white;
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.btn-download:hover { background-color: #f1f5f9; }
+
+/* --- Recent Reports --- */
+.recent-reports h3 {
+    font-size: 18px;
+    margin-bottom: 16px;
+}
+
+.report-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.report-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px; /* Slightly tighter padding for list items */
+}
+
+.report-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.file-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0fdf4; /* Light green bg */
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+}
+
+.report-details h4 {
+    margin: 0 0 4px 0;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.report-details p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.download-action {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.download-action:hover {
+    background-color: #f1f5f9;
+}
