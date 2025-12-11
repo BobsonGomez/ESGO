@@ -55,7 +55,7 @@ function logout() {
 }
 
 // --- 4. SUBMIT REPORT LOGIC ---
-function submitReport() {
+/*function submitReport() {
     const username = localStorage.getItem("currentUsername");
     const token = localStorage.getItem("token"); // Get token for this request too
 
@@ -89,4 +89,4 @@ function submitReport() {
             console.error("Error:", error);
             alert("Could not submit report. Check console.");
         });
-}
+}*/

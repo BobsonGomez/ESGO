@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate BRSR Report</title>
+
+    <!-- Link the new CSS -->
+    <link rel="stylesheet" href="CSS/create_report.css">
+</head>
+<body>
+
+<!-- Fixed Navbar -->
+<header class="navbar">
+    <h1 class="logo">ESGO Industry Portal</h1>
+    <button class="btn-logout" onclick="window.location.href='industry_homepage.html'">Back to Dashboard</button>
+</header>
+
+<div class="container">
+    <h2 class="page-title">Generate ESG Report</h2>
+    <p class="subtitle">Fill in the details below to generate a Word Document compliant with BRSR Standards.</p>
+
+    <form id="brsrForm" onsubmit="event.preventDefault(); generateReport();">
+
+        <!-- SECTION A: General Disclosures -->
+        <div class="form-section">
+            <div class="section-header">
+                <!-- Icon: Clipboard Document -->
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                Section A: General Disclosures
+            </div>
+            <div class="grid-2">
+                <div class="form-group"><label>Company Name</label><input type="text" id="companyName" required></div>
+                <div class="form-group"><label>CIN Number</label><input type="text" id="cin" placeholder="L27100MH..." required></div>
+                <div class="form-group"><label>Year of Incorporation</label><input type="text" id="yearOfInc"></div>
+                <div class="form-group"><label>Financial Year</label><input type="text" id="reportingYear" value="2023-24"></div>
+                <div class="form-group"><label>Paid-up Capital (INR)</label><input type="text" id="paidUpCapital"></div>
+                <div class="form-group"><label>Email</label><input type="email" id="email"></div>
+                <div class="form-group"><label>Telephone</label><input type="text" id="telephone"></div>
+                <div class="form-group"><label>Website</label><input type="text" id="website"></div>
+            </div>
+            <div class="form-group">
+                <label>Registered Address</label>
+                <input type="text" id="registeredAddress">
+            </div>
+            <div class="form-group">
+                <label>Corporate Address</label>
+                <input type="text" id="corporateAddress">
+            </div>
+        </div>
+
+        <!-- SECTION: Employee Details -->
+        <div class="form-section">
+            <div class="section-header">
+                <!-- Icon: Users -->
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                IV. Employee Details
+            </div>
+
+            <label class="sub-label">Permanent Employees</label>
+            <div class="grid-3">
+                <div class="form-group"><label>Male</label><input type="number" id="empMalePermanent"></div>
+                <div class="form-group"><label>Female</label><input type="number" id="empFemalePermanent"></div>
+                <div class="form-group"><label>Total</label><input type="number" id="empTotalPermanent"></div>
+            </div>
+
+            <label class="sub-label">Permanent Workers</label>
+            <div class="grid-3">
+                <div class="form-group"><label>Male</label><input type="number" id="workerMalePermanent"></div>
+                <div class="form-group"><label>Female</label><input type="number" id="workerFemalePermanent"></div>
+                <div class="form-group"><label>Total</label><input type="number" id="workerTotalPermanent"></div>
+            </div>
+        </div>
+
+        <!-- SECTION C: Environment -->
+        <div class="form-section">
+            <div class="section-header">
+                <!-- Icon: Globe/Leaf -->
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Principle 6: Environment
+            </div>
+            <div class="grid-2">
+                <div class="form-group"><label>Electricity Consumed (GJ)</label><input type="text" id="electricityConsumption"></div>
+                <div class="form-group"><label>Fuel Consumed (GJ)</label><input type="text" id="fuelConsumption"></div>
+                <div class="form-group"><label>Energy Intensity</label><input type="text" id="energyIntensity" placeholder="per rupee turnover"></div>
+
+                <div class="form-group"><label>Scope 1 Emissions (tCO2e)</label><input type="text" id="scope1Emissions"></div>
+                <div class="form-group"><label>Scope 2 Emissions (tCO2e)</label><input type="text" id="scope2Emissions"></div>
+                <div class="form-group"><label>Emission Intensity</label><input type="text" id="emissionIntensity"></div>
+            </div>
+
+            <label class="sub-label" style="margin-top: 20px;">Waste Management</label>
+            <div class="grid-3">
+                <div class="form-group"><label>Plastic Waste (MT)</label><input type="text" id="plasticWaste"></div>
+                <div class="form-group"><label>E-Waste (MT)</label><input type="text" id="eWaste"></div>
+                <div class="form-group"><label>Hazardous Waste (MT)</label><input type="text" id="hazardousWaste"></div>
+            </div>
+            <div class="grid-2">
+                <div class="form-group"><label>Total Waste Generated (MT)</label><input type="text" id="totalWasteGenerated"></div>
+                <div class="form-group"><label>Total Waste Recycled (MT)</label><input type="text" id="totalWasteRecycled"></div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+            Generate & Download Report
+        </button>
+    </form>
+</div>
+
+<!-- Link to External JS -->
+<script src="SCRIPTJS/create_report.js"></script>
+</body>
+</html>

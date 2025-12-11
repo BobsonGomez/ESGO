@@ -1,5 +1,6 @@
 package com.esgo.backend.controller;
 
+import java.io.ByteArrayInputStream;
 import com.esgo.backend.model.User;
 import com.esgo.backend.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,13 @@ import com.esgo.backend.security.JwtUtil;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.esgo.backend.dto.BrsrReportRequest;
+import com.esgo.backend.service.ReportService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api") // All endpoints here start with /api
@@ -20,6 +28,8 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private ReportService reportService;
 
     // --- REGISTER ENDPOINT ---
     @PostMapping("/register")
@@ -108,5 +118,21 @@ public class AuthController {
         }
 
         return response;
+    }
+
+    @PostMapping("/report/generate")
+    public ResponseEntity<InputStreamResource> generateReport(@RequestBody BrsrReportRequest request) throws IOException {
+
+        // Use the new method
+        ByteArrayInputStream bis = reportService.generateBrsrReport(request);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=BRSR_Report.docx");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(new InputStreamResource(bis));
     }
 }
