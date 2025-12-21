@@ -296,3 +296,43 @@ body {
 .download-action:hover {
     background-color: #f1f5f9;
 }
+
+/* Container to align icons side-by-side */
+.action-buttons-group {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Space between the buttons */
+}
+
+/* Base Style for all Icon Buttons */
+.icon-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--text-muted); /* Default Gray (#64748b) */
+    transition: all 0.2s ease;
+}
+
+/* --- Hover Effects --- */
+
+/* 1. Edit Button (Turns Blue) */
+.icon-btn.edit:hover {
+    background-color: #e0f2fe; /* Light Blue Background */
+    color: #0284c7; /* Blue Icon */
+}
+
+/* 2. Download Button (Turns Green) */
+.icon-btn.download:hover {
+    background-color: #f0fdf4; /* Light Green Background */
+    color: var(--primary-green); /* Green Icon */
+}
+
+/* 3. Delete Button (Turns RED - As Requested) */
+.icon-btn.delete:hover {
+    background-color: #fef2f2; /* Light Red Background */
+    color: #dc2626; /* Red Icon */
+}

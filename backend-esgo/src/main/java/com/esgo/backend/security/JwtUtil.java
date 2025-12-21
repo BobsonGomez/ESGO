@@ -12,7 +12,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    // Ideally store this in application.properties, but fine for now
+    // Ideally store this in application.properties, but fine for now(implemnt later)
     // It must be at least 32 characters long for security
     private static final String SECRET_KEY = "super_secret_key_for_esgo_industry_portal_secure_login";
 
