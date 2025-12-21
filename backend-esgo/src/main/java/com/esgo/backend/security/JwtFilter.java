@@ -40,7 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            // In a real app, you would load UserDetails from DB here.
+            // In a real app, you would load UserDetails from DB here.(implement later)
             // For simplicity, we just create a basic user object to satisfy Spring Security.
             UserDetails userDetails = new User(username, "", new ArrayList<>());
 

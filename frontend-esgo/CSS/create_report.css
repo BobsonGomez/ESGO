@@ -1,22 +1,22 @@
-/* --- Shared Variables (Matches Dashboard) --- */
+/* --- Shared Variables --- */
 :root {
-    --primary-green: #16a34a; /* The green from your screenshot */
-    --primary-green-hover: #15803d;
+    --primary-green: #108a55; /* Tata-style Green */
+    --primary-green-hover: #0d7045;
     --bg-color: #f8fafc;
     --border-color: #e2e8f0;
     --text-dark: #1e293b;
     --text-muted: #64748b;
-    --card-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-/* --- Page Layout --- */
+/* --- Page Background --- */
 body {
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-dark);
-    padding-top: 80px; /* Space for the fixed navbar */
+    padding-top: 80px; /* Space for Navbar */
 }
 
 /* --- Main Card Container --- */
@@ -32,10 +32,10 @@ body {
 
 /* --- Typography --- */
 h2.page-title {
-    color: var(--text-dark);
+    color: var(--primary-green);
     font-size: 24px;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     margin-top: 0;
 }
 
@@ -51,48 +51,49 @@ h2.page-title {
 .form-section {
     margin-bottom: 30px;
     padding: 24px;
-    background: #fcfcfc; /* Very subtle contrast */
+    background: #ffffff;
     border: 1px solid var(--border-color);
     border-radius: 8px;
+    /* Optional: Subtle background distinction for the section */
+    background-color: #fafafa;
 }
 
 .section-header {
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--primary-green);
     margin-bottom: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e2e8f0;
 }
 
 .section-header svg {
     width: 20px;
     height: 20px;
-    stroke: var(--primary-green); /* Ensures icons are green */
+    stroke: var(--primary-green);
 }
 
+/* --- Sub-labels (e.g. "Contact Person") --- */
 .sub-label {
     display: block;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
-    color: var(--text-muted);
-    margin-bottom: 12px;
-    margin-top: 15px;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    margin-top: 25px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    border-left: 3px solid var(--primary-green);
+    padding-left: 10px;
 }
 
 /* --- Grid Layouts --- */
 .grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.grid-3 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
     gap: 20px;
 }
 
@@ -103,13 +104,13 @@ h2.page-title {
 
 label {
     display: block;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--text-dark);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
-input {
+input, select {
     width: 100%;
     padding: 10px 12px;
     border: 1px solid var(--border-color);
@@ -121,10 +122,10 @@ input {
     background-color: white;
 }
 
-input:focus {
+input:focus, select:focus {
     border-color: var(--primary-green);
     outline: none;
-    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1); /* Green glow */
+    box-shadow: 0 0 0 3px rgba(16, 138, 85, 0.1);
 }
 
 input::placeholder {
@@ -143,7 +144,7 @@ input::placeholder {
     cursor: pointer;
     font-size: 16px;
     margin-top: 10px;
-    transition: background-color 0.2s, transform 0.1s;
+    transition: background-color 0.2s;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -152,14 +153,9 @@ input::placeholder {
 
 .btn-submit:hover {
     background-color: var(--primary-green-hover);
-    transform: translateY(-1px);
 }
 
-.btn-submit:active {
-    transform: translateY(0);
-}
-
-/* --- Navbar Override (To ensure it sticks to top) --- */
+/* --- Navbar (Fixed at top) --- */
 .navbar {
     position: fixed;
     top: 0;
@@ -196,4 +192,50 @@ input::placeholder {
 
 .btn-logout:hover {
     background: #f1f5f9;
+}
+
+/* Table Inputs */
+.input-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+.input-table th {
+    background-color: #f1f5f9;
+    padding: 10px;
+    text-align: left;
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+}
+
+.input-table td {
+    padding: 5px;
+    border: 1px solid var(--border-color);
+}
+
+.input-table input {
+    border: none;
+    padding: 8px;
+    width: 100%;
+}
+
+.btn-add-row {
+    background: white;
+    border: 1px dashed var(--primary-green);
+    color: var(--primary-green);
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+.btn-add-row:hover { background: #f0fdf4; }
+
+.btn-remove {
+    color: #ef4444;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
 }

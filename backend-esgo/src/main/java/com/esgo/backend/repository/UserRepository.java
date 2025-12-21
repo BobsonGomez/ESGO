@@ -1,4 +1,4 @@
-package com.esgo.backend;
+package com.esgo.backend.repository;
 
 import com.esgo.backend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;

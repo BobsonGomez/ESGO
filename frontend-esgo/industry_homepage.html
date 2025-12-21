@@ -33,7 +33,7 @@
         <div class="card stat-card">
             <div class="stat-info">
                 <p class="label">Reports Generated</p>
-                <h2 class="value">24</h2>
+                <h2 class="value" id="reportCountDisplay">--</h2>
             </div>
             <div class="icon-box green-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -104,77 +104,9 @@
     <!-- Recent Reports List -->
     <section class="recent-reports">
         <h3>Recent Reports</h3>
-
-        <div class="report-list">
-            <!-- Report Item 1 -->
-            <div class="card report-item">
-                <div class="report-left">
-                    <div class="file-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                        </svg>
-                    </div>
-                    <div class="report-details">
-                        <h4>Q4 2024 ESG Report</h4>
-                        <p>Comprehensive • 2024-12-15</p>
-                    </div>
-                </div>
-                <div class="download-action">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                </div>
-            </div>
-
-            <!-- Report Item 2 -->
-            <div class="card report-item">
-                <div class="report-left">
-                    <div class="file-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                        </svg>
-                    </div>
-                    <div class="report-details">
-                        <h4>Environmental Impact Report</h4>
-                        <p>Environmental • 2024-11-20</p>
-                    </div>
-                </div>
-                <div class="download-action">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                </div>
-            </div>
-
-            <!-- Report Item 3 -->
-            <div class="card report-item">
-                <div class="report-left">
-                    <div class="file-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                        </svg>
-                    </div>
-                    <div class="report-details">
-                        <h4>Social Governance Report</h4>
-                        <p>Governance • 2024-10-10</p>
-                    </div>
-                </div>
-                <div class="download-action">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                </div>
-            </div>
-
+        <!-- Empty Container to be filled by JS -->
+        <div class="report-list" id="reportListContainer">
+            <p style="color:#888; font-style:italic;">Loading reports...</p>
         </div>
     </section>
 </div>

@@ -2,7 +2,7 @@ package com.esgo.backend.controller;
 
 import java.io.ByteArrayInputStream;
 import com.esgo.backend.model.User;
-import com.esgo.backend.UserRepository;
+import com.esgo.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.esgo.backend.security.JwtUtil;
@@ -11,11 +11,11 @@ import java.util.Map;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.esgo.backend.dto.BrsrReportRequest;
 import com.esgo.backend.service.ReportService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import java.io.IOException;
+import com.esgo.backend.model.Report;
+import com.esgo.backend.repository.ReportRepository;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api") // All endpoints here start with /api
@@ -30,6 +30,8 @@ public class AuthController {
     private JwtUtil jwtUtil;
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private ReportRepository reportRepository;
 
     // --- REGISTER ENDPOINT ---
     @PostMapping("/register")
@@ -56,11 +58,9 @@ public class AuthController {
 
         User user = userRepository.findByUsername(username);
 
-        // --- SECURITY CHANGE ---
-        // We use .matches(rawPassword, encryptedPasswordFromDB)
+        // use .matches(rawPassword, encryptedPasswordFromDB)
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
 
-            // ... (Rest of your code remains the same: Generate Token, Response, etc.) ...
             String token = jwtUtil.generateToken(username);
 
             Map<String, Object> response = new HashMap<>();
@@ -108,9 +108,12 @@ public class AuthController {
             response.put("fullname", user.getFullname());
             response.put("email", user.getEmail());
 
-            // --- PLACEHOLDERS FOR FUTURE DATA ---
-            // Later, you will calculate these from real database tables
-            response.put("reportsCount", 24);
+            // --- REAL REPORT COUNT ---
+            // This calculates the number "24" (or 0, 1, 5) dynamically
+            List<Report> myReports = reportRepository.findByUserOrderByIdDesc(user);
+            response.put("reportsCount", myReports.size());
+
+            // Placeholder for ESG Score
             response.put("esgScore", "8.5/10");
         } else {
             response.put("status", "error");
@@ -120,19 +123,4 @@ public class AuthController {
         return response;
     }
 
-    @PostMapping("/report/generate")
-    public ResponseEntity<InputStreamResource> generateReport(@RequestBody BrsrReportRequest request) throws IOException {
-
-        // Use the new method
-        ByteArrayInputStream bis = reportService.generateBrsrReport(request);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "attachment; filename=BRSR_Report.docx");
-
-        return ResponseEntity
-                .ok()
-                .headers(headers)
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(new InputStreamResource(bis));
-    }
 }

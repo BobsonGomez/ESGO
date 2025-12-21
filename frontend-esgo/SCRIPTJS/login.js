@@ -12,7 +12,6 @@ function login() {
         password: password
     };
 
-    // --- FIX START: correctly defined fetch request ---
     fetch("http://localhost:8080/api/login", {
         method: "POST",
         headers: {
