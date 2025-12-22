@@ -336,3 +336,20 @@ body {
     background-color: #fef2f2; /* Light Red Background */
     color: #dc2626; /* Red Icon */
 }
+
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Segoe UI', sans-serif;
+    color: var(--text-dark);
+    box-sizing: border-box;
+    resize: vertical;
+}
+textarea:focus {
+    border-color: var(--primary-green);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+}
