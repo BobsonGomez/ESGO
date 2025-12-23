@@ -25,52 +25,104 @@ document.addEventListener("DOMContentLoaded", function() {
         })
             .then(res => res.json())
             .then(data => {
-                console.log("Data received from backend:", data); // Debugging
+                console.log("Data received:", data);
 
-                // 1. Fill Standard Fields (Section A + Section 3)
+                // 1. Fill Standard Fields (Section A, III, VI)
                 fillStandardFields(data);
 
-                // 2. Fill Section 2 Tables (Business Activities)
+                // 2. Fill Section II: Business Activities
                 const actBody = document.querySelector("#activitiesTable tbody");
-                actBody.innerHTML = ""; // Clear default empty rows first
+                actBody.innerHTML = "";
                 if (data.businessActivities && data.businessActivities.length > 0) {
                     data.businessActivities.forEach(act => addActivityRow(act));
                 } else {
-                    addActivityRow(); // Add 1 empty row if list is empty
+                    addActivityRow();
                 }
 
-                // 3. Fill Section 2 Tables (Products)
+                // 3. Fill Section II: Products
                 const prodBody = document.querySelector("#productsTable tbody");
-                prodBody.innerHTML = ""; // Clear default empty rows first
+                prodBody.innerHTML = "";
                 if (data.productsServices && data.productsServices.length > 0) {
-                    // Set checkbox state
                     document.getElementById("includeConsolidated").checked = data.includeConsolidated;
-                    toggleConsolidatedColumns(); // Refresh column visibility
-
+                    toggleConsolidatedColumns();
                     data.productsServices.forEach(prod => addProductRow(prod));
                 } else {
-                    addProductRow(); // Add 1 empty row if list is empty
+                    addProductRow();
                 }
-                // Fill Women Representation Table
+
+                // 4. Fill Section IV: Women Representation
                 const womenBody = document.querySelector("#womenRepTable tbody");
                 womenBody.innerHTML = "";
                 if (data.womenRepresentationList && data.womenRepresentationList.length > 0) {
                     data.womenRepresentationList.forEach(item => addWomenRepRow(item));
                 } else {
-                    addDefaultWomenRows(); // Add standard rows if empty
+                    addDefaultWomenRows();
                 }
-
                 if(document.getElementById("womenRepresentationNotes"))
                     document.getElementById("womenRepresentationNotes").value = data.womenRepresentationNotes || "";
+
+                // 5. Fill Section IV: Turnover Notes
+                if(document.getElementById("turnoverNotes"))
+                    document.getElementById("turnoverNotes").value = data.turnoverNotes || "";
+
+                // 6. Fill Section V: Holding Companies
+                // --- THIS WAS THE MISSING PART IN YOUR CODE ---
+                const hcBody = document.querySelector("#holdingTable tbody");
+                if (hcBody) {
+                    hcBody.innerHTML = "";
+                    if (data.holdingCompanies && data.holdingCompanies.length > 0) {
+                        document.querySelector('input[name="holdingMode"][value="table"]').checked = true;
+                        data.holdingCompanies.forEach(hc => addHoldingRow(hc));
+                    } else {
+                        if (data.holdingCompanyNote) {
+                            document.querySelector('input[name="holdingMode"][value="note"]').checked = true;
+                        } else {
+                            addHoldingRow();
+                        }
+                    }
+                    toggleHoldingMode();
+                    if(document.getElementById("holdingCompanyNote"))
+                        document.getElementById("holdingCompanyNote").value = data.holdingCompanyNote || "";
+                }
+
+                // Fill Section VII: Complaints
+                const compBody = document.querySelector("#complaintsTable tbody");
+                compBody.innerHTML = "";
+                if (data.complaintsList && data.complaintsList.length > 0) {
+                    data.complaintsList.forEach(c => addComplaintRow(c));
+                } else {
+                    addDefaultComplaintRows(); // Add standard rows
+                }
+
+                // Fill Headers
+                if(document.getElementById("complaintsFyCurrentHeader"))
+                    document.getElementById("complaintsFyCurrentHeader").value = data.complaintsFyCurrentHeader || "";
+                if(document.getElementById("complaintsFyPreviousHeader"))
+                    document.getElementById("complaintsFyPreviousHeader").value = data.complaintsFyPreviousHeader || "";
+
+                // Fill Q24 Material Issues
+                if(document.getElementById("materialIssuesNote"))
+                    document.getElementById("materialIssuesNote").value = data.materialIssuesNote || "";
+
+                const miBody = document.querySelector("#materialIssuesTable tbody");
+                miBody.innerHTML = "";
+                if (data.materialIssues && data.materialIssues.length > 0) {
+                    data.materialIssues.forEach(mi => addMaterialIssueRow(mi));
+                } else {
+                    addMaterialIssueRow(); // Default row
+                }
+
             })
             .catch(err => console.error("Failed to load report data", err));
-
     } else {
         // === NEW REPORT MODE ===
-        // Just add one empty row for each table to start
         addActivityRow();
         addProductRow();
         addDefaultWomenRows();
+        addHoldingRow(); // Add empty row for Holding Companies
+        toggleHoldingMode();
+        addDefaultComplaintRows();
+        addMaterialIssueRow();
     }
 });
 
@@ -115,6 +167,12 @@ function fillStandardFields(data) {
         "turnoverNotes",
         // NEW: Financial Year Headers
         "fyCurrent", "fyPrevious", "fyPrior",
+
+        //section V and VI
+        "holdingCompanyNote", "csrApplicable", "csrTurnover", "csrNetWorth",
+
+        //section VII
+        "complaintsFyCurrentHeader", "complaintsFyPreviousHeader",
 
     ];
 
@@ -292,6 +350,123 @@ function calcWomenPerc(inputElement) {
     row.querySelector(".wr-perc").value = perc;
 }
 
+// --- TOGGLE FUNCTION ---
+function toggleHoldingMode() {
+    const isTable = document.querySelector('input[name="holdingMode"][value="table"]').checked;
+    document.getElementById("holdingTableContainer").style.display = isTable ? "block" : "none";
+    document.getElementById("holdingNoteContainer").style.display = isTable ? "none" : "block";
+}
+
+// --- ROW FUNCTION ---
+function addHoldingRow(data = null) {
+    const tbody = document.querySelector("#holdingTable tbody");
+    const name = data ? (data.name || "") : "";
+    const type = data ? (data.type || "") : "";
+    const share = data ? (data.sharesHeld || "") : "";
+    const part = data ? (data.participateBusinessResponsibility || "No") : "No";
+
+    const row = `
+        <tr>
+            <td><input type="text" class="hc-name" value="${name}" placeholder="Company Name"></td>
+            <td>
+                <select class="hc-type">
+                    <option value="Subsidiary" ${type === 'Subsidiary' ? 'selected' : ''}>Subsidiary</option>
+                    <option value="Associate" ${type === 'Associate' ? 'selected' : ''}>Associate</option>
+                    <option value="Joint Venture" ${type === 'Joint Venture' ? 'selected' : ''}>Joint Venture</option>
+                    <option value="Holding" ${type === 'Holding' ? 'selected' : ''}>Holding</option>
+                </select>
+            </td>
+            <td><input type="text" class="hc-share" value="${share}" placeholder="%"></td>
+            <td>
+                <select class="hc-part">
+                    <option value="Yes" ${part === 'Yes' ? 'selected' : ''}>Yes</option>
+                    <option value="No" ${part === 'No' ? 'selected' : ''}>No</option>
+                </select>
+            </td>
+            <td class="btn-remove" onclick="this.parentElement.remove()">X</td>
+        </tr>
+    `;
+    tbody.insertAdjacentHTML('beforeend', row);
+}
+
+// --- HELPER: Default Rows ---
+function addDefaultComplaintRows() {
+    addComplaintRow({ stakeholder: "Communities" });
+    addComplaintRow({ stakeholder: "Investors/Shareholders" });
+    addComplaintRow({ stakeholder: "Employees and Workers" });
+    addComplaintRow({ stakeholder: "Customers" });
+    addComplaintRow({ stakeholder: "Value Chain Partners" });
+}
+
+// --- ROW MANAGEMENT ---
+function addComplaintRow(data = null) {
+    const tbody = document.querySelector("#complaintsTable tbody");
+
+    // Safety check nulls
+    const d = data || {};
+
+    const row = `
+        <tr>
+            <td><input type="text" class="c-stake" value="${d.stakeholder || ''}" placeholder="Group Name"></td>
+            
+            <!-- Large Text Area for Mechanism -->
+            <td><textarea class="c-mech" rows="3" style="width:100%; font-size:12px;" placeholder="Enter mechanism details or link...">${d.mechanism || ''}</textarea></td>
+            
+            <!-- Current FY -->
+            <td><input type="number" class="c-cur-f" value="${d.currFiled || ''}" style="width:60px;"></td>
+            <td><input type="number" class="c-cur-p" value="${d.currPending || ''}" style="width:60px;"></td>
+            <td><input type="text" class="c-cur-r" value="${d.currRemarks || ''}"></td>
+            
+            <!-- Previous FY -->
+            <td><input type="number" class="c-pre-f" value="${d.prevFiled || ''}" style="width:60px;"></td>
+            <td><input type="number" class="c-pre-p" value="${d.prevPending || ''}" style="width:60px;"></td>
+            <td><input type="text" class="c-pre-r" value="${d.prevRemarks || ''}"></td>
+            
+            <td class="btn-remove" onclick="this.parentElement.remove()">X</td>
+        </tr>
+    `;
+    tbody.insertAdjacentHTML('beforeend', row);
+}
+
+// --- ROW MANAGEMENT (Q24) ---
+function addMaterialIssueRow(data = null) {
+    const tbody = document.querySelector("#materialIssuesTable tbody");
+    const d = data || {};
+
+    // Dropdown helpers
+    const selRisk = d.riskOrOpportunity === 'Risk' ? 'selected' : '';
+    const selOpp = d.riskOrOpportunity === 'Opportunity' ? 'selected' : '';
+
+    const selPos = d.financialImplications === 'Positive' ? 'selected' : '';
+    const selNeg = d.financialImplications === 'Negative' ? 'selected' : '';
+
+    const row = `
+        <tr>
+            <td><input type="text" class="mi-desc" value="${d.description || ''}" placeholder="e.g. Climate Change"></td>
+            
+            <td>
+                <select class="mi-ro">
+                    <option value="Risk" ${selRisk}>Risk</option>
+                    <option value="Opportunity" ${selOpp}>Opportunity</option>
+                </select>
+            </td>
+            
+            <td><textarea class="mi-rat" rows="3" style="width:100%">${d.rationale || ''}</textarea></td>
+            <td><textarea class="mi-app" rows="3" style="width:100%">${d.approach || ''}</textarea></td>
+            
+            <td>
+                <select class="mi-fin">
+                    <option value="Positive" ${selPos}>Positive</option>
+                    <option value="Negative" ${selNeg}>Negative</option>
+                </select>
+            </td>
+            
+            <td class="btn-remove" onclick="this.parentElement.remove()">X</td>
+        </tr>
+    `;
+    tbody.insertAdjacentHTML('beforeend', row);
+}
+
 // --- MAIN GENERATE FUNCTION ---
 function generateReport() {
     const token = localStorage.getItem("token");
@@ -300,6 +475,27 @@ function generateReport() {
         window.location.replace("login.html");
         return;
     }
+
+    // --- LOGIC: Check which mode is selected for Section V ---
+    const isHoldingTableMode = document.querySelector('input[name="holdingMode"][value="table"]').checked;
+
+    // Prepare variables based on selection
+    let finalHoldingList = [];
+    let finalHoldingNote = "";
+
+    if (isHoldingTableMode) {
+        // Mode A: Table -> Scrape the rows
+        finalHoldingList = Array.from(document.querySelectorAll("#holdingTable tbody tr")).map(row => ({
+            name: row.querySelector(".hc-name").value,
+            type: row.querySelector(".hc-type").value,
+            sharesHeld: row.querySelector(".hc-share").value,
+            participateBusinessResponsibility: row.querySelector(".hc-part").value
+        }));
+    } else {
+        // Mode B: Note -> Get text, keep list empty/null
+        finalHoldingNote = document.getElementById("holdingCompanyNote") ? document.getElementById("holdingCompanyNote").value : "";
+    }
+    // ---------------------------------------------------------
 
     // 1. Gather Data
     const formData = {
@@ -339,17 +535,14 @@ function generateReport() {
         typesOfCustomers: document.getElementById("typesOfCustomers").value,
 
         // --- SECTION IV: EMPLOYEES (18.a) ---
-
-        // Permanent Employees
         empPermTotal: document.getElementById("empPermTotal").value,
         empPermMaleNo: document.getElementById("empPermMaleNo").value,
         empPermMalePerc: document.getElementById("empPermMalePerc").value,
         empPermFemaleNo: document.getElementById("empPermFemaleNo").value,
         empPermFemalePerc: document.getElementById("empPermFemalePerc").value,
-        empPermOtherNo: "0",   // Hardcoded to 0 because column was removed
-        empPermOtherPerc: "0", // Hardcoded to 0
+        empPermOtherNo: "0",
+        empPermOtherPerc: "0",
 
-        // Temporary Employees
         empTempTotal: document.getElementById("empTempTotal").value,
         empTempMaleNo: document.getElementById("empTempMaleNo").value,
         empTempMalePerc: document.getElementById("empTempMalePerc").value,
@@ -358,7 +551,6 @@ function generateReport() {
         empTempOtherNo: "0",
         empTempOtherPerc: "0",
 
-        // Permanent Workers
         workPermTotal: document.getElementById("workPermTotal").value,
         workPermMaleNo: document.getElementById("workPermMaleNo").value,
         workPermMalePerc: document.getElementById("workPermMalePerc").value,
@@ -367,7 +559,6 @@ function generateReport() {
         workPermOtherNo: "0",
         workPermOtherPerc: "0",
 
-        // Temporary Workers
         workTempTotal: document.getElementById("workTempTotal").value,
         workTempMaleNo: document.getElementById("workTempMaleNo").value,
         workTempMalePerc: document.getElementById("workTempMalePerc").value,
@@ -377,8 +568,6 @@ function generateReport() {
         workTempOtherPerc: "0",
 
         // --- SECTION IV: DIFFERENTLY ABLED (18.b) ---
-
-        // DA Permanent Employees
         daEmpPermTotal: document.getElementById("daEmpPermTotal").value,
         daEmpPermMaleNo: document.getElementById("daEmpPermMaleNo").value,
         daEmpPermMalePerc: document.getElementById("daEmpPermMalePerc").value,
@@ -387,7 +576,6 @@ function generateReport() {
         daEmpPermOtherNo: "0",
         daEmpPermOtherPerc: "0",
 
-        // DA Temporary Employees
         daEmpTempTotal: document.getElementById("daEmpTempTotal").value,
         daEmpTempMaleNo: document.getElementById("daEmpTempMaleNo").value,
         daEmpTempMalePerc: document.getElementById("daEmpTempMalePerc").value,
@@ -396,7 +584,6 @@ function generateReport() {
         daEmpTempOtherNo: "0",
         daEmpTempOtherPerc: "0",
 
-        // DA Permanent Workers
         daWorkPermTotal: document.getElementById("daWorkPermTotal").value,
         daWorkPermMaleNo: document.getElementById("daWorkPermMaleNo").value,
         daWorkPermMalePerc: document.getElementById("daWorkPermMalePerc").value,
@@ -405,7 +592,6 @@ function generateReport() {
         daWorkPermOtherNo: "0",
         daWorkPermOtherPerc: "0",
 
-        // DA Temporary Workers
         daWorkTempTotal: document.getElementById("daWorkTempTotal").value,
         daWorkTempMaleNo: document.getElementById("daWorkTempMaleNo").value,
         daWorkTempMalePerc: document.getElementById("daWorkTempMalePerc").value,
@@ -414,42 +600,77 @@ function generateReport() {
         daWorkTempOtherNo: "0",
         daWorkTempOtherPerc: "0",
 
-        // Notes
         employeeNotesA: document.getElementById("employeeNotesA").value,
         employeeNotesB: document.getElementById("employeeNotesB").value,
+
+        // --- Q19 ---
+        womenRepresentationList: Array.from(document.querySelectorAll("#womenRepTable tbody tr")).map(row => ({
+            category: row.querySelector(".wr-cat").value,
+            totalA: row.querySelector(".wr-tot").value,
+            femaleNoB: row.querySelector(".wr-fem").value,
+            femalePerc: row.querySelector(".wr-perc").value
+        })),
+        womenRepresentationNotes: document.getElementById("womenRepresentationNotes").value,
 
         // --- Q20 MAPPING ---
         turnoverEmpCurrMale: document.getElementById("turnoverEmpCurrMale").value,
         turnoverEmpCurrFemale: document.getElementById("turnoverEmpCurrFemale").value,
         turnoverEmpCurrTotal: document.getElementById("turnoverEmpCurrTotal").value,
-
         turnoverWorkCurrMale: document.getElementById("turnoverWorkCurrMale").value,
         turnoverWorkCurrFemale: document.getElementById("turnoverWorkCurrFemale").value,
         turnoverWorkCurrTotal: document.getElementById("turnoverWorkCurrTotal").value,
-
         turnoverEmpPrevMale: document.getElementById("turnoverEmpPrevMale").value,
         turnoverEmpPrevFemale: document.getElementById("turnoverEmpPrevFemale").value,
         turnoverEmpPrevTotal: document.getElementById("turnoverEmpPrevTotal").value,
-
         turnoverWorkPrevMale: document.getElementById("turnoverWorkPrevMale").value,
         turnoverWorkPrevFemale: document.getElementById("turnoverWorkPrevFemale").value,
         turnoverWorkPrevTotal: document.getElementById("turnoverWorkPrevTotal").value,
-
         turnoverEmpPriorMale: document.getElementById("turnoverEmpPriorMale").value,
         turnoverEmpPriorFemale: document.getElementById("turnoverEmpPriorFemale").value,
         turnoverEmpPriorTotal: document.getElementById("turnoverEmpPriorTotal").value,
-
         turnoverWorkPriorMale: document.getElementById("turnoverWorkPriorMale").value,
         turnoverWorkPriorFemale: document.getElementById("turnoverWorkPriorFemale").value,
         turnoverWorkPriorTotal: document.getElementById("turnoverWorkPriorTotal").value,
-
         turnoverNotes: document.getElementById("turnoverNotes").value,
+
         fyCurrent: document.getElementById("fyCurrent").value,
         fyPrevious: document.getElementById("fyPrevious").value,
         fyPrior: document.getElementById("fyPrior").value,
 
+        // --- SECTION V (Corrected) ---
+        holdingCompanies: finalHoldingList, // USE THE VARIABLE WE CALCULATED AT TOP
+        holdingCompanyNote: finalHoldingNote, // USE THE VARIABLE WE CALCULATED AT TOP
 
-        // --- SECTION II: LISTS ---
+        // --- SECTION VI ---
+        csrApplicable: document.getElementById("csrApplicable").value,
+        csrTurnover: document.getElementById("csrTurnover").value,
+        csrNetWorth: document.getElementById("csrNetWorth").value,
+
+        // --- SECTION VII ---
+        complaintsFyCurrentHeader: document.getElementById("complaintsFyCurrentHeader").value,
+        complaintsFyPreviousHeader: document.getElementById("complaintsFyPreviousHeader").value,
+        complaintsList: Array.from(document.querySelectorAll("#complaintsTable tbody tr")).map(row => ({
+            stakeholder: row.querySelector(".c-stake").value,
+            mechanism: row.querySelector(".c-mech").value,
+            currFiled: row.querySelector(".c-cur-f").value,
+            currPending: row.querySelector(".c-cur-p").value,
+            currRemarks: row.querySelector(".c-cur-r").value,
+            prevFiled: row.querySelector(".c-pre-f").value,
+            prevPending: row.querySelector(".c-pre-p").value,
+            prevRemarks: row.querySelector(".c-pre-r").value
+        })),
+
+        // --- SECTION 24 ---
+        materialIssuesNote: document.getElementById("materialIssuesNote").value,
+        materialIssues: Array.from(document.querySelectorAll("#materialIssuesTable tbody tr")).map(row => ({
+            description: row.querySelector(".mi-desc").value,
+            riskOrOpportunity: row.querySelector(".mi-ro").value,
+            rationale: row.querySelector(".mi-rat").value,
+            approach: row.querySelector(".mi-app").value,
+            financialImplications: row.querySelector(".mi-fin").value
+        })),
+
+        // --- SECTION II ---
         businessActivities: Array.from(document.querySelectorAll("#activitiesTable tbody tr")).map(row => ({
             descriptionMain: row.querySelector(".act-main") ? row.querySelector(".act-main").value : "",
             descriptionBusiness: row.querySelector(".act-bus") ? row.querySelector(".act-bus").value : "",
@@ -457,7 +678,6 @@ function generateReport() {
         })),
 
         includeConsolidated: document.getElementById("includeConsolidated").checked,
-
         productsServices: Array.from(document.querySelectorAll("#productsTable tbody tr")).map(row => ({
             productName: row.querySelector(".prod-name") ? row.querySelector(".prod-name").value : "",
             nicCode: row.querySelector(".prod-nic") ? row.querySelector(".prod-nic").value : "",
@@ -465,18 +685,7 @@ function generateReport() {
             percentageStandalone: row.querySelector(".prod-perc-s") ? row.querySelector(".prod-perc-s").value : "",
             turnoverConsolidated: row.querySelector(".prod-turn-c") ? row.querySelector(".prod-turn-c").value : "",
             percentageConsolidated: row.querySelector(".prod-perc-c") ? row.querySelector(".prod-perc-c").value : ""
-        })),
-
-        // Q19 List
-        womenRepresentationList: Array.from(document.querySelectorAll("#womenRepTable tbody tr")).map(row => ({
-            category: row.querySelector(".wr-cat").value,
-            totalA: row.querySelector(".wr-tot").value,
-            femaleNoB: row.querySelector(".wr-fem").value,
-            femalePerc: row.querySelector(".wr-perc").value
-        })),
-
-        womenRepresentationNotes: document.getElementById("womenRepresentationNotes").value
-
+        }))
     };
 
     // 2. Send to Backend
@@ -490,8 +699,8 @@ function generateReport() {
     })
         .then(async res => {
             if(res.ok) return res.blob();
-            const errorText = await res.text();
-            throw new Error("Server Error: " + errorText);
+            const text = await res.text();
+            throw new Error("Server Error: " + text);
         })
         .then(blob => {
             const url = window.URL.createObjectURL(blob);
