@@ -239,3 +239,33 @@ input::placeholder {
     text-align: center;
     font-weight: bold;
 }
+
+/* --- Radio Button Group Alignment --- */
+.radio-group {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Space between the "Table" option and "Note" option */
+    margin-bottom: 15px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between the radio dot and the text label */
+    cursor: pointer;
+}
+
+/* Reset default margins on radio inputs to prevent floating */
+input[type="radio"] {
+    margin: 0;
+    width: auto; /* Prevent it from stretching like text inputs */
+    cursor: pointer;
+}
+
+/* Ensure labels inside radio options don't have bottom margins */
+.radio-option label {
+    margin-bottom: 0;
+    font-weight: normal;
+    font-size: 14px;
+    cursor: pointer;
+}

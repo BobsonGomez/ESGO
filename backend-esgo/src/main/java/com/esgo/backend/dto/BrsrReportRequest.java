@@ -149,6 +149,96 @@ public class BrsrReportRequest {
         public void setPercentageConsolidated(String percentageConsolidated) { this.percentageConsolidated = percentageConsolidated; }
     }
 
+    // --- SECTION V: HOLDING/SUBSIDIARY COMPANIES (Q21) ---
+    private List<HoldingCompany> holdingCompanies;
+    private String holdingCompanyNote; // If table is not used
+
+    // --- SECTION VI: CSR DETAILS (Q22) ---
+    private String csrApplicable; // Yes/No
+    private String csrTurnover;
+    private String csrNetWorth;
+
+    // --- INNER CLASS FOR Q21 TABLE ---
+    public static class HoldingCompany {
+        private String name;
+        private String type; // Holding/Subsidiary/Associate/JV
+        private String sharesHeld;
+        private String participateBusinessResponsibility; // Yes/No
+
+        // Getters and Setters
+        public String getName() { return name; }
+        public void setName(String name) { this.name = name; }
+        public String getType() { return type; }
+        public void setType(String type) { this.type = type; }
+        public String getSharesHeld() { return sharesHeld; }
+        public void setSharesHeld(String sharesHeld) { this.sharesHeld = sharesHeld; }
+        public String getParticipateBusinessResponsibility() { return participateBusinessResponsibility; }
+        public void setParticipateBusinessResponsibility(String participateBusinessResponsibility) { this.participateBusinessResponsibility = participateBusinessResponsibility; }
+    }
+
+    // --- SECTION VII: TRANSPARENCY (Q23) ---
+    private String complaintsFyCurrentHeader;  // User input for "FY 2023-24"
+    private String complaintsFyPreviousHeader; // User input for "FY 2022-23"
+    private List<Complaint> complaintsList;
+
+    // --- INNER CLASS FOR COMPLAINTS ---
+    public static class Complaint {
+        private String stakeholder;
+        private String mechanism; // Large text
+        // Current FY
+        private String currFiled;
+        private String currPending;
+        private String currRemarks;
+        // Previous FY
+        private String prevFiled;
+        private String prevPending;
+        private String prevRemarks;
+
+        // Getters & Setters
+        public String getStakeholder() { return stakeholder; }
+        public void setStakeholder(String stakeholder) { this.stakeholder = stakeholder; }
+        public String getMechanism() { return mechanism; }
+        public void setMechanism(String mechanism) { this.mechanism = mechanism; }
+        public String getCurrFiled() { return currFiled; }
+        public void setCurrFiled(String currFiled) { this.currFiled = currFiled; }
+        public String getCurrPending() { return currPending; }
+        public void setCurrPending(String currPending) { this.currPending = currPending; }
+        public String getCurrRemarks() { return currRemarks; }
+        public void setCurrRemarks(String currRemarks) { this.currRemarks = currRemarks; }
+        public String getPrevFiled() { return prevFiled; }
+        public void setPrevFiled(String prevFiled) { this.prevFiled = prevFiled; }
+        public String getPrevPending() { return prevPending; }
+        public void setPrevPending(String prevPending) { this.prevPending = prevPending; }
+        public String getPrevRemarks() { return prevRemarks; }
+        public void setPrevRemarks(String prevRemarks) { this.prevRemarks = prevRemarks; }
+    }
+
+    // --- SECTION VII: Q24 (Material Issues) ---
+    private String materialIssuesNote; // User note before table
+    private List<MaterialIssue> materialIssues;
+
+    // --- INNER CLASS ---
+    public static class MaterialIssue {
+        private String description;
+        private String riskOrOpportunity; // Risk / Opportunity
+        private String rationale;
+        private String approach;
+        private String financialImplications; // Positive / Negative
+
+        // Getters & Setters
+        public String getDescription() { return description; }
+        public void setDescription(String description) { this.description = description; }
+        public String getRiskOrOpportunity() { return riskOrOpportunity; }
+        public void setRiskOrOpportunity(String riskOrOpportunity) { this.riskOrOpportunity = riskOrOpportunity; }
+        public String getRationale() { return rationale; }
+        public void setRationale(String rationale) { this.rationale = rationale; }
+        public String getApproach() { return approach; }
+        public void setApproach(String approach) { this.approach = approach; }
+        public String getFinancialImplications() { return financialImplications; }
+        public void setFinancialImplications(String financialImplications) { this.financialImplications = financialImplications; }
+    }
+
+
     // --- GETTERS AND SETTERS ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -674,4 +764,32 @@ public class BrsrReportRequest {
 
     public String getFyPrior() { return fyPrior; }
     public void setFyPrior(String fyPrior) { this.fyPrior = fyPrior; }
+
+    // --- GETTERS AND SETTERS FOR SECTION V & VI ---
+    public List<HoldingCompany> getHoldingCompanies() { return holdingCompanies; }
+    public void setHoldingCompanies(List<HoldingCompany> holdingCompanies) { this.holdingCompanies = holdingCompanies; }
+
+    public String getHoldingCompanyNote() { return holdingCompanyNote; }
+    public void setHoldingCompanyNote(String holdingCompanyNote) { this.holdingCompanyNote = holdingCompanyNote; }
+
+    public String getCsrApplicable() { return csrApplicable; }
+    public void setCsrApplicable(String csrApplicable) { this.csrApplicable = csrApplicable; }
+
+    public String getCsrTurnover() { return csrTurnover; }
+    public void setCsrTurnover(String csrTurnover) { this.csrTurnover = csrTurnover; }
+
+    public String getCsrNetWorth() { return csrNetWorth; }
+    public void setCsrNetWorth(String csrNetWorth) { this.csrNetWorth = csrNetWorth; }
+
+    public String getComplaintsFyCurrentHeader() { return complaintsFyCurrentHeader; }
+    public void setComplaintsFyCurrentHeader(String complaintsFyCurrentHeader) { this.complaintsFyCurrentHeader = complaintsFyCurrentHeader; }
+    public String getComplaintsFyPreviousHeader() { return complaintsFyPreviousHeader; }
+    public void setComplaintsFyPreviousHeader(String complaintsFyPreviousHeader) { this.complaintsFyPreviousHeader = complaintsFyPreviousHeader; }
+    public List<Complaint> getComplaintsList() { return complaintsList; }
+    public void setComplaintsList(List<Complaint> complaintsList) { this.complaintsList = complaintsList; }
+
+    public String getMaterialIssuesNote() { return materialIssuesNote; }
+    public void setMaterialIssuesNote(String materialIssuesNote) { this.materialIssuesNote = materialIssuesNote; }
+    public List<MaterialIssue> getMaterialIssues() { return materialIssues; }
+    public void setMaterialIssues(List<MaterialIssue> materialIssues) { this.materialIssues = materialIssues; }
 }
