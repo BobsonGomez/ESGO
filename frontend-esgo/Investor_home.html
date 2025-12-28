@@ -1,11 +1,128 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Document</title>
+    <title>ESGO | Investor Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@^19.2.3",
+        "react/": "https://esm.sh/react@^19.2.3/"
+      }
+    }
+    </script>
 </head>
 <body>
-     <p>Welcome to investor page</p>
+
+<header>
+    <div class="logo">ESGO<span>&middot;INVESTOR</span></div>
+    <div class="right">Prototype &middot; Sorted by ESG</div>
+</header>
+
+<main>
+    <section class="hero">
+        <h1>Invest in the future.</h1>
+        <p>A transparent screening platform to track and analyze corporate environmental, social, and governance rankings.</p>
+
+        <div class="search-wrapper">
+            <div class="search-bar">
+                <div class="search-icon">🔍</div>
+                <input id="companySearch" class="search-input" type="text" placeholder="Search for a company...">
+                <button class="search-button" id="searchBtn">Search</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="list-section">
+        <div class="list-header">
+            <div>
+                <h2>ESG Rankings</h2>
+                <p>Real-time sector performance overview.</p>
+            </div>
+            <p>Score &darr;</p>
+        </div>
+
+        <div id="companyList" class="company-list">
+            <article class="company-card" data-name="Aurora Renewables Ltd.">
+                <div class="company-left">
+                    <div class="company-name">Aurora Renewables Ltd.</div>
+                    <div class="company-meta">Sector: Renewable Energy &middot; Global</div>
+                </div>
+                <div class="company-right">
+                    <div class="esg-score">89</div>
+                    <div class="esg-label esg-high">High ESG</div>
+                </div>
+            </article>
+
+            <article class="company-card" data-name="BlueWave Infrastructure Co.">
+                <div class="company-left">
+                    <div class="company-name">BlueWave Infrastructure Co.</div>
+                    <div class="company-meta">Sector: Utilities &middot; North America</div>
+                </div>
+                <div class="company-right">
+                    <div class="esg-score">82</div>
+                    <div class="esg-label esg-high">High ESG</div>
+                </div>
+            </article>
+
+            <article class="company-card" data-name="CloudLeaf Systems">
+                <div class="company-left">
+                    <div class="company-name">CloudLeaf Systems</div>
+                    <div class="company-meta">Sector: IT Services &middot; Europe</div>
+                </div>
+                <div class="company-right">
+                    <div class="esg-score">76</div>
+                    <div class="esg-label esg-high">High ESG</div>
+                </div>
+            </article>
+
+            <article class="company-card" data-name="MetroBuild Cement Corp.">
+                <div class="company-left">
+                    <div class="company-name">MetroBuild Cement Corp.</div>
+                    <div class="company-meta">Sector: Manufacturing &middot; Asia</div>
+                </div>
+                <div class="company-right">
+                    <div class="esg-score">64</div>
+                    <div class="esg-label esg-medium">Medium ESG</div>
+                </div>
+            </article>
+
+            <article class="company-card" data-name="AgriNova Foods">
+                <div class="company-left">
+                    <div class="company-name">AgriNova Foods</div>
+                    <div class="company-meta">Sector: Agriculture &middot; Global</div>
+                </div>
+                <div class="company-right">
+                    <div class="esg-score">57</div>
+                    <div class="esg-label esg-medium">Medium ESG</div>
+                </div>
+            </article>
+
+            <article class="company-card" data-name="UrbanFuel Logistics">
+                <div class="company-left">
+                    <div class="company-name">UrbanFuel Logistics</div>
+                    <div class="company-meta">Sector: Transport &middot; Africa</div>
+                </div>
+                <div class="company-right">
+                    <div class="esg-score">49</div>
+                    <div class="esg-label esg-low">Low ESG</div>
+                </div>
+            </article>
+        </div>
+
+        <p class="placeholder-note">
+            Note: All data points shown are placeholders for demonstration purposes.
+        </p>
+    </section>
+</main>
+
+<footer>
+    &copy; 2025 ESGO Investor &middot; Refined Light Interface
+</footer>
+
+<script type="module" src="./index.tsx"></script>
+
 </body>
 </html>
