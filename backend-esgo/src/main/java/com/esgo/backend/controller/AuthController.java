@@ -15,11 +15,11 @@ import com.esgo.backend.model.Report;
 import com.esgo.backend.repository.ReportRepository;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-
+import java.util.Optional; // Import Optional
 
 @RestController
-@RequestMapping("/api") // All endpoints here start with /api
-@CrossOrigin(origins = "*") // CRITICAL: Allows your HTML file to talk to this Java server
+@RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
@@ -36,15 +36,13 @@ public class AuthController {
     // --- REGISTER ENDPOINT ---
     @PostMapping("/register")
     public String registerUser(@RequestBody User user) {
-        if (userRepository.findByUsername(user.getUsername()) != null) {
+        // FIX 1: Check if present
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             return "Username already exists!";
         }
 
-        // --- SECURITY CHANGE ---
-        // Hash the password before saving
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        // -----------------------
 
         userRepository.save(user);
         return "User registered successfully!";
@@ -54,11 +52,11 @@ public class AuthController {
     @PostMapping("/login")
     public Map<String, Object> loginUser(@RequestBody Map<String, String> loginData) {
         String username = loginData.get("username");
-        String password = loginData.get("password"); // The raw password typed by user
+        String password = loginData.get("password");
 
-        User user = userRepository.findByUsername(username);
+        // FIX 2: Unwrap Optional, return null if empty
+        User user = userRepository.findByUsername(username).orElse(null);
 
-        // use .matches(rawPassword, encryptedPasswordFromDB)
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
 
             String token = jwtUtil.generateToken(username);
@@ -73,7 +71,6 @@ public class AuthController {
             return response;
 
         } else {
-            // Failure
             Map<String, Object> response = new HashMap<>();
             response.put("status", "failure");
             response.put("message", "Invalid credentials");
@@ -81,15 +78,16 @@ public class AuthController {
         }
     }
 
-    // --- NEW ENDPOINT: Call this when they click "Generate Report" ---
+    // --- REPORT COMPLETE ENDPOINT ---
     @PostMapping("/report/complete")
     public String completeReport(@RequestBody Map<String, String> data) {
         String username = data.get("username");
 
-        User user = userRepository.findByUsername(username);
+        // FIX 3: Unwrap Optional
+        User user = userRepository.findByUsername(username).orElse(null);
 
         if (user != null) {
-            user.setHasGeneratedReport(true); // NOW we mark it as done
+            user.setHasGeneratedReport(true);
             userRepository.save(user);
             return "Report status updated";
         }
@@ -99,7 +97,8 @@ public class AuthController {
     @GetMapping("/user/{username}")
     public Map<String, Object> getUserDashboard(@PathVariable String username) {
 
-        User user = userRepository.findByUsername(username);
+        // FIX 4: Unwrap Optional
+        User user = userRepository.findByUsername(username).orElse(null);
 
         Map<String, Object> response = new HashMap<>();
 
@@ -108,12 +107,8 @@ public class AuthController {
             response.put("fullname", user.getFullname());
             response.put("email", user.getEmail());
 
-            // --- REAL REPORT COUNT ---
-            // This calculates the number "24" (or 0, 1, 5) dynamically
             List<Report> myReports = reportRepository.findByUserOrderByIdDesc(user);
             response.put("reportsCount", myReports.size());
-
-            // Placeholder for ESG Score
             response.put("esgScore", "8.5/10");
         } else {
             response.put("status", "error");
@@ -122,5 +117,4 @@ public class AuthController {
 
         return response;
     }
-
 }

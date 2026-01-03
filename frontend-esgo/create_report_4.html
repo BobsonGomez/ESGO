@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Section C: Principles 6-9</title>
+    <link rel="stylesheet" href="CSS/create_report.css">
+</head>
+<body>
+
+<header class="navbar">
+    <h1 class="logo">ESGO Industry Portal</h1>
+    <button class="btn-logout" onclick="window.location.href='industry_homepage.html'">Dashboard</button>
+</header>
+
+<div class="container" style="max-width: 1000px;">
+    <h2 class="page-title">Section C: Principle Wise Performance</h2>
+    <p class="subtitle">Principles 6, 7, 8 & 9</p>
+
+    <form onsubmit="event.preventDefault(); generateFinalReport();">
+
+        <!-- ================= PRINCIPLE 6: ENVIRONMENT ================= -->
+        <div class="form-section">
+            <div class="section-header">Principle 6: Environment</div>
+
+            <!-- 1. Energy -->
+            <label class="sub-label">1. Energy Consumption (GJ/PJ)</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead><tr><th>Parameter</th><th>Current FY</th><th>Previous FY</th></tr></thead>
+                    <tbody>
+                    <tr><td>Electricity</td><td><input type="text" id="p6ElecConsumCurr"></td><td><input type="text" id="p6ElecConsumPrev"></td></tr>
+                    <tr><td>Fuel</td><td><input type="text" id="p6FuelConsumCurr"></td><td><input type="text" id="p6FuelConsumPrev"></td></tr>
+                    <tr><td>Other Sources</td><td><input type="text" id="p6EnergyOtherCurr"></td><td><input type="text" id="p6EnergyOtherPrev"></td></tr>
+                    <tr><td><b>Total Energy</b></td><td><input type="text" id="p6EnergyTotalCurr"></td><td><input type="text" id="p6EnergyTotalPrev"></td></tr>
+                    <tr><td>Energy Intensity</td><td><input type="text" id="p6EnergyIntensityCurr"></td><td><input type="text" id="p6EnergyIntensityPrev"></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group"><textarea id="p6EnergyNote" rows="2" placeholder="Note on Energy..."></textarea></div>
+
+            <!-- 2. Emissions -->
+            <label class="sub-label">2. Emissions (Scope 1 & 2)</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead><tr><th>Parameter</th><th>Current FY</th><th>Previous FY</th></tr></thead>
+                    <tbody>
+                    <tr><td>Scope 1</td><td><input type="text" id="p6Scope1Curr"></td><td><input type="text" id="p6Scope1Prev"></td></tr>
+                    <tr><td>Scope 2</td><td><input type="text" id="p6Scope2Curr"></td><td><input type="text" id="p6Scope2Prev"></td></tr>
+                    <tr><td><b>Total</b></td><td><input type="text" id="p6ScopeTotalCurr"></td><td><input type="text" id="p6ScopeTotalPrev"></td></tr>
+                    <tr><td>Intensity</td><td><input type="text" id="p6EmissionIntensityCurr"></td><td><input type="text" id="p6EmissionIntensityPrev"></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group"><textarea id="p6EmissionNote" rows="2" placeholder="Note on Emissions..."></textarea></div>
+
+            <!-- 3. Water -->
+            <label class="sub-label">3. Water</label>
+            <div class="grid-2">
+                <div class="form-group"><label>Withdrawal (Current)</label><input type="text" id="p6WaterWithdrawalCurr"></div>
+                <div class="form-group"><label>Withdrawal (Previous)</label><input type="text" id="p6WaterWithdrawalPrev"></div>
+                <div class="form-group"><label>Consumption (Current)</label><input type="text" id="p6WaterConsumCurr"></div>
+                <div class="form-group"><label>Consumption (Previous)</label><input type="text" id="p6WaterConsumPrev"></div>
+            </div>
+            <div class="form-group"><textarea id="p6WaterNote" rows="2" placeholder="Note on Water..."></textarea></div>
+
+            <!-- 4. Waste -->
+            <label class="sub-label">4. Waste Management</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="p6WasteTable">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">Category</th>
+                        <th colspan="3">Current FY</th>
+                        <th colspan="3">Previous FY</th>
+                        <th rowspan="2">Action</th>
+                    </tr>
+                    <tr>
+                        <th>Gen</th><th>Rec</th><th>Disp</th>
+                        <th>Gen</th><th>Rec</th><th>Disp</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addWasteRow()">+ Add Waste Category</button>
+            <div class="form-group" style="margin-top:10px;"><textarea id="p6WasteNote" rows="2" placeholder="Note on Waste..."></textarea></div>
+        </div>
+
+        <!-- ================= PRINCIPLE 7: PUBLIC POLICY ================= -->
+        <div class="form-section">
+            <div class="section-header">Principle 7: Public Policy</div>
+
+            <div class="form-group">
+                <label>1.a Number of affiliations</label>
+                <input type="text" id="p7AffiliationsCount" placeholder="e.g. 28">
+            </div>
+
+            <label class="sub-label">1.b Top 10 Trade Chambers/Associations</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="p7AssocTable">
+                    <thead><tr><th>Name</th><th>Reach</th><th>Action</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addP7Row()">+ Add Association</button>
+
+            <div class="form-group" style="margin-top:15px;">
+                <label>2. Corrective actions on anti-competitive conduct</label>
+                <textarea id="p7AntiCompetitiveDetails" rows="2" placeholder="e.g. Not Applicable"></textarea>
+            </div>
+
+            <label class="sub-label">Leadership: Public Policy Positions</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="p7PolicyTable">
+                    <thead><tr><th>Policy Advocated</th><th>Method</th><th>Web Link</th><th>Action</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addP7PolicyRow()">+ Add Position</button>
+        </div>
+
+        <!-- ================= PRINCIPLE 8: INCLUSIVE GROWTH ================= -->
+        <div class="form-section">
+            <div class="section-header">Principle 8: Inclusive Growth</div>
+
+            <div class="form-group">
+                <label>1. Social Impact Assessments (SIA)</label>
+                <textarea id="p8SiaDetails" rows="2" placeholder="Details..."></textarea>
+            </div>
+
+            <label class="sub-label">2. Rehabilitation & Resettlement (R&R)</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="p8RrTable">
+                    <thead><tr><th>Project</th><th>State</th><th>District</th><th>PAFs</th><th>% Covered</th><th>Action</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addP8RrRow()">+ Add R&R Project</button>
+
+            <div class="form-group" style="margin-top:15px;">
+                <label>3. Grievance Redressal (Community)</label>
+                <textarea id="p8GrievanceMechanism" rows="2" placeholder="Details..."></textarea>
+            </div>
+
+            <label class="sub-label">4. Input Material Sourcing (%)</label>
+            <div class="grid-2">
+                <div class="form-group"><label>MSME (Current)</label><input type="text" id="p8InputMsmeCurr"></div>
+                <div class="form-group"><label>India (Current)</label><input type="text" id="p8InputIndiaCurr"></div>
+                <input type="hidden" id="p8InputMsmePrev"><input type="hidden" id="p8InputIndiaPrev">
+            </div>
+
+            <label class="sub-label">Leadership: Aspirational Districts (CSR)</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="p8AspTable">
+                    <thead><tr><th>State</th><th>District</th><th>Amount Spent</th><th>Action</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addP8AspRow()">+ Add District</button>
+
+            <div class="form-group" style="margin-top:15px;">
+                <label>Leadership: Preferential Procurement Policy</label>
+                <textarea id="p8PreferentialProcurement" rows="2" placeholder="Yes/No + Details"></textarea>
+            </div>
+            <div class="grid-2">
+                <div class="form-group"><label>Marginalized Groups</label><input type="text" id="p8MarginalizedGroups"></div>
+                <div class="form-group"><label>% Procurement</label><input type="text" id="p8ProcurementPercentage"></div>
+            </div>
+
+            <label class="sub-label">Leadership: CSR Beneficiaries</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="p8BenTable">
+                    <thead><tr><th>Project</th><th>Beneficiaries</th><th>% Vulnerable</th><th>Action</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addP8BenRow()">+ Add Beneficiary</button>
+        </div>
+
+        <!-- ================= PRINCIPLE 9: CONSUMER ================= -->
+        <div class="form-section">
+            <div class="section-header">Principle 9: Consumer Value</div>
+
+            <div class="form-group">
+                <label>1. Consumer Complaint Mechanisms</label>
+                <textarea id="p9ConsumerComplaintMech" rows="2" placeholder="Details..."></textarea>
+            </div>
+
+            <label class="sub-label">2. Consumer Complaints (Received / Pending)</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead><tr><th>Category</th><th>Current FY</th><th>Previous FY</th></tr></thead>
+                    <tbody>
+                    <tr><td>Data Privacy</td><td><input type="text" id="p9DataPrivacyCurr"></td><td><input type="text" id="p9DataPrivacyPrev"></td></tr>
+                    <tr><td>Advertising</td><td><input type="text" id="p9AdvertisingCurr"></td><td><input type="text" id="p9AdvertisingPrev"></td></tr>
+                    <tr><td>Cyber-security</td><td><input type="text" id="p9CyberCurr"></td><td><input type="text" id="p9CyberPrev"></td></tr>
+                    <tr><td>Delivery Services</td><td><input type="text" id="p9DeliveryCurr"></td><td><input type="text" id="p9DeliveryPrev"></td></tr>
+                    <tr><td>Restrictive Practices</td><td><input type="text" id="p9RestrictiveCurr"></td><td><input type="text" id="p9RestrictivePrev"></td></tr>
+                    <tr><td>Unfair Practices</td><td><input type="text" id="p9UnfairCurr"></td><td><input type="text" id="p9UnfairPrev"></td></tr>
+                    <tr><td>Other</td><td><input type="text" id="p9OtherCurr"></td><td><input type="text" id="p9OtherPrev"></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="grid-2" style="margin-top:15px;">
+                <div class="form-group"><label>Voluntary Recalls</label><input type="text" id="p9RecallVoluntary"></div>
+                <div class="form-group"><label>Forced Recalls</label><input type="text" id="p9RecallForced"></div>
+            </div>
+
+            <div class="form-group">
+                <label>4. Cyber Security & Data Privacy Policy</label>
+                <textarea id="p9CyberSecurityPolicy" rows="2" placeholder="Yes/No + Link"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>5. Corrective Actions (Complaints/Recalls/Cyber)</label>
+                <textarea id="p9CorrectiveActions" rows="3" placeholder="Details..."></textarea>
+            </div>
+
+            <label class="sub-label">Leadership Indicators</label>
+            <div class="grid-2">
+                <div class="form-group"><label>Info Channels</label><input type="text" id="p9InfoChannels"></div>
+                <div class="form-group"><label>Safe Usage Education</label><input type="text" id="p9SafeUsageSteps"></div>
+                <div class="form-group"><label>Disruption Info</label><input type="text" id="p9DisruptionInfo"></div>
+                <div class="form-group"><label>Product Info Display</label><input type="text" id="p9ProductInfoDisplay"></div>
+            </div>
+            <div class="form-group"><label>CSAT Survey Score</label><input type="text" id="p9CustomerSatSurvey"></div>
+        </div>
+
+        <!-- FINAL BUTTONS -->
+        <div style="display:flex; justify-content: space-between; margin-top:30px; margin-bottom:50px;">
+            <button type="button" class="btn-logout" onclick="window.location.href='create_report_3.html'">&larr; Previous</button>
+            <button type="submit" class="btn-submit" style="width:auto; padding: 15px 40px; font-size:16px;">GENERATE FINAL REPORT &darr;</button>
+        </div>
+    </form>
+</div>
+
+<script src="SCRIPTJS/create_report_4.js"></script>
+</body>
+</html>
