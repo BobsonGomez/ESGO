@@ -468,7 +468,7 @@ function addMaterialIssueRow(data = null) {
 }
 
 // --- MAIN GENERATE FUNCTION ---
-function generateReport() {
+function saveAndNext() {
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -687,9 +687,8 @@ function generateReport() {
             percentageConsolidated: row.querySelector(".prod-perc-c") ? row.querySelector(".prod-perc-c").value : ""
         }))
     };
-
-    // 2. Send to Backend
-    fetch("http://localhost:8080/api/report/generate", {
+    // 2. Call the NEW /save endpoint
+    fetch("http://localhost:8080/api/report/save", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -697,25 +696,22 @@ function generateReport() {
         },
         body: JSON.stringify(formData)
     })
-        .then(async res => {
-            if(res.ok) return res.blob();
-            const text = await res.text();
-            throw new Error("Server Error: " + text);
-        })
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "BRSR_Report_" + (formData.companyName || "Draft") + ".docx";
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success" && data.reportId) {
+                console.log("Report draft saved with ID:", data.reportId);
 
-            alert("Report Generated and Saved!");
-            window.location.href = "industry_homepage.html";
+                // 3. Save the ID returned by the backend to localStorage
+                localStorage.setItem("currentReportId", data.reportId);
+
+                // 4. Redirect to Part 2
+                window.location.href = "create_report_2.html";
+            } else {
+                throw new Error("Failed to save draft.");
+            }
         })
         .catch(err => {
             console.error(err);
-            alert("Error generating report: " + err.message);
+            alert("Error saving progress: " + err.message);
         });
 }

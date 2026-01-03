@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/report")
@@ -32,17 +34,25 @@ public class ReportController {
             @RequestHeader("Authorization") String token,
             @RequestBody BrsrReportRequest request) throws IOException {
 
-        // Extract username from token (Remove "Bearer ")
         String username = jwtUtil.extractUsername(token.substring(7));
 
-        // Save to DB first
-        reportService.saveReportToDb(request, username);
+        // 1. Save/Merge the new data (Part 2) into the DB
+        Long savedReportId = reportService.saveReportToDb(request, username);
 
-        // Generate Word Doc
-        ByteArrayInputStream bis = reportService.generateBrsrReport(request);
+        // 2. CRITICAL STEP:
+        // Throw away the 'request' object (which has nulls).
+        // Fetch the COMPLETE data from the database (which has Part 1 + Part 2).
+        BrsrReportRequest fullData = reportService.getReportDataById(savedReportId);
+
+        // 3. Generate Word Doc using the FULL Data
+        ByteArrayInputStream bis = reportService.generateBrsrReport(fullData);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "attachment; filename=BRSR_Report.docx");
+        // Use company name from DB data, fallback to "Draft"
+        String cName = (fullData.getCompanyName() != null && !fullData.getCompanyName().isEmpty())
+                ? fullData.getCompanyName() : "Draft";
+
+        headers.add("Content-Disposition", "attachment; filename=BRSR_Report_" + cName + ".docx");
 
         return ResponseEntity.ok()
                 .headers(headers)
@@ -102,5 +112,25 @@ public class ReportController {
             // If report belongs to someone else, return 403 Forbidden
             return ResponseEntity.status(403).body(e.getMessage());
         }
+    }
+
+    // 5. SAVE DRAFT (Returns ID, does not download file)
+    // --- NEW ENDPOINT FOR SAVING DRAFTS ---
+    @PostMapping("/save")
+    public ResponseEntity<Map<String, Object>> saveDraft(
+            @RequestHeader("Authorization") String token,
+            @RequestBody BrsrReportRequest request) {
+
+        String username = jwtUtil.extractUsername(token.substring(7));
+
+        // Call the service and get the ID of the saved/updated report
+        Long reportId = reportService.saveReportToDb(request, username);
+
+        // Return a JSON response with the ID
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("reportId", reportId);
+
+        return ResponseEntity.ok(response);
     }
 }
