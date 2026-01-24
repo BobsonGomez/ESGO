@@ -1,0 +1,2395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Section C: Principle 1</title>
+    <link rel="stylesheet" href="CSS/create_report.css">
+</head>
+<body>
+
+<header class="navbar">
+    <h1 class="logo">ESGO Industry Portal</h1>
+    <button class="btn-logout" onclick="window.location.href='industry_homepage.html'">Dashboard</button>
+</header>
+
+<div class="container" style="max-width: 1000px;">
+    <h2 class="page-title">Section C: Principle Wise Performance</h2>
+    <p class="subtitle">Principle 1: Ethics, Transparency & Accountability</p>
+
+    <form onsubmit="event.preventDefault(); generateFinalReport();">
+
+        <div class="form-section">
+            <div class="section-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                1. Training & Awareness Programmes
+            </div>
+
+            <table class="input-table" id="trainingTable">
+                <thead>
+                <tr>
+                    <th style="width:15%">Segment</th>
+                    <th style="width:15%">Total Programs Held</th>
+                    <th style="width:50%">Topics / Principles Covered</th>
+                    <th style="width:10%">% Coverage</th>
+                    <th style="width:5%">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Rows added via JS -->
+                </tbody>
+            </table>
+            <button type="button" class="btn-add-row" onclick="addTrainingRow()">+ Add Segment</button>
+
+            <div class="form-group" style="margin-top: 20px;">
+                <label>Additional Note (e.g. Tata Code of Conduct details)</label>
+                <textarea id="trainingNote" rows="4" placeholder="Enter note text here..."></textarea>
+            </div>
+        </div>
+
+        <!-- 2. FINES & PENALTIES -->
+        <div class="form-section">
+            <div class="section-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" /></svg>
+                2. Fines / Penalties / Punishment
+            </div>
+
+            <div class="form-group">
+                <label>Note (Optional)</label>
+                <textarea id="legalActionNote" rows="2" placeholder="e.g. Note: The entity shall make disclosures..."></textarea>
+            </div>
+
+            <!-- NEW: Non-Monetary NA Checkbox -->
+            <div style="background:#f0fdf4; padding:10px; border:1px solid #bbf7d0; border-radius:6px; margin-bottom:15px; display:flex; align-items:center; gap:10px;">
+                <input type="checkbox" id="nonMonetaryNA" style="width:16px; height:16px; margin:0;">
+                <label for="nonMonetaryNA" style="margin:0; font-weight:600; font-size:13px; cursor:pointer;">
+                    Non-Monetary actions (Imprisonment/Punishment) are NOT Applicable
+                </label>
+            </div>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="legalTable">
+                    <thead>
+                    <tr>
+                        <th style="width:15%">Type</th>
+                        <th style="width:10%">NGRBC Principle</th>
+                        <th style="width:20%">Agency/Authority</th>
+                        <th style="width:15%">Amount (INR)</th>
+                        <th style="width:25%">Brief of Case</th>
+                        <th style="width:10%">Appeal?</th>
+                        <th style="width:5%">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Rows added via JS -->
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addLegalRow()">+ Add Row</button>
+        </div>
+
+        <!-- 3. APPEALS -->
+        <div class="form-section">
+            <div class="section-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                3. Appeals / Revisions
+            </div>
+
+            <p style="font-size:12px; color:#666; margin-bottom:10px;">Details of cases from Q2 where an appeal has been preferred.</p>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="appealTable">
+                    <thead>
+                    <tr>
+                        <th style="width: 50%;">Case Details</th>
+                        <th style="width: 45%;">Name of Regulatory / Enforcement Agency</th>
+                        <th style="width: 5%;">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Rows added via JS -->
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addAppealRow()">+ Add Appeal</button>
+        </div>
+
+        <!-- 4. ANTI-CORRUPTION POLICY -->
+        <div class="form-section">
+            <div class="section-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                4. Anti-Corruption & Anti-Bribery Policy
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Does the entity have a policy? *</label>
+                    <select id="antiCorruptionPolicy">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Web Link to Policy (if available)</label>
+                    <input type="text" id="antiCorruptionLink" placeholder="https://www.example.com/policy.pdf">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Brief Details of the Policy</label>
+                <textarea id="antiCorruptionDetails" rows="4" placeholder="e.g. The ABAC Policy aims to ensure that all Group Companies conduct their operations..."></textarea>
+            </div>
+        </div>
+
+        <!-- 5. DISCIPLINARY ACTION -->
+        <div class="form-section">
+            <div class="section-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                5. Disciplinary Action (Bribery/Corruption)
+            </div>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 40%;">Category</th>
+                        <th style="width: 30%; background:#e0f2fe;">
+                            <input type="text" id="disciplinaryFyCurrentHeader" placeholder="Current FY (e.g. 2023-24)" style="text-align:center; font-weight:bold; background:transparent; border:none; width:100%;">
+                        </th>
+                        <th style="width: 30%; background:#f0fdf4;">
+                            <input type="text" id="disciplinaryFyPreviousHeader" placeholder="Previous FY (e.g. 2022-23)" style="text-align:center; font-weight:bold; background:transparent; border:none; width:100%;">
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Directors</td>
+                        <td><input type="text" id="discDirectorsCurr" placeholder="Nil"></td>
+                        <td><input type="text" id="discDirectorsPrev" placeholder="Nil"></td>
+                    </tr>
+                    <tr>
+                        <td>KMPs</td>
+                        <td><input type="text" id="discKmpsCurr" placeholder="Nil"></td>
+                        <td><input type="text" id="discKmpsPrev" placeholder="Nil"></td>
+                    </tr>
+                    <tr>
+                        <td>Employees</td>
+                        <td><input type="text" id="discEmployeesCurr" placeholder="Nil"></td>
+                        <td><input type="text" id="discEmployeesPrev" placeholder="Nil"></td>
+                    </tr>
+                    <tr>
+                        <td>Workers</td>
+                        <td><input type="text" id="discWorkersCurr" placeholder="Nil"></td>
+                        <td><input type="text" id="discWorkersPrev" placeholder="Nil"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 6. CONFLICT OF INTEREST -->
+        <div class="form-section">
+            <div class="section-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                6. Conflict of Interest Complaints
+            </div>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th rowspan="2" style="width: 40%;">Category</th>
+                        <th colspan="2" style="text-align:center; background:#e0f2fe;">FY Current</th>
+                        <th colspan="2" style="text-align:center; background:#f0fdf4;">FY Previous</th>
+                    </tr>
+                    <tr>
+                        <th>Number</th> <th>Remarks</th>
+                        <th>Number</th> <th>Remarks</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Directors</td>
+                        <td><input type="text" id="coiDirectorsCurrNum" placeholder="Nil"></td>
+                        <td><input type="text" id="coiDirectorsCurrRem"></td>
+                        <td><input type="text" id="coiDirectorsPrevNum" placeholder="Nil"></td>
+                        <td><input type="text" id="coiDirectorsPrevRem"></td>
+                    </tr>
+                    <tr>
+                        <td>KMPs</td>
+                        <td><input type="text" id="coiKmpsCurrNum" placeholder="Nil"></td>
+                        <td><input type="text" id="coiKmpsCurrRem"></td>
+                        <td><input type="text" id="coiKmpsPrevNum" placeholder="Nil"></td>
+                        <td><input type="text" id="coiKmpsPrevRem"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 7. CORRECTIVE ACTIONS -->
+        <div class="form-section">
+            <div class="section-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                7. Corrective Actions (Fines/Penalties/Corruption)
+            </div>
+
+            <div class="form-group">
+                <label>Details of corrective action taken or underway</label>
+                <textarea id="correctiveActionDetails" rows="4" placeholder="e.g. Not Applicable or Details of action..."></textarea>
+            </div>
+        </div>
+
+        <!-- LEADERSHIP INDICATORS -->
+        <div class="form-section">
+            <div class="section-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                Leadership Indicators
+            </div>
+
+            <!-- Optional Text -->
+            <div class="form-group">
+                <label>Overview / Description (Optional Text before table)</label>
+                <textarea id="leadershipIndicatorNote" rows="3" placeholder="e.g. Tata Steel takes several initiatives to create awareness..."></textarea>
+            </div>
+
+            <label class="sub-label">1. Awareness Programmes Table</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="leadershipTable">
+                    <thead>
+                    <tr>
+                        <th style="width: 20%;">Total Count</th>
+                        <th style="width: 60%;">Topics / Principles Covered</th>
+                        <th style="width: 15%;">% Partners Covered</th>
+                        <th style="width: 5%;">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Rows via JS -->
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addLeadershipRow()">+ Add Row</button>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+        <!-- LEADERSHIP INDICATOR 2 -->
+        <label class="sub-label">2. Conflict of Interest Processes</label>
+
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Processes in place to avoid/manage conflict?</label>
+                <select id="conflictOfInterestProcess">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Details of the process (If Yes)</label>
+            <textarea id="conflictOfInterestDetails" rows="4" placeholder="e.g. The Company has a Code of Conduct for all Board members..."></textarea>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 40px 0;">
+
+        <!-- PRINCIPLE 2 -->
+        <div class="form-section">
+            <div class="section-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                Principle 2: Sustainable Goods & Services
+            </div>
+
+            <label class="sub-label">1. R&D and Capex Investments (%)</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th style="width:10%">Category</th>
+                        <!-- EDITABLE HEADERS -->
+                        <th style="width:15%; background:#e0f2fe; padding:0;">
+                            <input type="text" id="p2FyCurrent" placeholder="Current FY" style="background:transparent; border:none; text-align:center; font-weight:bold; width:100%; height:100%;">
+                        </th>
+                        <th style="width:15%; background:#f0fdf4; padding:0;">
+                            <input type="text" id="p2FyPrevious" placeholder="Previous FY" style="background:transparent; border:none; text-align:center; font-weight:bold; width:100%; height:100%;">
+                        </th>
+                        <th style="width:60%">Details of Improvements</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><b>R&D</b></td>
+                        <td><input type="text" id="rdCurrentYear" placeholder="% or Amount"></td>
+                        <td><input type="text" id="rdPreviousYear" placeholder="% or Amount"></td>
+                        <td><textarea id="rdDetails" rows="3" style="width:100%"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td><b>Capex</b></td>
+                        <td><input type="text" id="capexCurrentYear" placeholder="% or Amount"></td>
+                        <td><input type="text" id="capexPreviousYear" placeholder="% or Amount"></td>
+                        <td><textarea id="capexDetails" rows="3" style="width:100%"></textarea></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- NEW: Note Input -->
+            <div class="form-group" style="margin-top: 10px; margin-bottom: 20px;">
+                <label>Note (Optional)</label>
+                <textarea id="principle2Note" rows="2" placeholder="e.g. Note: 100% of Tata Steel's R&D spent is aligned with..."></textarea>
+            </div>
+
+            <!-- 2. Sustainable Sourcing -->
+            <label class="sub-label">2. Sustainable Sourcing</label>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>a. Procedures in place? *</label>
+                    <select id="sustainableSourcingProcedures">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>b. % Inputs Sourced Sustainably</label>
+                    <input type="text" id="sustainableSourcingPercentage" placeholder="e.g. 100">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Details of Procedures (for 2.a)</label>
+                <textarea id="sustainableSourcingDetails" rows="4" placeholder="e.g. Tata Steel has a Responsible Supply Chain Policy (RSCP)..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Remarks for Percentage (for 2.b)</label>
+                <textarea id="sustainableSourcingRemarks" rows="2" placeholder="e.g. All suppliers must declare commitments..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 3. Reclaim Processes -->
+            <label class="sub-label">3. Reclaim Processes (Recycling/Disposal)</label>
+            <p style="font-size:12px; color:#666; margin-bottom:5px;">Describe processes for Plastics, E-waste, Hazardous waste, etc.</p>
+
+            <div class="form-group">
+                <textarea id="reclaimProcessDetails" rows="5" placeholder="e.g. Steel has a very long useful life... Tata Steel is committed to circularity..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 4. EPR Details -->
+            <label class="sub-label">4. Extended Producer Responsibility (EPR)</label>
+            <div class="form-group">
+                <label>Applicability and Plan Details</label>
+                <textarea id="eprDetails" rows="5" placeholder="e.g. Yes. In India, different types of wastes are being managed as per the rules notified by Ministry of Environment..."></textarea>
+            </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+        <div class="form-section">
+            <div class="section-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Leadership Indicators
+            </div>
+
+            <label class="sub-label">1. Life Cycle Assessments (LCA)</label>
+
+            <!-- Note -->
+            <div class="form-group">
+                <label>Description / Note (Displayed before table)</label>
+                <textarea id="lcaNote" rows="3" placeholder="e.g. Yes, Tata Steel conducts LCA for most of its products..."></textarea>
+            </div>
+
+            <!-- Table -->
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="lcaTable">
+                    <thead>
+                    <tr>
+                        <th style="width:10%">NIC Code</th>
+                        <th style="width:20%">Product Name</th>
+                        <th style="width:10%">% Turnover</th>
+                        <th style="width:25%">Boundary (e.g. Cradle-to-gate)</th>
+                        <th style="width:10%">External Agency?</th>
+                        <th style="width:20%">Results / Web-link</th>
+                        <th style="width:5%">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Rows via JS -->
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addLcaRow()">+ Add LCA</button>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 2. LCA RISKS -->
+            <label class="sub-label">2. Significant Risks identified in LCA</label>
+
+            <div style="margin-bottom:15px; display:flex; gap:20px; align-items:center;">
+                <label style="margin:0;">Provide details via:</label>
+                <div style="display:flex; align-items:center; gap:5px;">
+                    <input type="radio" name="riskMode" value="note" checked onclick="toggleRiskMode()" style="margin:0;">
+                    <span>Note / Description</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:5px;">
+                    <input type="radio" name="riskMode" value="table" onclick="toggleRiskMode()" style="margin:0;">
+                    <span>Table</span>
+                </div>
+            </div>
+
+            <!-- MODE A: NOTE -->
+            <div id="riskNoteContainer">
+                <textarea id="lcaRiskNote" rows="5" placeholder="e.g. As identified in the Life Cycle Assessments (LCA), no significant social or environmental concerns..."></textarea>
+            </div>
+
+            <!-- MODE B: TABLE -->
+            <div id="riskTableContainer" style="display:none;">
+                <div style="overflow-x:auto;">
+                    <table class="input-table" id="riskTable">
+                        <thead>
+                        <tr>
+                            <th style="width:20%">Product / Service</th>
+                            <th style="width:40%">Description of Risk</th>
+                            <th style="width:35%">Action Taken</th>
+                            <th style="width:5%">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Rows via JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <button type="button" class="btn-add-row" onclick="addRiskRow()">+ Add Risk</button>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 3. RECYCLED MATERIAL -->
+            <label class="sub-label">3. Percentage of Recycled/Reused Input Material</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="recycledTable">
+                    <thead>
+                    <tr>
+                        <th rowspan="2" style="width:40%">Indicate input material</th>
+                        <th colspan="2" style="text-align:center">Recycled or re-used input material to total material</th>
+                        <th rowspan="2" style="width:5%">Action</th>
+                    </tr>
+                    <tr>
+                        <!-- These should auto-fill from previous page or default -->
+                        <th style="width:25%; background:#e0f2fe;">Current FY</th>
+                        <th style="width:25%; background:#f0fdf4;">Previous FY</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Rows added via JS -->
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addRecycledRow()">+ Add Material</button>
+
+            <!-- Note -->
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="recycledInputNote" rows="2" placeholder="e.g. Note: Includes waste generated from process..."></textarea>
+            </div>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 4. RECLAIMED END OF LIFE (Fixed Rows) -->
+            <label class="sub-label">4. Products/Packaging Reclaimed at End of Life</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">Category</th>
+                        <th colspan="3" style="text-align:center; background:#e0f2fe;">Current FY</th>
+                        <th colspan="3" style="text-align:center; background:#f0fdf4;">Previous FY</th>
+                    </tr>
+                    <tr>
+                        <th>Re-Used</th> <th>Recycled</th> <th>Disposed</th>
+                        <th>Re-Used</th> <th>Recycled</th> <th>Disposed</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Plastics -->
+                    <tr>
+                        <td>Plastics</td>
+                        <td><input type="text" id="plasticReusedCurr"></td>
+                        <td><input type="text" id="plasticRecycledCurr"></td>
+                        <td><input type="text" id="plasticDisposedCurr"></td>
+                        <td><input type="text" id="plasticReusedPrev"></td>
+                        <td><input type="text" id="plasticRecycledPrev"></td>
+                        <td><input type="text" id="plasticDisposedPrev"></td>
+                    </tr>
+                    <!-- E-Waste -->
+                    <tr>
+                        <td>E-waste</td>
+                        <td><input type="text" id="ewasteReusedCurr"></td>
+                        <td><input type="text" id="ewasteRecycledCurr"></td>
+                        <td><input type="text" id="ewasteDisposedCurr"></td>
+                        <td><input type="text" id="ewasteReusedPrev"></td>
+                        <td><input type="text" id="ewasteRecycledPrev"></td>
+                        <td><input type="text" id="ewasteDisposedPrev"></td>
+                    </tr>
+                    <!-- Hazardous -->
+                    <tr>
+                        <td>Hazardous</td>
+                        <td><input type="text" id="hazardReusedCurr"></td>
+                        <td><input type="text" id="hazardRecycledCurr"></td>
+                        <td><input type="text" id="hazardDisposedCurr"></td>
+                        <td><input type="text" id="hazardReusedPrev"></td>
+                        <td><input type="text" id="hazardRecycledPrev"></td>
+                        <td><input type="text" id="hazardDisposedPrev"></td>
+                    </tr>
+                    <!-- Other -->
+                    <tr>
+                        <td>Other</td>
+                        <td><input type="text" id="otherReusedCurr"></td>
+                        <td><input type="text" id="otherRecycledCurr"></td>
+                        <td><input type="text" id="otherDisposedCurr"></td>
+                        <td><input type="text" id="otherReusedPrev"></td>
+                        <td><input type="text" id="otherRecycledPrev"></td>
+                        <td><input type="text" id="otherDisposedPrev"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group" style="margin-top:10px;">
+                <label>Note for Q4</label>
+                <textarea id="reclaimedWasteNote" rows="2" placeholder="Note..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 5. RECLAIMED % (Dynamic Table) -->
+            <label class="sub-label">5. Reclaimed % of Products Sold</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="reclaimedPercTable">
+                    <thead>
+                    <tr>
+                        <th style="width:60%">Product Category</th>
+                        <th style="width:30%">Reclaimed %</th>
+                        <th style="width:10%">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Rows via JS -->
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addReclaimedPercRow()">+ Add Product</button>
+
+            <div class="form-group" style="margin-top:10px;">
+                <label>Note for Q5</label>
+                <textarea id="reclaimedPercentageNote" rows="2" placeholder="Note..."></textarea>
+            </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+        <!-- PRINCIPLE 3: WELL-BEING -->
+        <div class="form-section">
+            <div class="section-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                Principle 3: Employee Well-being
+            </div>
+
+            <label class="sub-label">1.a Well-being of Employees</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="empWellBeingTable">
+                    <thead>
+                    <tr>
+                        <th rowspan="2" style="min-width:100px;">Category</th>
+                        <th rowspan="2" style="min-width:60px;">Total (A)</th>
+                        <th colspan="2">Health</th>
+                        <th colspan="2">Accident</th>
+                        <th colspan="2">Maternity</th>
+                        <th colspan="2">Paternity</th>
+                        <th colspan="2">Day Care</th>
+                    </tr>
+                    <tr>
+                        <th>No.</th><th>%</th> <th>No.</th><th>%</th> <th>No.</th><th>%</th> <th>No.</th><th>%</th> <th>No.</th><th>%</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Rows added via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <br>
+
+            <label class="sub-label">1.b Well-being of Workers</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="workWellBeingTable">
+                    <!-- Same header structure as above -->
+                    <thead>
+                    <tr>
+                        <th rowspan="2" style="min-width:100px;">Category</th>
+                        <th rowspan="2" style="min-width:60px;">Total (A)</th>
+                        <th colspan="2">Health</th>
+                        <th colspan="2">Accident</th>
+                        <th colspan="2">Maternity</th>
+                        <th colspan="2">Paternity</th>
+                        <th colspan="2">Day Care</th>
+                    </tr>
+                    <tr>
+                        <th>No.</th><th>%</th> <th>No.</th><th>%</th> <th>No.</th><th>%</th> <th>No.</th><th>%</th> <th>No.</th><th>%</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Rows added via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top:20px;">
+                <label>Note (Displayed after tables)</label>
+                <textarea id="wellBeingNote" rows="4" placeholder="e.g. All contract employees in India are covered under ESIC..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 2. RETIREMENT BENEFITS -->
+            <label class="sub-label">2. Retirement Benefits (PF, Gratuity, ESI)</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="retirementTable">
+                    <thead>
+                    <tr>
+                        <th rowspan="2" style="width:20%">Benefits</th>
+                        <th colspan="3" style="text-align:center; background:#e0f2fe;">Current FY</th>
+                        <th colspan="3" style="text-align:center; background:#f0fdf4;">Previous FY</th>
+                        <th rowspan="2" style="width:5%">Action</th>
+                    </tr>
+                    <tr>
+                        <th>Emp %</th> <th>Work %</th> <th>Deposited?</th>
+                        <th>Emp %</th> <th>Work %</th> <th>Deposited?</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Rows via JS -->
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addRetirementRow()">+ Add Benefit</button>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="retirementBenefitNote" rows="3" placeholder="e.g. Note: All contract employees are covered under ESIC..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 3. ACCESSIBILITY -->
+            <label class="sub-label">3. Accessibility of workplaces</label>
+            <div class="form-group">
+                <label>Are premises accessible? Describe steps taken.</label>
+                <!-- Updated Placeholder -->
+                <textarea id="accessibilityDetails" rows="4" placeholder="e.g. Yes, the entity has taken steps to comply with the Rights of Persons with Disability Act, 2016..."></textarea>
+            </div>
+
+            <!-- 4. EQUAL OPPORTUNITY -->
+            <label class="sub-label">4. Equal Opportunity Policy (RPwD Act)</label>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Does policy exist? *</label>
+                    <select id="equalOppPolicy">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Web Link (if available)</label>
+                    <input type="text" id="equalOppLink" placeholder="https://www.example.com/policy">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Policy Details / Summary</label>
+                <textarea id="equalOppDetails" rows="4" placeholder="e.g. Yes, Tata Steel has an equal opportunity policy for Persons with Disabilities..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 5. PARENTAL LEAVE -->
+            <label class="sub-label">5. Return to Work & Retention Rates (Parental Leave)</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th rowspan="2" style="width:20%">Gender</th>
+                        <th colspan="2" style="text-align:center; background:#e0f2fe;">Permanent Employees</th>
+                        <th colspan="2" style="text-align:center; background:#f0fdf4;">Permanent Workers</th>
+                    </tr>
+                    <tr>
+                        <th>Return Rate %</th> <th>Retention Rate %</th>
+                        <th>Return Rate %</th> <th>Retention Rate %</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Male -->
+                    <tr>
+                        <td>Male</td>
+                        <td><input type="text" id="plEmpMaleReturn" placeholder="%"></td>
+                        <td><input type="text" id="plEmpMaleRetain" placeholder="%"></td>
+                        <td><input type="text" id="plWorkMaleReturn" placeholder="%"></td>
+                        <td><input type="text" id="plWorkMaleRetain" placeholder="%"></td>
+                    </tr>
+                    <!-- Female -->
+                    <tr>
+                        <td>Female</td>
+                        <td><input type="text" id="plEmpFemaleReturn" placeholder="%"></td>
+                        <td><input type="text" id="plEmpFemaleRetain" placeholder="%"></td>
+                        <td><input type="text" id="plWorkFemaleReturn" placeholder="%"></td>
+                        <td><input type="text" id="plWorkFemaleRetain" placeholder="%"></td>
+                    </tr>
+                    <!-- Total (Calculated manually or entered) -->
+                    <tr style="background-color: #f9fafb; font-weight:bold;">
+                        <td>Total</td>
+                        <td><input type="text" id="plEmpTotalReturn" placeholder="%"></td>
+                        <td><input type="text" id="plEmpTotalRetain" placeholder="%"></td>
+                        <td><input type="text" id="plWorkTotalReturn" placeholder="%"></td>
+                        <td><input type="text" id="plWorkTotalRetain" placeholder="%"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="parentalLeaveNote" rows="2" placeholder="e.g. Note: Certain subsidiaries do not record this information..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 6. GRIEVANCE MECHANISM -->
+            <label class="sub-label">6. Grievance Redressal Mechanism</label>
+            <p style="font-size:12px; color:#666; margin-bottom:10px;">Indicate Yes/No and provide brief details.</p>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th style="width:30%">Category</th>
+                        <th style="width:70%">Yes/No (If Yes, give details)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Permanent Workers</td>
+                        <td><textarea id="grievancePermWorkers" rows="2" placeholder="e.g. Yes, via Works Committee..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>Other than Permanent Workers</td>
+                        <td><textarea id="grievanceTempWorkers" rows="2" placeholder="e.g. Yes, via Contractor Cell..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>Permanent Employees</td>
+                        <td><textarea id="grievancePermEmployees" rows="2" placeholder="e.g. Yes, via Ethics Helpline..."></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>Other than Permanent Employees</td>
+                        <td><textarea id="grievanceTempEmployees" rows="2" placeholder="e.g. Yes, via HR Helpdesk..."></textarea></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 7. UNION MEMBERSHIP -->
+            <label class="sub-label">7. Union Membership</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="unionTable">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">Category</th>
+                        <th colspan="3" style="text-align:center; background:#e0f2fe;">Current FY</th>
+                        <th colspan="3" style="text-align:center; background:#f0fdf4;">Previous FY</th>
+                    </tr>
+                    <tr>
+                        <th>Total</th> <th>In Union</th> <th>%</th>
+                        <th>Total</th> <th>In Union</th> <th>%</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- EMPLOYEES -->
+                    <tr><td colspan="7" style="font-weight:bold; background:#eee;">PERMANENT EMPLOYEES</td></tr>
+                    <tr>
+                        <td>Total</td>
+                        <td><input type="number" id="unionCurrEmpTotalA" oninput="calcUnionPerc('unionCurrEmp')"></td>
+                        <td><input type="number" id="unionCurrEmpUnionB" oninput="calcUnionPerc('unionCurrEmp')"></td>
+                        <td><input type="text" id="unionCurrEmpPerc" readonly></td>
+
+                        <td><input type="number" id="unionPrevEmpTotalC" oninput="calcUnionPerc('unionPrevEmp')"></td>
+                        <td><input type="number" id="unionPrevEmpUnionD" oninput="calcUnionPerc('unionPrevEmp')"></td>
+                        <td><input type="text" id="unionPrevEmpPerc" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>Male</td>
+                        <td><input type="number" id="unionCurrEmpMaleTotal" oninput="calcUnionPerc('unionCurrEmpMale')"></td>
+                        <td><input type="number" id="unionCurrEmpMaleUnion" oninput="calcUnionPerc('unionCurrEmpMale')"></td>
+                        <td><input type="text" id="unionCurrEmpMalePerc" readonly></td>
+
+                        <td><input type="number" id="unionPrevEmpMaleTotal" oninput="calcUnionPerc('unionPrevEmpMale')"></td>
+                        <td><input type="number" id="unionPrevEmpMaleUnion" oninput="calcUnionPerc('unionPrevEmpMale')"></td>
+                        <td><input type="text" id="unionPrevEmpMalePerc" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>Female</td>
+                        <td><input type="number" id="unionCurrEmpFemaleTotal" oninput="calcUnionPerc('unionCurrEmpFemale')"></td>
+                        <td><input type="number" id="unionCurrEmpFemaleUnion" oninput="calcUnionPerc('unionCurrEmpFemale')"></td>
+                        <td><input type="text" id="unionCurrEmpFemalePerc" readonly></td>
+
+                        <td><input type="number" id="unionPrevEmpFemaleTotal" oninput="calcUnionPerc('unionPrevEmpFemale')"></td>
+                        <td><input type="number" id="unionPrevEmpFemaleUnion" oninput="calcUnionPerc('unionPrevEmpFemale')"></td>
+                        <td><input type="text" id="unionPrevEmpFemalePerc" readonly></td>
+                    </tr>
+
+                    <!-- WORKERS -->
+                    <tr><td colspan="7" style="font-weight:bold; background:#eee;">PERMANENT WORKERS</td></tr>
+                    <tr>
+                        <td>Total</td>
+                        <td><input type="number" id="unionCurrWorkTotalA" oninput="calcUnionPerc('unionCurrWork')"></td>
+                        <td><input type="number" id="unionCurrWorkUnionB" oninput="calcUnionPerc('unionCurrWork')"></td>
+                        <td><input type="text" id="unionCurrWorkPerc" readonly></td>
+
+                        <td><input type="number" id="unionPrevWorkTotalC" oninput="calcUnionPerc('unionPrevWork')"></td>
+                        <td><input type="number" id="unionPrevWorkUnionD" oninput="calcUnionPerc('unionPrevWork')"></td>
+                        <td><input type="text" id="unionPrevWorkPerc" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>Male</td>
+                        <td><input type="number" id="unionCurrWorkMaleTotal" oninput="calcUnionPerc('unionCurrWorkMale')"></td>
+                        <td><input type="number" id="unionCurrWorkMaleUnion" oninput="calcUnionPerc('unionCurrWorkMale')"></td>
+                        <td><input type="text" id="unionCurrWorkMalePerc" readonly></td>
+
+                        <td><input type="number" id="unionPrevWorkMaleTotal" oninput="calcUnionPerc('unionPrevWorkMale')"></td>
+                        <td><input type="number" id="unionPrevWorkMaleUnion" oninput="calcUnionPerc('unionPrevWorkMale')"></td>
+                        <td><input type="text" id="unionPrevWorkMalePerc" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>Female</td>
+                        <td><input type="number" id="unionCurrWorkFemaleTotal" oninput="calcUnionPerc('unionCurrWorkFemale')"></td>
+                        <td><input type="number" id="unionCurrWorkFemaleUnion" oninput="calcUnionPerc('unionCurrWorkFemale')"></td>
+                        <td><input type="text" id="unionCurrWorkFemalePerc" readonly></td>
+
+                        <td><input type="number" id="unionPrevWorkFemaleTotal" oninput="calcUnionPerc('unionPrevWorkFemale')"></td>
+                        <td><input type="number" id="unionPrevWorkFemaleUnion" oninput="calcUnionPerc('unionPrevWorkFemale')"></td>
+                        <td><input type="text" id="unionPrevWorkFemalePerc" readonly></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="unionMembershipNote" rows="3" placeholder="e.g. Note: Others include transgender personnel..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 8. TRAINING DETAILS -->
+            <label class="sub-label">8. Details of training given to employees and workers</label>
+            <p style="font-size:12px; color:#666; margin-bottom:10px;">(Health & Safety Measures and Skill Upgradation)</p>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="trainingDetailsTable">
+                    <thead>
+                    <tr>
+                        <th rowspan="2" style="background:#eee; min-width:100px;">Category</th>
+                        <th colspan="5" style="text-align:center; background:#e0f2fe;">Current Financial Year</th>
+                        <th colspan="5" style="text-align:center; background:#f0fdf4;">Previous Financial Year</th>
+                    </tr>
+                    <tr>
+                        <!-- Current Header -->
+                        <th style="min-width:60px;">Total (A)</th>
+                        <th style="min-width:60px;">Health No.</th>
+                        <th style="min-width:50px;">% (B/A)</th>
+                        <th style="min-width:60px;">Skill No.</th>
+                        <th style="min-width:50px;">% (C/A)</th>
+
+                        <!-- Previous Header -->
+                        <th style="min-width:60px;">Total (D)</th>
+                        <th style="min-width:60px;">Health No.</th>
+                        <th style="min-width:50px;">% (E/D)</th>
+                        <th style="min-width:60px;">Skill No.</th>
+                        <th style="min-width:50px;">% (F/D)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- === EMPLOYEES === -->
+                    <tr><td colspan="11" style="font-weight:bold; background:#f9f9f9; color:#108a55;">EMPLOYEES</td></tr>
+
+                    <!-- Male Employees -->
+                    <tr>
+                        <td>Male</td>
+                        <!-- Current -->
+                        <td><input type="number" id="trainEmpMaleTotal" oninput="calcTrainRow(this)"></td>
+                        <td><input type="number" id="trainEmpMaleHealthNo" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainEmpMaleHealthPerc" readonly style="background:#f0f0f0;"></td>
+                        <td><input type="number" id="trainEmpMaleSkillNo" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainEmpMaleSkillPerc" readonly style="background:#f0f0f0;"></td>
+                        <!-- Previous -->
+                        <td><input type="number" id="trainEmpMaleTotalPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="number" id="trainEmpMaleHealthNoPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainEmpMaleHealthPercPrev" readonly style="background:#f0f0f0;"></td>
+                        <td><input type="number" id="trainEmpMaleSkillNoPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainEmpMaleSkillPercPrev" readonly style="background:#f0f0f0;"></td>
+                    </tr>
+
+                    <!-- Female Employees -->
+                    <tr>
+                        <td>Female</td>
+                        <!-- Current -->
+                        <td><input type="number" id="trainEmpFemaleTotal" oninput="calcTrainRow(this)"></td>
+                        <td><input type="number" id="trainEmpFemaleHealthNo" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainEmpFemaleHealthPerc" readonly style="background:#f0f0f0;"></td>
+                        <td><input type="number" id="trainEmpFemaleSkillNo" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainEmpFemaleSkillPerc" readonly style="background:#f0f0f0;"></td>
+                        <!-- Previous -->
+                        <td><input type="number" id="trainEmpFemaleTotalPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="number" id="trainEmpFemaleHealthNoPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainEmpFemaleHealthPercPrev" readonly style="background:#f0f0f0;"></td>
+                        <td><input type="number" id="trainEmpFemaleSkillNoPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainEmpFemaleSkillPercPrev" readonly style="background:#f0f0f0;"></td>
+                    </tr>
+
+                    <!-- Total Employees -->
+                    <tr style="font-weight:bold;">
+                        <td>Total</td>
+                        <!-- Current -->
+                        <td><input type="number" id="trainEmpGenTotal" oninput="calcTrainRow(this)"></td>
+                        <td><input type="number" id="trainEmpGenHealthNo" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainEmpGenHealthPerc" readonly style="background:#e0f2fe;"></td>
+                        <td><input type="number" id="trainEmpGenSkillNo" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainEmpGenSkillPerc" readonly style="background:#e0f2fe;"></td>
+                        <!-- Previous -->
+                        <td><input type="number" id="trainEmpGenTotalPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="number" id="trainEmpGenHealthNoPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainEmpGenHealthPercPrev" readonly style="background:#f0fdf4;"></td>
+                        <td><input type="number" id="trainEmpGenSkillNoPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainEmpGenSkillPercPrev" readonly style="background:#f0fdf4;"></td>
+                    </tr>
+
+                    <!-- === WORKERS === -->
+                    <tr><td colspan="11" style="font-weight:bold; background:#f9f9f9; color:#108a55;">WORKERS</td></tr>
+
+                    <!-- Male Workers -->
+                    <tr>
+                        <td>Male</td>
+                        <!-- Current -->
+                        <td><input type="number" id="trainWorkMaleTotal" oninput="calcTrainRow(this)"></td>
+                        <td><input type="number" id="trainWorkMaleHealthNo" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainWorkMaleHealthPerc" readonly style="background:#f0f0f0;"></td>
+                        <td><input type="number" id="trainWorkMaleSkillNo" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainWorkMaleSkillPerc" readonly style="background:#f0f0f0;"></td>
+                        <!-- Previous -->
+                        <td><input type="number" id="trainWorkMaleTotalPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="number" id="trainWorkMaleHealthNoPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainWorkMaleHealthPercPrev" readonly style="background:#f0f0f0;"></td>
+                        <td><input type="number" id="trainWorkMaleSkillNoPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainWorkMaleSkillPercPrev" readonly style="background:#f0f0f0;"></td>
+                    </tr>
+
+                    <!-- Female Workers -->
+                    <tr>
+                        <td>Female</td>
+                        <!-- Current -->
+                        <td><input type="number" id="trainWorkFemaleTotal" oninput="calcTrainRow(this)"></td>
+                        <td><input type="number" id="trainWorkFemaleHealthNo" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainWorkFemaleHealthPerc" readonly style="background:#f0f0f0;"></td>
+                        <td><input type="number" id="trainWorkFemaleSkillNo" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainWorkFemaleSkillPerc" readonly style="background:#f0f0f0;"></td>
+                        <!-- Previous -->
+                        <td><input type="number" id="trainWorkFemaleTotalPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="number" id="trainWorkFemaleHealthNoPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainWorkFemaleHealthPercPrev" readonly style="background:#f0f0f0;"></td>
+                        <td><input type="number" id="trainWorkFemaleSkillNoPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainWorkFemaleSkillPercPrev" readonly style="background:#f0f0f0;"></td>
+                    </tr>
+
+                    <!-- Total Workers -->
+                    <tr style="font-weight:bold;">
+                        <td>Total</td>
+                        <!-- Current -->
+                        <td><input type="number" id="trainWorkGenTotal" oninput="calcTrainRow(this)"></td>
+                        <td><input type="number" id="trainWorkGenHealthNo" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainWorkGenHealthPerc" readonly style="background:#e0f2fe;"></td>
+                        <td><input type="number" id="trainWorkGenSkillNo" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainWorkGenSkillPerc" readonly style="background:#e0f2fe;"></td>
+                        <!-- Previous -->
+                        <td><input type="number" id="trainWorkGenTotalPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="number" id="trainWorkGenHealthNoPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainWorkGenHealthPercPrev" readonly style="background:#f0fdf4;"></td>
+                        <td><input type="number" id="trainWorkGenSkillNoPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainWorkGenSkillPercPrev" readonly style="background:#f0fdf4;"></td>
+                    </tr>
+
+                    <tr>
+                        <td>Others</td>
+                        <!-- Current -->
+                        <td><input type="number" id="trainEmpOtherTotal" oninput="calcTrainRow(this)"></td>
+                        <td><input type="number" id="trainEmpOtherHealthNo" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainEmpOtherHealthPerc" readonly style="background:#f0f0f0;"></td>
+                        <td><input type="number" id="trainEmpOtherSkillNo" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainEmpOtherSkillPerc" readonly style="background:#f0f0f0;"></td>
+                        <!-- Previous -->
+                        <td><input type="number" id="trainEmpOtherTotalPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="number" id="trainEmpOtherHealthNoPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainEmpOtherHealthPercPrev" readonly style="background:#f0f0f0;"></td>
+                        <td><input type="number" id="trainEmpOtherSkillNoPrev" oninput="calcTrainRow(this)"></td>
+                        <td><input type="text" id="trainEmpOtherSkillPercPrev" readonly style="background:#f0f0f0;"></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="trainingDetailsNote" rows="3" placeholder="e.g. Note: Others include transgender personnel..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 9. PERFORMANCE REVIEWS -->
+            <label class="sub-label">9. Performance & Career Development Reviews</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">Category</th>
+                        <th colspan="3" style="text-align:center; background:#e0f2fe;">Current FY</th>
+                        <th colspan="3" style="text-align:center; background:#f0fdf4;">Previous FY</th>
+                    </tr>
+                    <tr>
+                        <th>Total (A)</th> <th>Covered (B)</th> <th>% (B/A)</th>
+                        <th>Total (C)</th> <th>Covered (D)</th> <th>% (D/C)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- EMPLOYEES -->
+                    <tr><td colspan="7" style="font-weight:bold; background:#eee;">PERMANENT EMPLOYEES</td></tr>
+                    <tr>
+                        <td>Male</td>
+                        <td><input type="number" id="revEmpMaleTotal" oninput="calcReviewRow(this)"></td>
+                        <td><input type="number" id="revEmpMaleCovered" oninput="calcReviewRow(this)"></td>
+                        <td><input type="text" id="revEmpMalePerc" readonly></td>
+                        <td><input type="number" id="revEmpMaleTotalPrev" oninput="calcReviewRow(this)"></td>
+                        <td><input type="number" id="revEmpMaleCoveredPrev" oninput="calcReviewRow(this)"></td>
+                        <td><input type="text" id="revEmpMalePercPrev" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>Female</td>
+                        <td><input type="number" id="revEmpFemTotal" oninput="calcReviewRow(this)"></td>
+                        <td><input type="number" id="revEmpFemCovered" oninput="calcReviewRow(this)"></td>
+                        <td><input type="text" id="revEmpFemPerc" readonly></td>
+                        <td><input type="number" id="revEmpFemTotalPrev" oninput="calcReviewRow(this)"></td>
+                        <td><input type="number" id="revEmpFemCoveredPrev" oninput="calcReviewRow(this)"></td>
+                        <td><input type="text" id="revEmpFemPercPrev" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>Others</td>
+                        <td><input type="number" id="revEmpOthTotal" oninput="calcReviewRow(this)"></td>
+                        <td><input type="number" id="revEmpOthCovered" oninput="calcReviewRow(this)"></td>
+                        <td><input type="text" id="revEmpOthPerc" readonly></td>
+                        <td><input type="number" id="revEmpOthTotalPrev" oninput="calcReviewRow(this)"></td>
+                        <td><input type="number" id="revEmpOthCoveredPrev" oninput="calcReviewRow(this)"></td>
+                        <td><input type="text" id="revEmpOthPercPrev" readonly></td>
+                    </tr>
+                    <tr style="font-weight:bold;">
+                        <td>Total</td>
+                        <td><input type="number" id="revEmpGenTotal" oninput="calcReviewRow(this)"></td>
+                        <td><input type="number" id="revEmpGenCovered" oninput="calcReviewRow(this)"></td>
+                        <td><input type="text" id="revEmpGenPerc" readonly></td>
+                        <td><input type="number" id="revEmpGenTotalPrev" oninput="calcReviewRow(this)"></td>
+                        <td><input type="number" id="revEmpGenCoveredPrev" oninput="calcReviewRow(this)"></td>
+                        <td><input type="text" id="revEmpGenPercPrev" readonly></td>
+                    </tr>
+
+                    <!-- WORKERS -->
+                    <tr><td colspan="7" style="font-weight:bold; background:#eee;">PERMANENT WORKERS</td></tr>
+                    <!-- (Repeat rows for Workers with IDs: revWorkMaleTotal, etc.) -->
+                    <!-- Male -->
+                    <tr>
+                        <td>Male</td>
+                        <td><input type="number" id="revWorkMaleTotal" oninput="calcReviewRow(this)"></td>
+                        <td><input type="number" id="revWorkMaleCovered" oninput="calcReviewRow(this)"></td>
+                        <td><input type="text" id="revWorkMalePerc" readonly></td>
+                        <td><input type="number" id="revWorkMaleTotalPrev" oninput="calcReviewRow(this)"></td>
+                        <td><input type="number" id="revWorkMaleCoveredPrev" oninput="calcReviewRow(this)"></td>
+                        <td><input type="text" id="revWorkMalePercPrev" readonly></td>
+                    </tr>
+                    <!-- Female -->
+                    <tr>
+                        <td>Female</td>
+                        <td><input type="number" id="revWorkFemTotal" oninput="calcReviewRow(this)"></td>
+                        <td><input type="number" id="revWorkFemCovered" oninput="calcReviewRow(this)"></td>
+                        <td><input type="text" id="revWorkFemPerc" readonly></td>
+                        <td><input type="number" id="revWorkFemTotalPrev" oninput="calcReviewRow(this)"></td>
+                        <td><input type="number" id="revWorkFemCoveredPrev" oninput="calcReviewRow(this)"></td>
+                        <td><input type="text" id="revWorkFemPercPrev" readonly></td>
+                    </tr>
+                    <!-- Others -->
+                    <tr>
+                        <td>Others</td>
+                        <td><input type="number" id="revWorkOthTotal" oninput="calcReviewRow(this)"></td>
+                        <td><input type="number" id="revWorkOthCovered" oninput="calcReviewRow(this)"></td>
+                        <td><input type="text" id="revWorkOthPerc" readonly></td>
+                        <td><input type="number" id="revWorkOthTotalPrev" oninput="calcReviewRow(this)"></td>
+                        <td><input type="number" id="revWorkOthCoveredPrev" oninput="calcReviewRow(this)"></td>
+                        <td><input type="text" id="revWorkOthPercPrev" readonly></td>
+                    </tr>
+                    <!-- Total -->
+                    <tr style="font-weight:bold;">
+                        <td>Total</td>
+                        <td><input type="number" id="revWorkGenTotal" oninput="calcReviewRow(this)"></td>
+                        <td><input type="number" id="revWorkGenCovered" oninput="calcReviewRow(this)"></td>
+                        <td><input type="text" id="revWorkGenPerc" readonly></td>
+                        <td><input type="number" id="revWorkGenTotalPrev" oninput="calcReviewRow(this)"></td>
+                        <td><input type="number" id="revWorkGenCoveredPrev" oninput="calcReviewRow(this)"></td>
+                        <td><input type="text" id="revWorkGenPercPrev" readonly></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="reviewDetailsNote" rows="2" placeholder="e.g. Note: Others include..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 10. HEALTH & SAFETY -->
+            <label class="sub-label">10. Health & Safety Management System</label>
+
+            <div class="form-group">
+                <label>a. System Implemented & Coverage (Yes/No + Details)</label>
+                <textarea id="healthSafetySystem" rows="3" placeholder="e.g. Yes, ISO 45001:2018 implemented covering all manufacturing units..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>b. Hazard Identification & Risk Assessment Processes</label>
+                <textarea id="hazardIdentification" rows="3" placeholder="e.g. Regular safety audits, HIRA process, Job Cycle Checks..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>c. Worker Reporting Mechanism (Y/N + Details)</label>
+                <textarea id="hazardReporting" rows="2" placeholder="e.g. Yes, 'Speak Up' helpline and Safety Incident Reporting app..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>d. Non-Occupational Medical Access (Yes/No)</label>
+                <textarea id="medicalAccess" rows="2" placeholder="e.g. Yes, via Company hospitals and mediclaim policies..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 11. SAFETY INCIDENTS -->
+            <label class="sub-label">11. Details of Safety Related Incidents</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="safetyTable">
+                    <thead>
+                    <tr>
+                        <th style="width:30%">Safety Incident/Number</th>
+                        <th style="width:20%">Category</th>
+                        <!-- Reuse Global FY Headers Logic -->
+                        <th style="width:25%; background:#e0f2fe;">Current FY</th>
+                        <th style="width:25%; background:#f0fdf4;">Previous FY</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- LTIFR -->
+                    <tr>
+                        <td rowspan="2"><b>LTIFR</b> (per 1M hours)</td>
+                        <td>Employees</td>
+                        <td><input type="text" id="safetyLtifrEmpCurr"></td>
+                        <td><input type="text" id="safetyLtifrEmpPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Workers</td>
+                        <td><input type="text" id="safetyLtifrWorkCurr"></td>
+                        <td><input type="text" id="safetyLtifrWorkPrev"></td>
+                    </tr>
+
+                    <!-- Total Injuries -->
+                    <tr>
+                        <td rowspan="2"><b>Total recordable injuries</b></td>
+                        <td>Employees</td>
+                        <td><input type="text" id="safetyTotalInjEmpCurr"></td>
+                        <td><input type="text" id="safetyTotalInjEmpPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Workers</td>
+                        <td><input type="text" id="safetyTotalInjWorkCurr"></td>
+                        <td><input type="text" id="safetyTotalInjWorkPrev"></td>
+                    </tr>
+
+                    <!-- Fatalities -->
+                    <tr>
+                        <td rowspan="2"><b>No. of fatalities</b></td>
+                        <td>Employees</td>
+                        <td><input type="text" id="safetyFatalEmpCurr"></td>
+                        <td><input type="text" id="safetyFatalEmpPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Workers</td>
+                        <td><input type="text" id="safetyFatalWorkCurr"></td>
+                        <td><input type="text" id="safetyFatalWorkPrev"></td>
+                    </tr>
+
+                    <!-- High Consequence -->
+                    <tr>
+                        <td rowspan="2"><b>High consequence injury</b><br>(excl. fatalities)</td>
+                        <td>Employees</td>
+                        <td><input type="text" id="safetyHighConEmpCurr"></td>
+                        <td><input type="text" id="safetyHighConEmpPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Workers</td>
+                        <td><input type="text" id="safetyHighConWorkCurr"></td>
+                        <td><input type="text" id="safetyHighConWorkPrev"></td>
+                    </tr>
+
+                    <!-- Permanent Disabilities -->
+                    <tr>
+                        <td rowspan="2"><b>Permanent Disabilities</b></td>
+                        <td>Employees</td>
+                        <td><input type="text" id="safetyPermDisEmpCurr"></td>
+                        <td><input type="text" id="safetyPermDisEmpPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Workers</td>
+                        <td><input type="text" id="safetyPermDisWorkCurr"></td>
+                        <td><input type="text" id="safetyPermDisWorkPrev"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="safetyIncidentsNote" rows="2" placeholder="e.g. Note: Employees include all personnel on rolls..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 12. SAFETY MEASURES -->
+            <label class="sub-label">12. Measures for Safe & Healthy Workplace</label>
+            <p style="font-size:12px; color:#666; margin-bottom:10px;">Add key strategies (e.g. Leadership capability, Risk Management).</p>
+
+            <div id="safetyMeasuresContainer">
+                <!-- Items added via JS -->
+            </div>
+
+            <button type="button" class="btn-add-row" onclick="addSafetyMeasureRow()">+ Add Strategy</button>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 13. WORKER COMPLAINTS -->
+            <label class="sub-label">13. Employee & Worker Complaints</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">Category</th>
+                        <th colspan="3" style="text-align:center; background:#e0f2fe;">Current FY</th>
+                        <th colspan="3" style="text-align:center; background:#f0fdf4;">Previous FY</th>
+                    </tr>
+                    <tr>
+                        <th>Filed</th> <th>Pending</th> <th>Remarks</th>
+                        <th>Filed</th> <th>Pending</th> <th>Remarks</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Working Conditions</td>
+                        <td><input type="number" id="wcFiledCurr"></td>
+                        <td><input type="number" id="wcPendingCurr"></td>
+                        <td><input type="text" id="wcRemarksCurr"></td>
+
+                        <td><input type="number" id="wcFiledPrev"></td>
+                        <td><input type="number" id="wcPendingPrev"></td>
+                        <td><input type="text" id="wcRemarksPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Health & Safety</td>
+                        <td><input type="number" id="hsFiledCurr"></td>
+                        <td><input type="number" id="hsPendingCurr"></td>
+                        <td><input type="text" id="hsRemarksCurr"></td>
+
+                        <td><input type="number" id="hsFiledPrev"></td>
+                        <td><input type="number" id="hsPendingPrev"></td>
+                        <td><input type="text" id="hsRemarksPrev"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="workerComplaintsNote" rows="2" placeholder="e.g. Note: Assessment by internal team..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 14. ASSESSMENTS -->
+            <label class="sub-label">14. Assessments for the Year (% Covered)</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th style="width:40%">Category</th>
+                        <th style="width:60%">% of Plants/Offices Assessed</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Health & Safety Practices</td>
+                        <td><input type="text" id="assessmentHealthPerc" placeholder="e.g. 100"></td>
+                    </tr>
+                    <tr>
+                        <td>Working Conditions</td>
+                        <td><input type="text" id="assessmentWorkingPerc" placeholder="e.g. 100"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="assessmentNote" rows="2" placeholder="e.g. Note: Assessment by Internal team..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 15. CORRECTIVE ACTIONS -->
+            <label class="sub-label">15. Safety Corrective Actions</label>
+
+            <div class="form-group">
+                <label>Details of actions taken for safety incidents/risks</label>
+                <textarea id="safetyCorrectiveActions" rows="4" placeholder="e.g. All safety incidents and near-misses are investigated..."></textarea>
+            </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+        <!-- LEADERSHIP INDICATORS -->
+        <div class="form-section">
+            <div class="section-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                Leadership Indicators
+            </div>
+
+            <!-- 1. Life Insurance -->
+            <label class="sub-label">1. Life Insurance / Compensatory Package</label>
+
+            <!-- Grid for Yes/No Dropdowns -->
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>(A) Employees (Y/N)</label>
+                    <select id="lifeInsuranceEmployees">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>(B) Workers (Y/N)</label>
+                    <select id="lifeInsuranceWorkers">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Text Area for Details (Full Width) -->
+            <div class="form-group">
+                <label>Details of Schemes / Benefits</label>
+                <textarea id="lifeInsuranceDetails" rows="4" style="width: 100%; box-sizing: border-box;" placeholder="e.g. In case of death or permanent disablement, Tata Steel has institutionalised..."></textarea>
+            </div>
+
+            <!-- Visual Separator -->
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 2. Statutory Dues -->
+            <label class="sub-label">2. Statutory Dues Measures</label>
+
+            <!-- Text Area for Measures (Full Width) -->
+            <div class="form-group">
+                <label>Measures taken to ensure deduction and deposit by value chain partners</label>
+                <textarea id="statutoryDuesMeasures" rows="4" style="width: 100%; box-sizing: border-box;" placeholder="e.g. The contract between Tata Steel and its suppliers incorporates statutory provisions..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- LEADERSHIP 3 -->
+            <label class="sub-label">3. Rehabilitation (High Consequence Injury)</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th rowspan="2" style="width:20%">Category</th>
+                        <th colspan="2" style="text-align:center; background:#e0f2fe;">Total Affected</th>
+                        <th colspan="2" style="text-align:center; background:#f0fdf4;">Rehabilitated / Placed</th>
+                    </tr>
+                    <tr>
+                        <!-- Headers will inherit FY from Q20 inputs if filled -->
+                        <th>Current FY</th> <th>Previous FY</th>
+                        <th>Current FY</th> <th>Previous FY</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Employees</td>
+                        <td><input type="text" id="rehabEmpAffCurr"></td>
+                        <td><input type="text" id="rehabEmpAffPrev"></td>
+                        <td><input type="text" id="rehabEmpPlacedCurr"></td>
+                        <td><input type="text" id="rehabEmpPlacedPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Workers</td>
+                        <td><input type="text" id="rehabWorkAffCurr"></td>
+                        <td><input type="text" id="rehabWorkAffPrev"></td>
+                        <td><input type="text" id="rehabWorkPlacedCurr"></td>
+                        <td><input type="text" id="rehabWorkPlacedPrev"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="rehabilitationNote" rows="2" placeholder="Note..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- LEADERSHIP 4 -->
+            <label class="sub-label">4. Transition Assistance Programs</label>
+
+            <div class="form-group">
+                <label>Details of programs (or state Not Applicable)</label>
+                <textarea id="transitionAssistanceDetails" rows="4" placeholder="e.g. Yes, Tata Steel provides transition assistance programme in the UK..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- LEADERSHIP 5 -->
+            <label class="sub-label">5. Value Chain Assessment Details</label>
+
+            <div class="form-group">
+                <label>Description of assessment process (Note)</label>
+                <textarea id="valueChainAssessmentNote" rows="4" placeholder="e.g. All Tata Steel's critical and high-risk vendor partners are periodically assessed..."></textarea>
+            </div>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th style="width:40%">Category</th>
+                        <th style="width:60%">% of Partners Assessed</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Health and safety practices</td>
+                        <td><input type="text" id="vcHealthSafetyPerc" placeholder="e.g. 74"></td>
+                    </tr>
+                    <tr>
+                        <td>Working Conditions</td>
+                        <td><input type="text" id="vcWorkingCondPerc" placeholder="e.g. 74"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- LEADERSHIP 6 -->
+            <label class="sub-label">6. Value Chain Corrective Actions</label>
+
+            <div class="form-group">
+                <label>Introductory Statement</label>
+                <textarea id="vcCorrectiveActionIntro" rows="3" placeholder="e.g. Over the years, Tata Steel has taken several actions..."></textarea>
+            </div>
+
+            <label style="font-size:13px; font-weight:600; color:#444;">Key Actions Taken (Bullet Points)</label>
+            <div id="vcActionsContainer">
+                <!-- Rows added via JS -->
+            </div>
+            <button type="button" class="btn-add-row" onclick="addVcActionRow()">+ Add Action Point</button>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 40px 0;">
+
+        <!-- PRINCIPLE 4 -->
+        <div class="form-section">
+            <div class="section-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                Principle 4: Stakeholder Engagement
+            </div>
+
+            <label class="sub-label">1. Process for Identifying Stakeholders</label>
+
+            <div class="form-group">
+                <label>Introductory Statement</label>
+                <textarea id="principle4Q1Intro" rows="3" placeholder="e.g. Tata Steel has a structured Materiality Assessment process..."></textarea>
+            </div>
+
+            <label style="font-size:13px; font-weight:600; color:#444;">Key Standards / Guidelines Used (List):</label>
+            <div id="p4PointsContainer">
+                <!-- Rows added via JS -->
+            </div>
+            <button type="button" class="btn-add-row" onclick="addP4PointRow()">+ Add Standard</button>
+
+            <div class="form-group" style="margin-top: 20px;">
+                <label>Concluding Statement</label>
+                <textarea id="principle4Q1Conclusion" rows="3" placeholder="e.g. As part of the Materiality Assessment, Tata Steel also uses..."></textarea>
+            </div>
+
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 2. STAKEHOLDER ENGAGEMENT -->
+            <label class="sub-label">2. Stakeholder Groups & Engagement</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="stakeholderTable">
+                    <thead>
+                    <tr>
+                        <th style="width:15%">Stakeholder Group</th>
+                        <th style="width:10%">Vulnerable? (Y/N)</th>
+                        <th style="width:25%">Channels</th>
+                        <th style="width:15%">Frequency</th>
+                        <th style="width:30%">Purpose & Scope</th>
+                        <th style="width:5%">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Rows via JS -->
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addStakeholderRow()">+ Add Stakeholder</button>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="stakeholderNote" rows="2" placeholder="e.g. Note: Additional details on forums..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- LEADERSHIP 1: CONSULTATION PROCESS -->
+            <label class="sub-label">Leadership Indicators</label>
+
+            <div class="form-group">
+                <label>1. Consultation Processes (Stakeholders & Board)</label>
+                <textarea id="consultationProcessDetails" rows="5" placeholder="e.g. The entity has delegated consultation to the CEO & MD... Feedback is provided via quarterly Board meetings..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- LEADERSHIP 2: CONSULTATION USAGE -->
+            <label class="sub-label">2. Stakeholder Consultation Usage</label>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Is consultation used for E&S topics?</label>
+                    <select id="stakeholderConsultationUsed">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Details of instances / How inputs were incorporated</label>
+                <textarea id="stakeholderConsultationDetails" rows="5" placeholder="e.g. Yes, Tata Steel relies on the outcome of the stakeholder's consultation..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- LEADERSHIP 3: VULNERABLE GROUPS -->
+            <label class="sub-label">3. Engagement with Vulnerable Groups</label>
+
+            <div class="form-group">
+                <label>Introductory Statement</label>
+                <textarea id="vulnerableGroupIntro" rows="3" placeholder="e.g. In India, our company's operations are in states with..."></textarea>
+            </div>
+
+            <label style="font-size:13px; font-weight:600; color:#444;">Actions Taken (Numbered List):</label>
+            <div id="vulnerableActionsContainer">
+                <!-- Rows added via JS -->
+            </div>
+            <button type="button" class="btn-add-row" onclick="addVulnerableActionRow()">+ Add Action</button>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Concluding Statement</label>
+                <textarea id="vulnerableGroupConclusion" rows="2" placeholder="e.g. Further details on engagement are provided in..."></textarea>
+            </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 40px 0;">
+
+        <!-- PRINCIPLE 5 -->
+        <div class="form-section">
+            <div class="section-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                Principle 5: Human Rights
+            </div>
+
+            <label class="sub-label">1. Human Rights Training Coverage</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">Category</th>
+                        <th colspan="3" style="text-align:center; background:#e0f2fe;">Current FY</th>
+                        <th colspan="3" style="text-align:center; background:#f0fdf4;">Previous FY</th>
+                    </tr>
+                    <tr>
+                        <th>Total (A)</th> <th>Covered (B)</th> <th>% (B/A)</th>
+                        <th>Total (C)</th> <th>Covered (D)</th> <th>% (D/C)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- EMPLOYEES -->
+                    <tr><td colspan="7" style="font-weight:bold; background:#eee;">EMPLOYEES</td></tr>
+                    <tr>
+                        <td>Permanent</td>
+                        <td><input type="number" id="hrEmpPermTotalCurr" oninput="calcP5Row()"></td>
+                        <td><input type="number" id="hrEmpPermCovCurr" oninput="calcP5Row()"></td>
+                        <td><input type="text" id="hrEmpPermPercCurr" readonly></td>
+                        <td><input type="number" id="hrEmpPermTotalPrev" oninput="calcP5Row()"></td>
+                        <td><input type="number" id="hrEmpPermCovPrev" oninput="calcP5Row()"></td>
+                        <td><input type="text" id="hrEmpPermPercPrev" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>Other than Permanent</td>
+                        <td><input type="number" id="hrEmpTempTotalCurr" oninput="calcP5Row()"></td>
+                        <td><input type="number" id="hrEmpTempCovCurr" oninput="calcP5Row()"></td>
+                        <td><input type="text" id="hrEmpTempPercCurr" readonly></td>
+                        <td><input type="number" id="hrEmpTempTotalPrev" oninput="calcP5Row()"></td>
+                        <td><input type="number" id="hrEmpTempCovPrev" oninput="calcP5Row()"></td>
+                        <td><input type="text" id="hrEmpTempPercPrev" readonly></td>
+                    </tr>
+                    <tr style="font-weight:bold;">
+                        <td>Total Employees</td>
+                        <td><input type="text" id="hrEmpGrandTotalCurr" readonly></td>
+                        <td><input type="text" id="hrEmpGrandCovCurr" readonly></td>
+                        <td><input type="text" id="hrEmpGrandPercCurr" readonly></td>
+                        <td><input type="text" id="hrEmpGrandTotalPrev" readonly></td>
+                        <td><input type="text" id="hrEmpGrandCovPrev" readonly></td>
+                        <td><input type="text" id="hrEmpGrandPercPrev" readonly></td>
+                    </tr>
+
+                    <!-- WORKERS -->
+                    <tr><td colspan="7" style="font-weight:bold; background:#eee;">WORKERS</td></tr>
+                    <!-- (Repeat logic for Workers) -->
+                    <tr>
+                        <td>Permanent</td>
+                        <td><input type="number" id="hrWorkPermTotalCurr" oninput="calcP5Row()"></td>
+                        <td><input type="number" id="hrWorkPermCovCurr" oninput="calcP5Row()"></td>
+                        <td><input type="text" id="hrWorkPermPercCurr" readonly></td>
+                        <td><input type="number" id="hrWorkPermTotalPrev" oninput="calcP5Row()"></td>
+                        <td><input type="number" id="hrWorkPermCovPrev" oninput="calcP5Row()"></td>
+                        <td><input type="text" id="hrWorkPermPercPrev" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>Other than Permanent</td>
+                        <td><input type="number" id="hrWorkTempTotalCurr" oninput="calcP5Row()"></td>
+                        <td><input type="number" id="hrWorkTempCovCurr" oninput="calcP5Row()"></td>
+                        <td><input type="text" id="hrWorkTempPercCurr" readonly></td>
+                        <td><input type="number" id="hrWorkTempTotalPrev" oninput="calcP5Row()"></td>
+                        <td><input type="number" id="hrWorkTempCovPrev" oninput="calcP5Row()"></td>
+                        <td><input type="text" id="hrWorkTempPercPrev" readonly></td>
+                    </tr>
+                    <tr style="font-weight:bold;">
+                        <td>Total Workers</td>
+                        <td><input type="text" id="hrWorkGrandTotalCurr" readonly></td>
+                        <td><input type="text" id="hrWorkGrandCovCurr" readonly></td>
+                        <td><input type="text" id="hrWorkGrandPercCurr" readonly></td>
+                        <td><input type="text" id="hrWorkGrandTotalPrev" readonly></td>
+                        <td><input type="text" id="hrWorkGrandCovPrev" readonly></td>
+                        <td><input type="text" id="hrWorkGrandPercPrev" readonly></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="hrTrainingNote" rows="2" placeholder="e.g. All employees provided training on Tata Code of Conduct..."></textarea>
+            </div>
+
+            <!-- 2. MINIMUM WAGES -->
+            <label class="sub-label">2. Minimum Wages (Details)</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="minWageTable">
+                    <thead>
+                    <tr>
+                        <th rowspan="3" style="min-width:100px;">Category</th>
+                        <th colspan="5" style="text-align:center; background:#e0f2fe;">Current FY</th>
+                        <th colspan="5" style="text-align:center; background:#f0fdf4;">Previous FY</th>
+                    </tr>
+                    <tr>
+                        <th rowspan="2">Total (A)</th>
+                        <th colspan="2">Equal to Min Wage</th>
+                        <th colspan="2">More than Min Wage</th>
+                        <th rowspan="2">Total (D)</th>
+                        <th colspan="2">Equal to Min Wage</th>
+                        <th colspan="2">More than Min Wage</th>
+                    </tr>
+                    <tr>
+                        <th>No.</th> <th>%</th> <th>No.</th> <th>%</th>
+                        <th>No.</th> <th>%</th> <th>No.</th> <th>%</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- EMPLOYEES PERMANENT -->
+                    <tr><td colspan="11" style="font-weight:bold; background:#eee;">EMPLOYEES - PERMANENT</td></tr>
+                    <tr>
+                        <td>Male</td>
+                        <td><input type="number" id="mwEmpPermMaleTotalCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwEmpPermMaleEqNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpPermMaleEqPercCurr" readonly></td>
+                        <td><input type="number" id="mwEmpPermMaleMoreNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpPermMaleMorePercCurr" readonly></td>
+                        <td><input type="number" id="mwEmpPermMaleTotalPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwEmpPermMaleEqNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpPermMaleEqPercPrev" readonly></td>
+                        <td><input type="number" id="mwEmpPermMaleMoreNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpPermMaleMorePercPrev" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>Female</td>
+                        <td><input type="number" id="mwEmpPermFemTotalCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwEmpPermFemEqNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpPermFemEqPercCurr" readonly></td>
+                        <td><input type="number" id="mwEmpPermFemMoreNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpPermFemMorePercCurr" readonly></td>
+                        <td><input type="number" id="mwEmpPermFemTotalPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwEmpPermFemEqNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpPermFemEqPercPrev" readonly></td>
+                        <td><input type="number" id="mwEmpPermFemMoreNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpPermFemMorePercPrev" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>Others</td>
+                        <td><input type="number" id="mwEmpPermOthTotalCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwEmpPermOthEqNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpPermOthEqPercCurr" readonly></td>
+                        <td><input type="number" id="mwEmpPermOthMoreNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpPermOthMorePercCurr" readonly></td>
+                        <td><input type="number" id="mwEmpPermOthTotalPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwEmpPermOthEqNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpPermOthEqPercPrev" readonly></td>
+                        <td><input type="number" id="mwEmpPermOthMoreNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpPermOthMorePercPrev" readonly></td>
+                    </tr>
+
+                    <!-- EMPLOYEES TEMPORARY -->
+                    <tr><td colspan="11" style="font-weight:bold; background:#eee;">EMPLOYEES - OTHER THAN PERMANENT</td></tr>
+                    <!-- (Repeat rows for EmpTemp - IDs: mwEmpTempMaleTotalCurr, etc.) -->
+                    <!-- Male -->
+                    <tr>
+                        <td>Male</td>
+                        <td><input type="number" id="mwEmpTempMaleTotalCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwEmpTempMaleEqNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpTempMaleEqPercCurr" readonly></td>
+                        <td><input type="number" id="mwEmpTempMaleMoreNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpTempMaleMorePercCurr" readonly></td>
+                        <td><input type="number" id="mwEmpTempMaleTotalPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwEmpTempMaleEqNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpTempMaleEqPercPrev" readonly></td>
+                        <td><input type="number" id="mwEmpTempMaleMoreNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpTempMaleMorePercPrev" readonly></td>
+                    </tr>
+                    <!-- Female -->
+                    <tr>
+                        <td>Female</td>
+                        <td><input type="number" id="mwEmpTempFemTotalCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwEmpTempFemEqNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpTempFemEqPercCurr" readonly></td>
+                        <td><input type="number" id="mwEmpTempFemMoreNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpTempFemMorePercCurr" readonly></td>
+                        <td><input type="number" id="mwEmpTempFemTotalPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwEmpTempFemEqNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpTempFemEqPercPrev" readonly></td>
+                        <td><input type="number" id="mwEmpTempFemMoreNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpTempFemMorePercPrev" readonly></td>
+                    </tr>
+                    <!-- Others -->
+                    <tr>
+                        <td>Others</td>
+                        <td><input type="number" id="mwEmpTempOthTotalCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwEmpTempOthEqNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpTempOthEqPercCurr" readonly></td>
+                        <td><input type="number" id="mwEmpTempOthMoreNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpTempOthMorePercCurr" readonly></td>
+                        <td><input type="number" id="mwEmpTempOthTotalPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwEmpTempOthEqNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpTempOthEqPercPrev" readonly></td>
+                        <td><input type="number" id="mwEmpTempOthMoreNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwEmpTempOthMorePercPrev" readonly></td>
+                    </tr>
+
+                    <!-- WORKERS PERMANENT -->
+                    <tr><td colspan="11" style="font-weight:bold; background:#eee;">WORKERS - PERMANENT</td></tr>
+                    <!-- (Repeat for WorkPerm) -->
+                    <tr>
+                        <td>Male</td>
+                        <td><input type="number" id="mwWorkPermMaleTotalCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwWorkPermMaleEqNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkPermMaleEqPercCurr" readonly></td>
+                        <td><input type="number" id="mwWorkPermMaleMoreNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkPermMaleMorePercCurr" readonly></td>
+                        <td><input type="number" id="mwWorkPermMaleTotalPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwWorkPermMaleEqNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkPermMaleEqPercPrev" readonly></td>
+                        <td><input type="number" id="mwWorkPermMaleMoreNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkPermMaleMorePercPrev" readonly></td>
+                    </tr>
+                    <!-- Add Female/Other for WorkPerm -->
+                    <tr>
+                        <td>Female</td>
+                        <td><input type="number" id="mwWorkPermFemTotalCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwWorkPermFemEqNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkPermFemEqPercCurr" readonly></td>
+                        <td><input type="number" id="mwWorkPermFemMoreNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkPermFemMorePercCurr" readonly></td>
+                        <td><input type="number" id="mwWorkPermFemTotalPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwWorkPermFemEqNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkPermFemEqPercPrev" readonly></td>
+                        <td><input type="number" id="mwWorkPermFemMoreNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkPermFemMorePercPrev" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>Others</td>
+                        <td><input type="number" id="mwWorkPermOthTotalCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwWorkPermOthEqNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkPermOthEqPercCurr" readonly></td>
+                        <td><input type="number" id="mwWorkPermOthMoreNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkPermOthMorePercCurr" readonly></td>
+                        <td><input type="number" id="mwWorkPermOthTotalPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwWorkPermOthEqNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkPermOthEqPercPrev" readonly></td>
+                        <td><input type="number" id="mwWorkPermOthMoreNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkPermOthMorePercPrev" readonly></td>
+                    </tr>
+
+                    <!-- WORKERS TEMPORARY -->
+                    <tr><td colspan="11" style="font-weight:bold; background:#eee;">WORKERS - OTHER THAN PERMANENT</td></tr>
+                    <!-- (Repeat for WorkTemp) -->
+                    <tr>
+                        <td>Male</td>
+                        <td><input type="number" id="mwWorkTempMaleTotalCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwWorkTempMaleEqNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkTempMaleEqPercCurr" readonly></td>
+                        <td><input type="number" id="mwWorkTempMaleMoreNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkTempMaleMorePercCurr" readonly></td>
+                        <td><input type="number" id="mwWorkTempMaleTotalPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwWorkTempMaleEqNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkTempMaleEqPercPrev" readonly></td>
+                        <td><input type="number" id="mwWorkTempMaleMoreNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkTempMaleMorePercPrev" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>Female</td>
+                        <td><input type="number" id="mwWorkTempFemTotalCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwWorkTempFemEqNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkTempFemEqPercCurr" readonly></td>
+                        <td><input type="number" id="mwWorkTempFemMoreNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkTempFemMorePercCurr" readonly></td>
+                        <td><input type="number" id="mwWorkTempFemTotalPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwWorkTempFemEqNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkTempFemEqPercPrev" readonly></td>
+                        <td><input type="number" id="mwWorkTempFemMoreNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkTempFemMorePercPrev" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>Others</td>
+                        <td><input type="number" id="mwWorkTempOthTotalCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwWorkTempOthEqNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkTempOthEqPercCurr" readonly></td>
+                        <td><input type="number" id="mwWorkTempOthMoreNoCurr" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkTempOthMorePercCurr" readonly></td>
+                        <td><input type="number" id="mwWorkTempOthTotalPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="number" id="mwWorkTempOthEqNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkTempOthEqPercPrev" readonly></td>
+                        <td><input type="number" id="mwWorkTempOthMoreNoPrev" oninput="calcMwRow(this)"></td>
+                        <td><input type="text" id="mwWorkTempOthMorePercPrev" readonly></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="minWageNote" rows="2" placeholder="e.g. Note: 100% of employees are paid..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 3. REMUNERATION -->
+            <label class="sub-label">3. Remuneration Details</label>
+            <p style="font-size:12px; color:#666; margin-bottom:10px;">Median remuneration/salary/wages</p>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th rowspan="2" style="width:20%">Category</th>
+                        <th colspan="2" style="text-align:center; background:#e0f2fe;">Male</th>
+                        <th colspan="2" style="text-align:center; background:#f0fdf4;">Female</th>
+                    </tr>
+                    <tr>
+                        <th>Number</th> <th>Median Remuneration</th>
+                        <th>Number</th> <th>Median Remuneration</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Board of Directors (BoD)</td>
+                        <td><input type="number" id="remBodMaleNum" placeholder="0"></td>
+                        <td><input type="text" id="remBodMaleMedian" placeholder="INR"></td>
+                        <td><input type="number" id="remBodFemNum" placeholder="0"></td>
+                        <td><input type="text" id="remBodFemMedian" placeholder="INR"></td>
+                    </tr>
+                    <tr>
+                        <td>Key Managerial Personnel (KMP)</td>
+                        <td><input type="number" id="remKmpMaleNum" placeholder="0"></td>
+                        <td><input type="text" id="remKmpMaleMedian" placeholder="INR"></td>
+                        <td><input type="number" id="remKmpFemNum" placeholder="0"></td>
+                        <td><input type="text" id="remKmpFemMedian" placeholder="INR"></td>
+                    </tr>
+                    <tr>
+                        <td>Employees (Excl. BoD & KMP)</td>
+                        <td><input type="number" id="remEmpMaleNum" placeholder="0"></td>
+                        <td><input type="text" id="remEmpMaleMedian" placeholder="INR"></td>
+                        <td><input type="number" id="remEmpFemNum" placeholder="0"></td>
+                        <td><input type="text" id="remEmpFemMedian" placeholder="INR"></td>
+                    </tr>
+                    <tr>
+                        <td>Workers</td>
+                        <td><input type="number" id="remWorkMaleNum" placeholder="0"></td>
+                        <td><input type="text" id="remWorkMaleMedian" placeholder="INR"></td>
+                        <td><input type="number" id="remWorkFemNum" placeholder="0"></td>
+                        <td><input type="text" id="remWorkFemMedian" placeholder="INR"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="remunerationNote" rows="2" placeholder="e.g. Note: Directors who were on the Board for part of the year..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 2.b GROSS WAGES TO FEMALES -->
+            <label class="sub-label">2.b Gross Wages to Females (% of Total)</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th style="width:60%">Category</th>
+                        <th style="width:20%; background:#e0f2fe;">Current FY</th>
+                        <th style="width:20%; background:#f0fdf4;">Previous FY</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Gross wages paid to females as % of total wages</td>
+                        <td><input type="text" id="grossWagesFemalePercCurr" placeholder="%"></td>
+                        <td><input type="text" id="grossWagesFemalePercPrev" placeholder="%"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="grossWagesNote" rows="2" placeholder="e.g. Note: Wages include salaries..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 4. FOCAL POINT -->
+            <label class="sub-label">4. Focal Point for Human Rights</label>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Does a focal point exist? *</label>
+                    <select id="humanRightsFocalPoint">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Details of Focal Point / Committee / Policy</label>
+                <textarea id="humanRightsFocalDetails" rows="4" placeholder="e.g. Yes, Tata Steel has the Apex Business & Human Rights Committee..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 5. GRIEVANCE MECHANISM -->
+            <label class="sub-label">5. Internal Grievance Mechanisms</label>
+
+            <div class="form-group">
+                <label>Describe mechanisms (e.g. Speak Up platform, Ethics Committee)</label>
+                <!-- Removed specific placeholder text -->
+                <textarea id="humanRightsGrievanceMechanism" rows="6"></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 6. COMPLAINTS -->
+            <label class="sub-label">6. Human Rights Complaints (Employees/Workers)</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th rowspan="2" style="width:20%">Category</th>
+                        <th colspan="3" style="text-align:center; background:#e0f2fe;">Current FY</th>
+                        <th colspan="3" style="text-align:center; background:#f0fdf4;">Previous FY</th>
+                    </tr>
+                    <tr>
+                        <th>Filed</th> <th>Pending</th> <th>Remarks</th>
+                        <th>Filed</th> <th>Pending</th> <th>Remarks</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- 1. Sexual Harassment -->
+                    <tr>
+                        <td>Sexual Harassment</td>
+                        <td><input type="number" id="compShFiledCurr"></td>
+                        <td><input type="number" id="compShPendingCurr"></td>
+                        <td><input type="text" id="compShRemarksCurr"></td>
+
+                        <td><input type="number" id="compShFiledPrev"></td>
+                        <td><input type="number" id="compShPendingPrev"></td>
+                        <td><input type="text" id="compShRemarksPrev"></td>
+                    </tr>
+                    <!-- 2. Discrimination -->
+                    <tr>
+                        <td>Discrimination at workplace</td>
+                        <td><input type="number" id="compDiscrimFiledCurr"></td>
+                        <td><input type="number" id="compDiscrimPendingCurr"></td>
+                        <td><input type="text" id="compDiscrimRemarksCurr"></td>
+
+                        <td><input type="number" id="compDiscrimFiledPrev"></td>
+                        <td><input type="number" id="compDiscrimPendingPrev"></td>
+                        <td><input type="text" id="compDiscrimRemarksPrev"></td>
+                    </tr>
+                    <!-- 3. Child Labour -->
+                    <tr>
+                        <td>Child Labour</td>
+                        <td><input type="number" id="compChildFiledCurr"></td>
+                        <td><input type="number" id="compChildPendingCurr"></td>
+                        <td><input type="text" id="compChildRemarksCurr"></td>
+
+                        <td><input type="number" id="compChildFiledPrev"></td>
+                        <td><input type="number" id="compChildPendingPrev"></td>
+                        <td><input type="text" id="compChildRemarksPrev"></td>
+                    </tr>
+                    <!-- 4. Forced Labour -->
+                    <tr>
+                        <td>Forced Labour</td>
+                        <td><input type="number" id="compForcedFiledCurr"></td>
+                        <td><input type="number" id="compForcedPendingCurr"></td>
+                        <td><input type="text" id="compForcedRemarksCurr"></td>
+
+                        <td><input type="number" id="compForcedFiledPrev"></td>
+                        <td><input type="number" id="compForcedPendingPrev"></td>
+                        <td><input type="text" id="compForcedRemarksPrev"></td>
+                    </tr>
+                    <!-- 5. Wages -->
+                    <tr>
+                        <td>Wages</td>
+                        <td><input type="number" id="compWagesFiledCurr"></td>
+                        <td><input type="number" id="compWagesPendingCurr"></td>
+                        <td><input type="text" id="compWagesRemarksCurr"></td>
+
+                        <td><input type="number" id="compWagesFiledPrev"></td>
+                        <td><input type="number" id="compWagesPendingPrev"></td>
+                        <td><input type="text" id="compWagesRemarksPrev"></td>
+                    </tr>
+                    <!-- 6. Others -->
+                    <tr>
+                        <td>Other HR Issues</td>
+                        <td><input type="number" id="compOtherHrFiledCurr"></td>
+                        <td><input type="number" id="compOtherHrPendingCurr"></td>
+                        <td><input type="text" id="compOtherHrRemarksCurr"></td>
+
+                        <td><input type="number" id="compOtherHrFiledPrev"></td>
+                        <td><input type="number" id="compOtherHrPendingPrev"></td>
+                        <td><input type="text" id="compOtherHrRemarksPrev"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 7. POSH COMPLAINTS -->
+            <label class="sub-label">7. POSH Complaints (Sexual Harassment)</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th style="width:60%">Details</th>
+                        <th style="width:20%; background:#e0f2fe;">Current FY</th>
+                        <th style="width:20%; background:#f0fdf4;">Previous FY</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Total Complaints Reported</td>
+                        <td><input type="number" id="poshTotalCurr"></td>
+                        <td><input type="number" id="poshTotalPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Complaints as % of Female Workforce</td>
+                        <td><input type="text" id="poshPercCurr" placeholder="%"></td>
+                        <td><input type="text" id="poshPercPrev" placeholder="%"></td>
+                    </tr>
+                    <tr>
+                        <td>Complaints Upheld</td>
+                        <td><input type="number" id="poshUpheldCurr"></td>
+                        <td><input type="number" id="poshUpheldPrev"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="poshNote" rows="2" placeholder="e.g. Note: In case of Tata Steel UK, no one beyond the team dealing..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 8. PROTECTION MECHANISMS -->
+            <label class="sub-label">8. Protection Mechanisms (Discrimination/Harassment)</label>
+
+            <div class="form-group">
+                <label>Introductory Statement</label>
+                <textarea id="protectionMechanismsIntro" rows="3" placeholder="e.g. Tata Steel encourages its employees... to raise concerns..."></textarea>
+            </div>
+
+            <label style="font-size:13px; font-weight:600; color:#444;">List of Mechanisms:</label>
+            <div id="protectionMechanismsContainer">
+                <!-- Rows added via JS -->
+            </div>
+            <button type="button" class="btn-add-row" onclick="addProtectionMechanismRow()">+ Add Mechanism</button>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 9. CONTRACTS -->
+            <label class="sub-label">9. Human Rights in Contracts</label>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Are requirements included in contracts?</label>
+                    <select id="humanRightsContracts">
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Details of implementation (Clauses, Policies, etc.)</label>
+                <textarea id="humanRightsContractsDetails" rows="5" placeholder="e.g. Yes, terms of contract include compliance with SA8000:2014..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 10. ASSESSMENTS -->
+            <label class="sub-label">10. Assessments for the Year (% Covered)</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th style="width:40%">Category</th>
+                        <th style="width:60%">% of Plants/Offices Assessed</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Child labour</td>
+                        <td><input type="text" id="assessChildLabourPerc" placeholder="e.g. 100"></td>
+                    </tr>
+                    <tr>
+                        <td>Forced/involuntary labour</td>
+                        <td><input type="text" id="assessForcedLabourPerc" placeholder="e.g. 100"></td>
+                    </tr>
+                    <tr>
+                        <td>Sexual harassment</td>
+                        <td><input type="text" id="assessSexualHarassmentPerc" placeholder="e.g. 100"></td>
+                    </tr>
+                    <tr>
+                        <td>Discrimination at workplace</td>
+                        <td><input type="text" id="assessDiscriminationPerc" placeholder="e.g. 100"></td>
+                    </tr>
+                    <tr>
+                        <td>Wages</td>
+                        <td><input type="text" id="assessWagesPerc" placeholder="e.g. 100"></td>
+                    </tr>
+                    <tr>
+                        <td>Others – please specify</td>
+                        <td><input type="text" id="assessOthersPerc" placeholder="%"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Note (Optional)</label>
+                <textarea id="assessmentsP5Note" rows="2" placeholder="e.g. Note: Assessment by Internal team..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- 11. CORRECTIVE ACTIONS -->
+            <label class="sub-label">11. Corrective Actions (Human Rights)</label>
+
+            <div class="form-group">
+                <label>Introductory Statement</label>
+                <textarea id="assessCorrectiveIntro" rows="3" placeholder="e.g. No significant risks were identified... However, Tata Steel ensures..."></textarea>
+            </div>
+
+            <label style="font-size:13px; font-weight:600; color:#444;">Key Initiatives / Actions Taken:</label>
+            <div id="assessCorrectiveContainer">
+                <!-- Rows added via JS -->
+            </div>
+            <button type="button" class="btn-add-row" onclick="addAssessCorrectiveRow()">+ Add Initiative</button>
+        </div>
+
+        <!-- LEADERSHIP INDICATORS (PRINCIPLE 5) -->
+        <div class="form-section">
+            <div class="section-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Leadership Indicators
+            </div>
+
+            <!-- Q1: Business Process Modifications -->
+            <label class="sub-label">1. Business Process Modifications (Due to Human Rights Grievances)</label>
+
+            <div class="form-group">
+                <label>Introductory Statement</label>
+                <textarea id="p5LeadProcessModIntro" rows="3" placeholder="e.g. Some key processes that have been adopted over the last several years..."></textarea>
+            </div>
+
+            <label style="font-size:13px; font-weight:600; color:#444;">Key Modifications / Processes (List):</label>
+            <div id="p5LeadModContainer">
+                <!-- Rows added via JS -->
+            </div>
+            <button type="button" class="btn-add-row" onclick="addP5LeadModRow()">+ Add Modification</button>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- Q2: Due Diligence -->
+            <label class="sub-label">2. Human Rights Due Diligence (Scope & Coverage)</label>
+
+            <div class="form-group">
+                <label>Scope Details</label>
+                <textarea id="p5LeadDueDiligenceScope" rows="5" placeholder="e.g. Tata Steel conducted a third-party Human Rights due diligence... based on UNGPs, OECD..."></textarea>
+            </div>
+
+            <!-- Issues List -->
+            <label style="font-size:13px; font-weight:600; color:#444;">Human Rights Issues Identified (e.g. Child Labour, Wages):</label>
+            <div id="p5LeadIssuesContainer">
+                <!-- Rows added via JS -->
+            </div>
+            <button type="button" class="btn-add-row" onclick="addP5LeadIssueRow()">+ Add Issue</button>
+
+            <br><br>
+
+            <!-- Rights Holders List -->
+            <label style="font-size:13px; font-weight:600; color:#444;">Rights Holders Identified (e.g. Employees, Contract Workers):</label>
+            <div id="p5LeadHoldersContainer">
+                <!-- Rows added via JS -->
+            </div>
+            <button type="button" class="btn-add-row" onclick="addP5LeadHolderRow()">+ Add Rights Holder</button>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- Q3: Premises Accessibility -->
+            <label class="sub-label">3. Accessibility for Differently Abled Visitors</label>
+
+            <div class="form-group">
+                <label>Compliance with Rights of Persons with Disabilities Act, 2016</label>
+                <textarea id="p5LeadPremisesAccess" rows="4" placeholder="e.g. Yes, Tata Steel has taken steps to ensure compliance... Ramps, elevators and disabled-friendly washrooms have been installed..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- Q4: Value Chain Assessment -->
+            <label class="sub-label">4. Details on assessment of value chain partners</label>
+            <p style="font-size:12px; color:#666; margin-bottom:10px;">
+                (Covers: Child Labour, Forced Labour, Sexual Harassment, Discrimination, Wages, Others)
+            </p>
+
+            <div class="form-group">
+                <label>% of value chain partners assessed (enter details)</label>
+                <textarea id="p5LeadValueChainAssessment" rows="5" placeholder="e.g. ~95% of critical suppliers, contributing to 74% of the total spend (84% of the critical spend) were assessed under Responsible Supply Chain/Procurement Policy..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+
+            <!-- Q5: Value Chain Corrective Actions -->
+            <label class="sub-label">5. Corrective actions for value chain risks</label>
+            <div class="form-group">
+                <label>Details of corrective actions taken or underway</label>
+                <textarea id="p5LeadValueChainCorrectiveActions" rows="4" placeholder="e.g. No significant risks were identified. However, Tata Steel has developed monitoring mechanisms..."></textarea>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div style="display: flex; justify-content: space-between; gap: 20px; margin-top: 30px;">
+
+            <!-- PREVIOUS BUTTON -->
+            <button type="button" class="btn-logout" onclick="window.location.href='create_report_2.html'"
+                    style="width: auto; min-width: 120px; padding: 12px 20px; text-align: center;">
+                &larr; Previous
+            </button>
+
+            <!-- NEXT BUTTON -->
+            <button type="button" class="btn-submit" onclick="saveAndNext()"
+                    style="width: auto; min-width: 200px; padding: 12px 30px;">
+                Next: Principles 6-9 &rarr;
+            </button>
+
+        </div>
+    </form>
+</div>
+
+<script src="SCRIPTJS/create_report_3.js"></script>
+</body>
+</html>

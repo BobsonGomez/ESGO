@@ -1,11 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESG Invest - Sustainable Industry Index</title>
+    <link rel="stylesheet" href="CSS/investor.css">
 </head>
 <body>
-     <p>Welcome to investor page</p>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="logo">ESG Invest</div>
+    <div class="nav-links">
+        <a href="#" class="active">Industries</a>
+        <a href="#" id="userProfileLink">Profile</a>
+    </div>
+    <!-- Added Logout Button -->
+    <div class="nav-actions">
+        <button class="btn-logout" onclick="logout()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px; vertical-align: middle;">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Logout
+        </button>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<header class="hero">
+    <h1>Invest in Sustainable Excellence</h1>
+    <p>Discover industries leading the way in Environmental, Social, and Governance standards</p>
+
+    <div class="search-container">
+        <!-- Filter button removed from inside search bar -->
+        <input type="text" id="searchInput" placeholder="Search industries by name, sector, or location..." onkeyup="filterIndustries()">
+    </div>
+</header>
+
+<!-- Filter Tags -->
+<div class="filter-bar">
+    <button class="filter-tag active" onclick="filterBySector('All')">All Industries</button>
+    <button class="filter-tag" onclick="filterBySector('Technology')">Technology</button>
+    <button class="filter-tag" onclick="filterBySector('Renewable Energy')">Renewable Energy</button>
+    <button class="filter-tag" onclick="filterBySector('Manufacturing')">Manufacturing</button>
+    <button class="filter-tag" onclick="filterBySector('Healthcare')">Healthcare</button>
+    <button class="filter-tag" onclick="filterBySector('Finance')">Finance</button>
+</div>
+
+<!-- Main Content -->
+<main class="container">
+    <h2>Top ESG-Rated Industries</h2>
+    <p class="subtitle">Showing industries with exceptional ESG performance</p>
+
+    <!-- Grid for Cards -->
+    <div class="grid-container" id="industryGrid">
+        <!-- Cards will be injected here by JS -->
+    </div>
+</main>
+
+<script src="SCRIPTJS/investor.js"></script>
 </body>
 </html>

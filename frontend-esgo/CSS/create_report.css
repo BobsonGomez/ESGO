@@ -1,0 +1,271 @@
+/* --- Shared Variables --- */
+:root {
+    --primary-green: #108a55; /* Tata-style Green */
+    --primary-green-hover: #0d7045;
+    --bg-color: #f8fafc;
+    --border-color: #e2e8f0;
+    --text-dark: #1e293b;
+    --text-muted: #64748b;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* --- Page Background --- */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-dark);
+    padding-top: 80px; /* Space for Navbar */
+}
+
+/* --- Main Card Container --- */
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+}
+
+/* --- Typography --- */
+h2.page-title {
+    color: var(--primary-green);
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    margin-bottom: 30px;
+    font-size: 14px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* --- Form Sections --- */
+.form-section {
+    margin-bottom: 30px;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    /* Optional: Subtle background distinction for the section */
+    background-color: #fafafa;
+}
+
+.section-header {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary-green);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.section-header svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--primary-green);
+}
+
+/* --- Sub-labels (e.g. "Contact Person") --- */
+.sub-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    margin-top: 25px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-left: 3px solid var(--primary-green);
+    padding-left: 10px;
+}
+
+/* --- Grid Layouts --- */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* --- Inputs --- */
+.form-group {
+    margin-bottom: 16px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--text-dark);
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background-color: white;
+}
+
+input:focus, select:focus {
+    border-color: var(--primary-green);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(16, 138, 85, 0.1);
+}
+
+input::placeholder {
+    color: #cbd5e1;
+}
+
+/* --- Submit Button --- */
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--primary-green);
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background-color 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-submit:hover {
+    background-color: var(--primary-green-hover);
+}
+
+/* --- Navbar (Fixed at top) --- */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: white;
+    border-bottom: 1px solid var(--border-color);
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-green);
+    margin: 0;
+}
+
+.btn-logout {
+    padding: 8px 16px;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text-dark);
+    transition: background 0.2s;
+}
+
+.btn-logout:hover {
+    background: #f1f5f9;
+}
+
+/* Table Inputs */
+.input-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+.input-table th {
+    background-color: #f1f5f9;
+    padding: 10px;
+    text-align: left;
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+}
+
+.input-table td {
+    padding: 5px;
+    border: 1px solid var(--border-color);
+}
+
+.input-table input {
+    border: none;
+    padding: 8px;
+    width: 100%;
+}
+
+.btn-add-row {
+    background: white;
+    border: 1px dashed var(--primary-green);
+    color: var(--primary-green);
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+.btn-add-row:hover { background: #f0fdf4; }
+
+.btn-remove {
+    color: #ef4444;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* --- Radio Button Group Alignment --- */
+.radio-group {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Space between the "Table" option and "Note" option */
+    margin-bottom: 15px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between the radio dot and the text label */
+    cursor: pointer;
+}
+
+/* Reset default margins on radio inputs to prevent floating */
+input[type="radio"] {
+    margin: 0;
+    width: auto; /* Prevent it from stretching like text inputs */
+    cursor: pointer;
+}
+
+/* Ensure labels inside radio options don't have bottom margins */
+.radio-option label {
+    margin-bottom: 0;
+    font-weight: normal;
+    font-size: 14px;
+    cursor: pointer;
+}
