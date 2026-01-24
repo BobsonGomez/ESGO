@@ -435,3 +435,50 @@ textarea:focus {
 }
 
 .btn-submit-publish:hover { background-color: #219150; }
+
+/* Add/Replace these styles */
+
+.action-row {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+.action-box {
+    flex: 1;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid #e9ecef;
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-width: 250px;
+}
+
+.action-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border-color: #ddd;
+}
+
+.icon-circle {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    margin: 0 auto 15px auto;
+    display: flex; align-items: center; justify-content: center;
+}
+.green-bg { background: #2ecc71; box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3); }
+.blue-bg { background: #3498db; box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3); }
+
+.action-box h3 { margin: 0 0 8px 0; color: #2c3e50; font-size: 18px; }
+.action-box p { font-size: 13px; color: #7f8c8d; margin-bottom: 20px; height: 40px; }
+
+.btn-action {
+    width: 100%; padding: 10px; border: none; border-radius: 6px;
+    font-weight: 600; cursor: pointer; color: white; transition: 0.3s;
+}
+.btn-green { background-color: #27ae60; }
+.btn-green:hover { background-color: #219150; }
+.btn-blue { background-color: #2980b9; }
+.btn-blue:hover { background-color: #1f618d; }

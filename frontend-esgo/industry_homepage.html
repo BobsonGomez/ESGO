@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESGO Industry Portal</title>
     <link rel="stylesheet" href="CSS/industry_homepage.css">
-    <!-- Add FontAwesome for icons if needed, or stick to SVG -->
 </head>
 <body>
 
@@ -30,7 +29,6 @@
                 <h2 class="value" id="reportCountDisplay">--</h2>
             </div>
             <div class="icon-box green-icon">
-                <!-- Icon SVG -->
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
             </div>
         </div>
@@ -56,24 +54,40 @@
         </div>
     </section>
 
+    <!-- Main Dashboard Grid -->
     <div class="dashboard-grid">
-        <!-- Generate Report Section -->
+
+        <!-- Card 1: ESG Tools (Wizard + AI) -->
         <section class="card form-card">
             <div class="form-header">
-                <h2>Generate ESG Report</h2>
-                <p>Create comprehensive, BRSR-compliant ESG reports.</p>
+                <h2>ESG Reporting Tools</h2>
+                <p>Manage your sustainability reporting lifecycle.</p>
             </div>
-            <div style="text-align: center; padding: 20px;">
-                <p style="margin-bottom: 20px; color: #666;">
-                    Launch the wizard to calculate Emissions, Waste, and Social metrics.
-                </p>
-                <button onclick="window.location.href='create_report.html'" class="btn-generate">
-                    Open Report Generator
-                </button>
+
+            <div class="action-row">
+                <!-- Action 1: Manual Wizard -->
+                <div class="action-box">
+                    <div class="icon-circle green-bg">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </div>
+                    <h3>Create New Report</h3>
+                    <p>Launch the step-by-step wizard to build a BRSR-compliant report.</p>
+                    <button onclick="window.location.href='create_report.html'" class="btn-action btn-green">Start Wizard &rarr;</button>
+                </div>
+
+                <!-- Action 2: AI Analysis -->
+                <div class="action-box">
+                    <div class="icon-circle blue-bg">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    </div>
+                    <h3>AI Score Predictor</h3>
+                    <p>Upload a draft PDF/Doc to get an instant AI-predicted ESG score.</p>
+                    <button onclick="window.location.href='generate_score.html'" class="btn-action btn-blue">Upload File &rarr;</button>
+                </div>
             </div>
         </section>
 
-        <!-- NEW: Publish to Investor Section -->
+        <!-- Card 2: Publish to Investor Section -->
         <section class="card form-card" style="border-left: 5px solid #2ecc71;">
             <div class="form-header">
                 <h2>Investor Visibility</h2>
@@ -83,7 +97,10 @@
                 <p style="margin-bottom: 20px; color: #666;">
                     Make your company visible to investors searching for sustainable industries.
                 </p>
-                <button onclick="openPublishModal()" class="btn-generate" style="background-color: #27ae60;">
+                <div class="icon-circle green-bg" style="width: 60px; height: 60px; margin-bottom: 15px;">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                </div>
+                <button onclick="openPublishModal()" class="btn-generate" style="background-color: #27ae60; max-width: 250px; margin: 0 auto;">
                     Publish Profile
                 </button>
             </div>
@@ -130,16 +147,24 @@
                 </div>
             </div>
 
+            <!-- Removed Manual Score Inputs (Since AI/Backend handles calculation now) -->
+            <!-- If you still want manual overrides, uncomment the block below -->
+            <!--
             <div class="form-group">
                 <label>ESG Scores (0-100)</label>
                 <div class="score-inputs">
-                    <input type="number" id="scoreE" placeholder="Env" min="0" max="100" required>
-                    <input type="number" id="scoreS" placeholder="Soc" min="0" max="100" required>
-                    <input type="number" id="scoreG" placeholder="Gov" min="0" max="100" required>
+                    <input type="number" id="scoreE" placeholder="Env" min="0" max="100">
+                    <input type="number" id="scoreS" placeholder="Soc" min="0" max="100">
+                    <input type="number" id="scoreG" placeholder="Gov" min="0" max="100">
                 </div>
             </div>
+            -->
 
-            <!-- NEW: File Upload -->
+            <p style="font-size: 12px; color: #666; margin: 10px 0; background: #f0fdf4; padding: 10px; border-radius: 5px; border-left: 3px solid #2ecc71;">
+                <strong>Note:</strong> Your ESG Score will be auto-calculated by our AI Engine based on the report data.
+            </p>
+
+            <!-- File Upload -->
             <div class="form-group">
                 <label>Attach Report (PDF/Doc) - Optional on Update</label>
                 <input type="file" id="reportFile" accept=".pdf,.doc,.docx">
@@ -150,7 +175,7 @@
 
             <button type="submit" id="btnPublish" class="btn-submit-publish">Publish to Investors</button>
 
-            <!-- NEW: Delete Button (Hidden by default) -->
+            <!-- Delete Button (Hidden by default) -->
             <button type="button" id="btnDeleteProfile" onclick="deleteProfile()" class="btn-submit-publish" style="background-color: #e74c3c; margin-top: 10px; display: none;">
                 Unpublish / Remove Profile
             </button>
