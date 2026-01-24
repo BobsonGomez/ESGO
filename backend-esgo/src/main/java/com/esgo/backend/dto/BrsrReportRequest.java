@@ -1,6 +1,7 @@
 package com.esgo.backend.dto;
 
 import java.util.List;
+import java.util.Map;
 
 public class BrsrReportRequest {
     private Long id;
@@ -240,27 +241,157 @@ public class BrsrReportRequest {
     }
 
     // --- SECTION B: MANAGEMENT & PROCESS ---
-    private String policyGovernanceNote; // For Q7 (Director Statement)
-    private List<PolicyMapping> policyMappings;
+    // === SECTION B DATA ===
+
+    // Q1: Policy Matrix
+    private List<PolicyMapping> q1Policies;
+
+    public String getQ2Procedures() {
+        return q2Procedures;
+    }
+
+    public void setQ2Procedures(String q2Procedures) {
+        this.q2Procedures = q2Procedures;
+    }
+
+    public List<PolicyMapping> getQ1Policies() {
+        return q1Policies;
+    }
+
+    public void setQ1Policies(List<PolicyMapping> q1Policies) {
+        this.q1Policies = q1Policies;
+    }
+
+    public String getQ3ValueChain() {
+        return q3ValueChain;
+    }
+
+    public void setQ3ValueChain(String q3ValueChain) {
+        this.q3ValueChain = q3ValueChain;
+    }
+
+    public List<StandardMapping> getQ4Standards() {
+        return q4Standards;
+    }
+
+    public void setQ4Standards(List<StandardMapping> q4Standards) {
+        this.q4Standards = q4Standards;
+    }
+
+    public String getQ5Commitments() {
+        return q5Commitments;
+    }
+
+    public void setQ5Commitments(String q5Commitments) {
+        this.q5Commitments = q5Commitments;
+    }
+
+    public String getQ6Performance() {
+        return q6Performance;
+    }
+
+    public void setQ6Performance(String q6Performance) {
+        this.q6Performance = q6Performance;
+    }
+
+    // Q2: Translation to Procedures (Text/List)
+    private String q2Procedures;
+
+    // Q3: Value Chain Extension (Text)
+    private String q3ValueChain;
+
+    // Q4: National/International Standards Matrix
+    private List<StandardMapping> q4Standards;
+
+    // Q5: Specific Commitments (Text/List)
+    private String q5Commitments;
+
+    // Q6: Performance against goals (Text)
+    private String q6Performance;
+
+    // Q7 & Q8 (Governance - Keep existing)
     private String governanceStatement;
     private String oversightAuthority;
 
-    // --- INNER CLASS ---
+
+    // --- INNER CLASSES ---
+
+    // For Q1
     public static class PolicyMapping {
-        private String policyName;
-        private boolean p1;
-        private boolean p2;
-        private boolean p3;
-        private boolean p4;
-        private boolean p5;
-        private boolean p6;
-        private boolean p7;
-        private boolean p8;
-        private boolean p9;
+        private String name;
+        private String boardApproved; // Yes/No
+        private String webLink;
+        // P1-P9 booleans
+        private boolean p1, p2, p3, p4, p5, p6, p7, p8, p9;
+
+        // Generate Getters & Setters
+        public String getName() { return name; } public void setName(String name) { this.name = name; }
+        public String getBoardApproved() { return boardApproved; } public void setBoardApproved(String boardApproved) { this.boardApproved = boardApproved; }
+        public String getWebLink() { return webLink; } public void setWebLink(String webLink) { this.webLink = webLink; }
+        public boolean isP1() { return p1; } public void setP1(boolean p1) { this.p1 = p1; }
+        public boolean isP2() { return p2; } public void setP2(boolean p2) { this.p2 = p2; }
+        public boolean isP3() { return p3; } public void setP3(boolean p3) { this.p3 = p3; }
+        public boolean isP4() { return p4; } public void setP4(boolean p4) { this.p4 = p4; }
+        public boolean isP5() { return p5; } public void setP5(boolean p5) { this.p5 = p5; }
+        public boolean isP6() { return p6; } public void setP6(boolean p6) { this.p6 = p6; }
+        public boolean isP7() { return p7; } public void setP7(boolean p7) { this.p7 = p7; }
+        public boolean isP8() { return p8; } public void setP8(boolean p8) { this.p8 = p8; }
+        public boolean isP9() { return p9; } public void setP9(boolean p9) { this.p9 = p9; }
+    }
+
+    // For Q4 (Identical structure to Policy, but for Standards)
+    public static class StandardMapping {
+        private String name; // e.g., "ISO 14001"
+        private boolean p1, p2, p3, p4, p5, p6, p7, p8, p9;
+
+        // Generate Getters & Setters
+        public String getName() { return name; } public void setName(String name) { this.name = name; }
+        public boolean isP1() { return p1; } public void setP1(boolean p1) { this.p1 = p1; }
+        public boolean isP2() { return p2; } public void setP2(boolean p2) { this.p2 = p2; }
+        public boolean isP3() { return p3; } public void setP3(boolean p3) { this.p3 = p3; }
+        public boolean isP4() { return p4; } public void setP4(boolean p4) { this.p4 = p4; }
+        public boolean isP5() { return p5; } public void setP5(boolean p5) { this.p5 = p5; }
+        public boolean isP6() { return p6; } public void setP6(boolean p6) { this.p6 = p6; }
+        public boolean isP7() { return p7; } public void setP7(boolean p7) { this.p7 = p7; }
+        public boolean isP8() { return p8; } public void setP8(boolean p8) { this.p8 = p8; }
+        public boolean isP9() { return p9; } public void setP9(boolean p9) { this.p9 = p9; }
+    }
+
+    // --- SECTION B (PART 2: Q9 - Q12) ---
+
+    // Q9: Specified Committee Details
+    private String q9Committee;
+
+    // Q10: Review Details (Narrative style to match Tata Sample)
+    private String q10PerformanceReview; // Row 1
+    private String q10ComplianceReview;  // Row 2
+
+    // Q11: Independent Assessment
+    private String q11Assessment;
+
+    // Q12: Reasons for "No" in Q1 (Matrix)
+    private List<ReasonMapping> q12Reasons;
+
+    // Getters & Setters for Q9-Q11
+    public String getQ9Committee() { return q9Committee; }
+    public void setQ9Committee(String q9Committee) { this.q9Committee = q9Committee; }
+    public String getQ10PerformanceReview() { return q10PerformanceReview; }
+    public void setQ10PerformanceReview(String q10PerformanceReview) { this.q10PerformanceReview = q10PerformanceReview; }
+    public String getQ10ComplianceReview() { return q10ComplianceReview; }
+    public void setQ10ComplianceReview(String q10ComplianceReview) { this.q10ComplianceReview = q10ComplianceReview; }
+    public String getQ11Assessment() { return q11Assessment; }
+    public void setQ11Assessment(String q11Assessment) { this.q11Assessment = q11Assessment; }
+    public List<ReasonMapping> getQ12Reasons() { return q12Reasons; }
+    public void setQ12Reasons(List<ReasonMapping> q12Reasons) { this.q12Reasons = q12Reasons; }
+
+    // --- INNER CLASS FOR Q12 ---
+    public static class ReasonMapping {
+        private String questionText;
+        private boolean p1, p2, p3, p4, p5, p6, p7, p8, p9;
 
         // Getters & Setters
-        public String getPolicyName() { return policyName; }
-        public void setPolicyName(String policyName) { this.policyName = policyName; }
+        public String getQuestionText() { return questionText; }
+        public void setQuestionText(String questionText) { this.questionText = questionText; }
         public boolean isP1() { return p1; } public void setP1(boolean p1) { this.p1 = p1; }
         public boolean isP2() { return p2; } public void setP2(boolean p2) { this.p2 = p2; }
         public boolean isP3() { return p3; } public void setP3(boolean p3) { this.p3 = p3; }
@@ -1703,11 +1834,6 @@ public class BrsrReportRequest {
     public void setMaterialIssuesNote(String materialIssuesNote) { this.materialIssuesNote = materialIssuesNote; }
     public List<MaterialIssue> getMaterialIssues() { return materialIssues; }
     public void setMaterialIssues(List<MaterialIssue> materialIssues) { this.materialIssues = materialIssues; }
-
-    public List<PolicyMapping> getPolicyMappings() { return policyMappings; }
-    public void setPolicyMappings(List<PolicyMapping> policyMappings) { this.policyMappings = policyMappings; }
-    public String getPolicyGovernanceNote() { return policyGovernanceNote; }
-    public void setPolicyGovernanceNote(String policyGovernanceNote) { this.policyGovernanceNote = policyGovernanceNote; }
 
     public String getGovernanceStatement() { return governanceStatement; } public void setGovernanceStatement(String s) { this.governanceStatement = s; }
     public String getOversightAuthority() { return oversightAuthority; } public void setOversightAuthority(String s) { this.oversightAuthority = s; }

@@ -1,37 +1,46 @@
-body {
+/* 1. Global Reset to fix invisible margins and width calculations */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 2. Center the card perfectly on the screen */
+body {
+    background-color: #f0f4f8; /* Light gray-blue background */
     height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #f5f7fa;
-    font-family: Arial, sans-serif;
+    justify-content: center; /* Center Horizontally */
+    align-items: center;     /* Center Vertically */
 }
 
+/* 3. The Login Card */
 .container {
-    width: 380px;
-    background: white;
+    background-color: white;
+    width: 100%;
+    max-width: 400px; /* strict width */
     padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Centers the headings */
 }
 
+/* Typography */
 h2 {
-    margin: 0;
-    color: #1e8ca0;
+    color: #0d9488; /* Teal color from your screenshot */
+    margin-bottom: 10px;
     font-size: 28px;
-    font-weight: 700;
+    font-weight: bold;
 }
 
-p.subtitle {
-    color: #666;
+.subtitle {
+    color: #64748b;
     margin-bottom: 30px;
-    margin-top: 10px;
-    font-size: 15px;
+    font-size: 14px;
 }
 
+/* 4. Input Groups - Align text to the left */
 .input-group {
     text-align: left;
     margin-bottom: 20px;
@@ -39,43 +48,59 @@ p.subtitle {
 
 .input-group label {
     display: block;
-    margin-bottom: 6px;
-    font-weight: bold;
-    color: #333;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-    outline: none;
-}
-
-button {
-    width: 100%;
-    padding: 12px;
-    background: #1e8c60;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-button:hover {
-    background: #18724e;
-}
-
-.register {
-    margin-top: 20px;
+    margin-bottom: 8px;
+    color: #334155;
+    font-weight: 600;
     font-size: 14px;
 }
 
+/* 5. Inputs - Ensure they fill the width */
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #0d9488;
+}
+
+/* 6. Button Styling */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #198754; /* Green color */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #157347;
+}
+
+/* Footer Link */
+.register {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #64748b;
+}
+
 .register a {
-    color: #1e8ca0;
+    color: #0d9488;
     text-decoration: none;
     font-weight: bold;
+}
+
+.register a:hover {
+    text-decoration: underline;
 }

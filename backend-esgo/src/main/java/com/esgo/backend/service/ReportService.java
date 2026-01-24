@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @Service
 public class ReportService {
@@ -630,59 +632,161 @@ public class ReportService {
             doc.createParagraph().createRun().addBreak();
 
             // ================= SECTION B: MANAGEMENT =================
+            // --- SECTION B HEADER ---
             XWPFParagraph pSecB = doc.createParagraph();
             pSecB.setPageBreak(true);
-            pSecB.setSpacingAfter(300);
             XWPFRun rSecB = pSecB.createRun();
             rSecB.setText("SECTION B: MANAGEMENT AND PROCESS DISCLOSURES");
             rSecB.setBold(true);
             rSecB.setFontSize(14);
-            rSecB.setColor(COLOR_THEME_GREEN);
-            rSecB.setFontFamily("Calibri");
+            rSecB.setColor("108a55");
 
+// --- Q1: Policy Matrix ---
             addBoldText(doc, "1. Policy and management processes");
+            XWPFTable tableQ1 = doc.createTable();
+            tableQ1.setWidth("100%");
+            XWPFTableRow hQ1 = tableQ1.getRow(0);
+            ensureCells(hQ1, 12);
+            styleCell(hQ1.getCell(0), "Policy Name", true);
+            for(int k=1; k<=9; k++) styleCell(hQ1.getCell(k), "P"+k, true);
+            styleCell(hQ1.getCell(10), "Board Appr", true);
+            styleCell(hQ1.getCell(11), "Web Link", true);
 
-            XWPFTable tablePol = doc.createTable();
-            tablePol.setWidth("100%");
-
-            // Headers for P1-P9
-            XWPFTableRow hPol = tablePol.getRow(0);
-            ensureCells(hPol, 10); // Policy Name + 9 Principles
-            styleCell(hPol.getCell(0), "Policy Name", true);
-            for(int k=1; k<=9; k++) {
-                styleCell(hPol.getCell(k), "P"+k, true);
-            }
-
-            List<BrsrReportRequest.PolicyMapping> policies = data.getPolicyMappings();
-            if (policies != null && !policies.isEmpty()) {
-                for (BrsrReportRequest.PolicyMapping pm : policies) {
-                    XWPFTableRow row = tablePol.createRow();
-                    ensureCells(row, 10);
-                    styleCell(row.getCell(0), checkNull(pm.getPolicyName()), false);
-
-                    // Add checkmarks
-                    styleCell(row.getCell(1), pm.isP1() ? "Y" : "", false);
-                    styleCell(row.getCell(2), pm.isP2() ? "Y" : "", false);
-                    styleCell(row.getCell(3), pm.isP3() ? "Y" : "", false);
-                    styleCell(row.getCell(4), pm.isP4() ? "Y" : "", false);
-                    styleCell(row.getCell(5), pm.isP5() ? "Y" : "", false);
-                    styleCell(row.getCell(6), pm.isP6() ? "Y" : "", false);
-                    styleCell(row.getCell(7), pm.isP7() ? "Y" : "", false);
-                    styleCell(row.getCell(8), pm.isP8() ? "Y" : "", false);
-                    styleCell(row.getCell(9), pm.isP9() ? "Y" : "", false);
+            if(data.getQ1Policies() != null) {
+                for(BrsrReportRequest.PolicyMapping pm : data.getQ1Policies()) {
+                    XWPFTableRow r = tableQ1.createRow();
+                    ensureCells(r, 12);
+                    styleCell(r.getCell(0), checkNull(pm.getName()), false);
+                    styleCell(r.getCell(1), pm.isP1()?"Y":"", false);
+                    styleCell(r.getCell(2), pm.isP2()?"Y":"", false);
+                    styleCell(r.getCell(3), pm.isP3()?"Y":"", false);
+                    styleCell(r.getCell(4), pm.isP4()?"Y":"", false);
+                    styleCell(r.getCell(5), pm.isP5()?"Y":"", false);
+                    styleCell(r.getCell(6), pm.isP6()?"Y":"", false);
+                    styleCell(r.getCell(7), pm.isP7()?"Y":"", false);
+                    styleCell(r.getCell(8), pm.isP8()?"Y":"", false);
+                    styleCell(r.getCell(9), pm.isP9()?"Y":"", false);
+                    styleCell(r.getCell(10), checkNull(pm.getBoardApproved()), false);
+                    styleCell(r.getCell(11), checkNull(pm.getWebLink()), false);
                 }
             }
-
             doc.createParagraph().createRun().addBreak();
-            addBoldText(doc, "2. Governance, leadership and oversight");
 
-            addBoldText(doc, "Statement by Director responsible for the business responsibility report, highlighting ESG related challenges, targets and achievements:");
-            XWPFParagraph pGov = doc.createParagraph();
-            setTextWithBreaks(pGov.createRun(), checkNull(data.getGovernanceStatement()));
+// --- Q2: Procedures ---
+            addBoldText(doc, "2. Whether the entity has translated the policy into procedures. (Yes/No)");
+            XWPFParagraph pQ2 = doc.createParagraph();
+// Handle line breaks from textarea
+            String[] q2Lines = checkNull(data.getQ2Procedures()).split("\n");
+            for(String line : q2Lines) {
+                XWPFRun r = pQ2.createRun();
+                r.setText(line);
+                r.addBreak();
+            }
 
-            addBoldText(doc, "Details of the highest authority responsible for implementation and oversight:");
-            XWPFParagraph pAuth = doc.createParagraph();
-            pAuth.createRun().setText(checkNull(data.getOversightAuthority()));
+// --- Q3: Value Chain ---
+            addBoldText(doc, "3. Do the enlisted policies extend to your value chain partners? (Yes/No)");
+            XWPFParagraph pQ3 = doc.createParagraph();
+            pQ3.createRun().setText(checkNull(data.getQ3ValueChain()));
+            doc.createParagraph().createRun().addBreak();
+
+// --- Q4: Standards Matrix ---
+            addBoldText(doc, "4. Name of national and international standards adopted");
+            XWPFTable tableQ4 = doc.createTable();
+            tableQ4.setWidth("100%");
+            XWPFTableRow hQ4 = tableQ4.getRow(0);
+            ensureCells(hQ4, 10);
+            styleCell(hQ4.getCell(0), "Standard Name", true);
+            for(int k=1; k<=9; k++) styleCell(hQ4.getCell(k), "P"+k, true);
+
+            if(data.getQ4Standards() != null) {
+                for(BrsrReportRequest.StandardMapping sm : data.getQ4Standards()) {
+                    XWPFTableRow r = tableQ4.createRow();
+                    ensureCells(r, 10);
+                    styleCell(r.getCell(0), checkNull(sm.getName()), false);
+                    styleCell(r.getCell(1), sm.isP1()?"Y":"", false);
+                    styleCell(r.getCell(2), sm.isP2()?"Y":"", false);
+                    styleCell(r.getCell(3), sm.isP3()?"Y":"", false);
+                    styleCell(r.getCell(4), sm.isP4()?"Y":"", false);
+                    styleCell(r.getCell(5), sm.isP5()?"Y":"", false);
+                    styleCell(r.getCell(6), sm.isP6()?"Y":"", false);
+                    styleCell(r.getCell(7), sm.isP7()?"Y":"", false);
+                    styleCell(r.getCell(8), sm.isP8()?"Y":"", false);
+                    styleCell(r.getCell(9), sm.isP9()?"Y":"", false);
+                }
+            }
+            doc.createParagraph().createRun().addBreak();
+
+// --- Q5: Commitments ---
+            addBoldText(doc, "5. Specific commitments, goals and targets set by the entity");
+            XWPFParagraph pQ5 = doc.createParagraph();
+            String[] q5Lines = checkNull(data.getQ5Commitments()).split("\n");
+            for(String line : q5Lines) {
+                XWPFRun r = pQ5.createRun();
+                r.setText(line);
+                r.addBreak();
+            }
+
+// --- Q6: Performance ---
+            addBoldText(doc, "6. Performance of the entity against the specific commitments");
+            XWPFParagraph pQ6 = doc.createParagraph();
+            pQ6.createRun().setText(checkNull(data.getQ6Performance()));
+
+            // --- Q9 ---
+            addBoldText(doc, "9. Specified Committee of the Board/Director responsible for decision making");
+            XWPFParagraph pQ9 = doc.createParagraph();
+            setTextWithBreaks(pQ9.createRun(), checkNull(data.getQ9Committee()));
+
+// --- Q10: Review Details (Table) ---
+            addBoldText(doc, "10. Details of Review of NGRBCs by the Company");
+            XWPFTable tableQ10 = doc.createTable();
+            tableQ10.setWidth("100%");
+            XWPFTableRow hQ10 = tableQ10.getRow(0);
+            ensureCells(hQ10, 2);
+            styleCell(hQ10.getCell(0), "Subject for Review", true);
+            styleCell(hQ10.getCell(1), "Reviewer & Frequency", true);
+
+            XWPFTableRow r10_1 = tableQ10.createRow();
+            ensureCells(r10_1, 2);
+            styleCell(r10_1.getCell(0), "Performance against above policies", false);
+            styleCell(r10_1.getCell(1), checkNull(data.getQ10PerformanceReview()), false);
+
+            XWPFTableRow r10_2 = tableQ10.createRow();
+            ensureCells(r10_2, 2);
+            styleCell(r10_2.getCell(0), "Compliance with statutory requirements", false);
+            styleCell(r10_2.getCell(1), checkNull(data.getQ10ComplianceReview()), false);
+            doc.createParagraph().createRun().addBreak();
+
+// --- Q11: Assessment ---
+            addBoldText(doc, "11. Has the entity carried out independent assessment/ evaluation?");
+            XWPFParagraph pQ11 = doc.createParagraph();
+            setTextWithBreaks(pQ11.createRun(), checkNull(data.getQ11Assessment()));
+
+// --- Q12: Reasons for No ---
+            addBoldText(doc, "12. If answer to question (1) above is “No”, reasons to be stated:");
+            XWPFTable tableQ12 = doc.createTable();
+            tableQ12.setWidth("100%");
+
+            XWPFTableRow hQ12 = tableQ12.getRow(0);
+            ensureCells(hQ12, 10);
+            styleCell(hQ12.getCell(0), "Reason", true);
+            for(int k=1; k<=9; k++) styleCell(hQ12.getCell(k), "P"+k, true);
+
+            if(data.getQ12Reasons() != null) {
+                for(BrsrReportRequest.ReasonMapping rm : data.getQ12Reasons()) {
+                    XWPFTableRow r = tableQ12.createRow();
+                    ensureCells(r, 10);
+                    styleCell(r.getCell(0), checkNull(rm.getQuestionText()), false);
+                    styleCell(r.getCell(1), rm.isP1()?"Y":"", false);
+                    styleCell(r.getCell(2), rm.isP2()?"Y":"", false);
+                    styleCell(r.getCell(3), rm.isP3()?"Y":"", false);
+                    styleCell(r.getCell(4), rm.isP4()?"Y":"", false);
+                    styleCell(r.getCell(5), rm.isP5()?"Y":"", false);
+                    styleCell(r.getCell(6), rm.isP6()?"Y":"", false);
+                    styleCell(r.getCell(7), rm.isP7()?"Y":"", false);
+                    styleCell(r.getCell(8), rm.isP8()?"Y":"", false);
+                    styleCell(r.getCell(9), rm.isP9()?"Y":"", false);
+                }
+            }
 
             doc.createParagraph().createRun().addBreak();
 
