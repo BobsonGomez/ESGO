@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Fixes Zooming -->
+    <title>Messages - ESGO</title>
+    <!-- Link to the updated stylesheet -->
+    <link rel="stylesheet" href="CSS/chat.css">
+</head>
+<body>
+
+<!-- Sidebar: Contact List -->
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h2>Messages</h2>
+        <button class="back-btn" onclick="goBack()" title="Go Back">
+            <!-- Left Arrow Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        </button>
+    </div>
+    <div class="contact-list" id="contactList">
+        <!-- Contacts will be injected here by chat.js -->
+    </div>
+</div>
+
+<!-- Main Chat Area -->
+<div class="chat-area">
+
+    <!-- Header: Shown when chat is active -->
+    <div class="chat-header" id="chatHeader" style="display:none;">
+        <div class="avatar" id="chatAvatar"></div>
+        <span id="chatUserName">Select a user</span>
+    </div>
+
+    <!-- Messages Container -->
+    <div class="messages-box" id="messagesBox">
+        <div class="empty-state">
+            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: #cbd5e1;">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <h3>Your messages will appear here</h3>
+            <p>Select a conversation to start chatting.</p>
+        </div>
+    </div>
+
+    <!-- Input Area: Shown when chat is active -->
+    <div class="input-area" id="inputArea" style="display:none;">
+        <input type="text" id="msgInput" placeholder="Type a message..." onkeypress="handleEnter(event)">
+        <button class="send-btn" onclick="sendMessage()" title="Send Message">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+    </div>
+</div>
+
+<script src="SCRIPTJS/chat.js"></script>
+</body>
+</html>
