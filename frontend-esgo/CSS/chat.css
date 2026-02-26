@@ -1,0 +1,352 @@
+/* --- GLOBAL RESET --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
+}
+
+body {
+    background-color: #f1f5f9; /* Slate background */
+    height: 100vh;
+    display: flex;
+    overflow: hidden; /* Important: Prevents whole page scrolling */
+}
+
+/* --- SIDEBAR (Contacts) --- */
+.sidebar {
+    width: 320px;
+    background: white;
+    border-right: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+}
+
+.sidebar-header h2 {
+    font-size: 20px;
+    color: #1e293b; /* Dark Slate */
+    font-weight: 700;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #64748b;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-btn:hover {
+    background-color: #f1f5f9;
+    color: #0f172a;
+}
+
+.contact-list {
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Contact Item */
+.contact-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid #f8fafc;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.contact-item:hover {
+    background-color: #f8fafc;
+}
+
+.contact-item.active {
+    background-color: #f0fdf4; /* Light Emerald */
+    border-right: 3px solid #10b981;
+}
+
+.contact-item .avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #64748b;
+    font-size: 18px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.contact-item .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.contact-details {
+    flex: 1;
+    overflow: hidden;
+}
+
+.contact-name {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 14px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.contact-last-msg {
+    font-size: 12px;
+    color: #94a3b8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* --- CHAT AREA --- */
+.chat-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #efeae2; /* Optional: WhatsApp-like beige */
+    background-color: #f8fafc; /* Or Clean Slate */
+    position: relative;
+}
+
+/* Header */
+.chat-header {
+    padding: 15px 25px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    height: 70px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.chat-header .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #64748b;
+    overflow: hidden;
+}
+.chat-header .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+#chatUserName {
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 16px;
+}
+
+/* Messages Box */
+.messages-box {
+    flex: 1;
+    padding: 20px 40px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Message Bubbles */
+.message {
+    max-width: 65%;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    line-height: 1.5;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    word-wrap: break-word;
+}
+
+/* Sent by Me */
+.msg-sent {
+    align-self: flex-end;
+    background-color: #10b981; /* Emerald Green */
+    color: white;
+    border-bottom-right-radius: 2px;
+}
+.msg-sent .msg-time {
+    color: rgba(255, 255, 255, 0.75);
+    text-align: right;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+/* Received */
+.msg-received {
+    align-self: flex-start;
+    background-color: white;
+    color: #1e293b;
+    border-bottom-left-radius: 2px;
+    border: 1px solid #e2e8f0;
+}
+.msg-received .msg-time {
+    color: #94a3b8;
+    text-align: right;
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #94a3b8;
+    text-align: center;
+}
+.empty-state h3 { margin-top: 20px; color: #475569; }
+
+/* Input Area */
+.input-area {
+    background: white;
+    padding: 20px 30px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.input-area input {
+    flex: 1;
+    padding: 14px 20px;
+    border-radius: 30px;
+    border: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.input-area input:focus {
+    background-color: white;
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.send-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #10b981;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+    box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.4);
+}
+
+.send-btn:hover {
+    background-color: #059669;
+    transform: scale(1.05);
+}
+
+.send-btn svg {
+    margin-left: -2px; /* Visual correction for send icon */
+    stroke: white;
+}
+
+/* --- Message Actions (Edit/Delete) --- */
+.message {
+    position: relative; /* Needed for positioning the menu */
+}
+
+/* Hidden menu button (3 dots) */
+.msg-actions-btn {
+    display: none;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(0,0,0,0.1);
+    border: none;
+    color: #555;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Show button on hover */
+.message:hover .msg-actions-btn {
+    display: block;
+}
+
+/* Dropdown Menu */
+.actions-menu {
+    position: absolute;
+    top: 25px;
+    right: 10px;
+    background: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    z-index: 100;
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    min-width: 80px;
+    overflow: hidden;
+}
+
+.actions-menu button {
+    background: white;
+    border: none;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 12px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.actions-menu button:hover {
+    background-color: #f0f0f0;
+}
+
+.actions-menu button.delete-btn {
+    color: red;
+}
+
+/* Edited Label */
+.edited-tag {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+    margin-left: 5px;
+}
+.msg-received .edited-tag {
+    color: #999;
+}

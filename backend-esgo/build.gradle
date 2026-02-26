@@ -52,6 +52,8 @@ dependencies {
     implementation 'org.apache.poi:poi-ooxml-full:5.5.1'
 
     implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 }
 
 tasks.named('test') {

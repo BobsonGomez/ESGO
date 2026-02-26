@@ -1,46 +1,63 @@
-/* 1. Global Reset to fix invisible margins and width calculations */
+/* GLOBAL RESET & FONT */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Poppins', sans-serif; /* Modern Font */
 }
 
-/* 2. Center the card perfectly on the screen */
 body {
-    background-color: #f0f4f8; /* Light gray-blue background */
+    background-color: #f0fdf4; /* Very light green tint */
     height: 100vh;
     display: flex;
-    justify-content: center; /* Center Horizontally */
-    align-items: center;     /* Center Vertically */
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
 }
 
-/* 3. The Login Card */
-.container {
-    background-color: white;
+/* Background Pattern (CSS Only - No images needed) */
+.background-pattern {
+    position: absolute;
     width: 100%;
-    max-width: 400px; /* strict width */
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    text-align: center; /* Centers the headings */
+    height: 100%;
+    background-image: radial-gradient(#15803d 0.5px, transparent 0.5px);
+    background-size: 24px 24px;
+    opacity: 0.1;
+    z-index: -1;
 }
 
-/* Typography */
+/* CARD CONTAINER */
+.container {
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 420px;
+    padding: 45px;
+    border-radius: 16px;
+    /* Soft, multi-layered shadow for depth */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05),
+                0 4px 6px -2px rgba(0, 0, 0, 0.025),
+                0 0 0 1px rgba(0,0,0,0.02);
+    text-align: center;
+}
+
+/* TYPOGRAPHY */
 h2 {
-    color: #0d9488; /* Teal color from your screenshot */
-    margin-bottom: 10px;
-    font-size: 28px;
-    font-weight: bold;
+    color: #0f766e; /* Deep Teal */
+    margin-bottom: 8px;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
 .subtitle {
     color: #64748b;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
     font-size: 14px;
+    font-weight: 400;
 }
 
-/* 4. Input Groups - Align text to the left */
+/* INPUTS */
 .input-group {
     text-align: left;
     margin-bottom: 20px;
@@ -51,56 +68,74 @@ h2 {
     margin-bottom: 8px;
     color: #334155;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-/* 5. Inputs - Ensure they fill the width */
 .input-group input {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
+    padding: 14px 16px;
+    border: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    border-radius: 10px;
     font-size: 14px;
+    color: #334155;
     outline: none;
-    transition: border-color 0.3s;
+    transition: all 0.3s ease;
 }
 
+/* Focus State: Glow Effect */
 .input-group input:focus {
-    border-color: #0d9488;
+    border-color: #0f766e;
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.1);
 }
 
-/* 6. Button Styling */
+.input-group input::placeholder {
+    color: #94a3b8;
+}
+
+/* BUTTON */
 button {
     width: 100%;
-    padding: 12px;
-    background-color: #198754; /* Green color */
+    padding: 14px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%); /* Gradient Green */
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 10px;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: transform 0.2s, box-shadow 0.2s;
     margin-top: 10px;
+    box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.3);
 }
 
 button:hover {
-    background-color: #157347;
+    transform: translateY(-2px); /* Slight lift */
+    box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.4);
 }
 
-/* Footer Link */
-.register {
-    margin-top: 20px;
+button:active {
+    transform: translateY(0);
+}
+
+/* FOOTER LINK */
+.register-link {
+    margin-top: 25px;
     font-size: 14px;
     color: #64748b;
 }
 
-.register a {
-    color: #0d9488;
+.register-link a {
+    color: #0f766e;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 600;
+    transition: color 0.2s;
 }
 
-.register a:hover {
+.register-link a:hover {
+    color: #0d9488;
     text-decoration: underline;
 }

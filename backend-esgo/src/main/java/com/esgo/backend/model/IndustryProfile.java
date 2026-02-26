@@ -14,18 +14,25 @@ public class IndustryProfile {
 
     private String companyName;
     private String sector;
-    private String location;
 
-    private int scoreE;
-    private int scoreS;
-    private int scoreG;
-    private int scoreAvg;
+    // --- UPDATED FIELDS ---
+    private String address;
+    private String phone;
+    private String email;
+
+    private double scoreE;
+    private double scoreS;
+    private double scoreG;
+    private double scoreAvg;
+
+    @Column(length = 5000) // Allow long text
+    private String description;
 
     // --- NEW: File Storage ---
     private String reportFileName;
 
     @Lob // Large Object for storing file data
-    @Column(length = 10000000) // Allow large files
+    @Column(length = 25000000) // Allow large files
     private byte[] reportFile;
 
     // --- Link to User (One User = One Profile) ---
