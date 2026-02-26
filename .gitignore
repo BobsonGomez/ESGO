@@ -1,0 +1,14 @@
+# Ignore ML model
+ai-engine/models/final_esg_model/model.safetensors
+
+# IDE
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+venv/
+*.pyc
+
+# Env
+.env
