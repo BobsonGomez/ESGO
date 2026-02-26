@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.List;
+import java.util.List; // <--- MAKE SURE THIS IMPORT IS HERE
 import java.util.Optional;
 
 @RestController
@@ -25,46 +25,35 @@ public class InvestorController {
     @Autowired
     private UserRepository userRepo;
 
-    // --- 1. Get All Industries (For Investor Grid) ---
+    // --- 4. NEW: Get All Industries (This was missing!) ---
     @GetMapping("/industries")
     public ResponseEntity<List<IndustryProfile>> getAllIndustries() {
-        List<IndustryProfile> profiles = profileRepo.findAll();
-
-        // Sort by Score Average Descending (Highest score first)
-        profiles.sort((p1, p2) -> Double.compare(p2.getScoreAvg(), p1.getScoreAvg()));
-
-        return ResponseEntity.ok(profiles);
+        // This returns ALL profiles for the Investor Grid
+        return ResponseEntity.ok(profileRepo.findAll());
     }
 
-    // --- 2. Get Current User's Profile (For Editing) ---
+    // 1. Get Current User's Profile (For Editing)
     @GetMapping("/my-profile")
     public ResponseEntity<?> getMyProfile(Principal principal) {
         User user = userRepo.findByUsername(principal.getName()).orElse(null);
         if (user == null) return ResponseEntity.status(403).body("User not found");
 
         Optional<IndustryProfile> profile = profileRepo.findByUser(user);
-
-        // If profile exists, return it. If not, return 204 No Content
         return profile.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.noContent().build());
     }
 
+    // 2. Publish or Update Profile (With File)
     @PostMapping(value = "/publish", consumes = {"multipart/form-data"})
     public ResponseEntity<?> publishProfile(
             Principal principal,
             @RequestParam("companyName") String companyName,
             @RequestParam("sector") String sector,
-            @RequestParam("address") String address,
-            @RequestParam("phone") String phone,
-            @RequestParam("email") String email,
-            @RequestParam(value = "description", required = false) String description,
-
-            // 1. Accept Double (Decimals)
-            @RequestParam("scoreE") Double e,
-            @RequestParam("scoreS") Double s,
-            @RequestParam("scoreG") Double g,
-            @RequestParam("scoreAvg") Double avg,
-
+            @RequestParam("location") String location,
+            @RequestParam("scoreE") int e,
+            @RequestParam("scoreS") int s,
+            @RequestParam("scoreG") int g,
+            @RequestParam("scoreAvg") int avg,
             @RequestParam(value = "file", required = false) MultipartFile file
     ) throws IOException {
 
@@ -74,12 +63,7 @@ public class InvestorController {
         profile.setUser(user);
         profile.setCompanyName(companyName);
         profile.setSector(sector);
-        profile.setAddress(address);
-        profile.setPhone(phone);
-        profile.setEmail(email);
-        profile.setDescription(description);
-
-        // 2. Save directly as Double (No rounding needed anymore)
+        profile.setLocation(location);
         profile.setScoreE(e);
         profile.setScoreS(s);
         profile.setScoreG(g);
@@ -94,20 +78,7 @@ public class InvestorController {
         return ResponseEntity.ok("Profile Published/Updated Successfully");
     }
 
-    // --- NEW: Download Profile Report Endpoint ---
-    @GetMapping("/download-report/{id}")
-    public ResponseEntity<byte[]> downloadProfileReport(@PathVariable Long id) {
-        IndustryProfile profile = profileRepo.findById(id).orElse(null);
-        if (profile == null || profile.getReportFile() == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok()
-                .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + profile.getReportFileName() + "\"")
-                .contentType(org.springframework.http.MediaType.APPLICATION_OCTET_STREAM)
-                .body(profile.getReportFile());
-    }
-
-    // --- 4. Delete Profile ---
+    // 3. Delete Profile
     @DeleteMapping("/publish")
     public ResponseEntity<?> deleteProfile(Principal principal) {
         User user = userRepo.findByUsername(principal.getName()).orElseThrow();

@@ -1,7 +1,6 @@
 package com.esgo.backend.model;
 
 import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users")
@@ -18,11 +17,6 @@ public class User {
     private String role;
     private boolean hasGeneratedReport = false;
 
-    @Lob
-    @JsonIgnore // Prevents the heavy image data from being sent in the /me endpoint
-    @Column(length = 10000000) // Increased to ~10MB to prevent save failures
-    private byte[] profilePicture;
-
     // --- GETTERS AND SETTERS ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -30,6 +24,7 @@ public class User {
     public String getFullname() { return fullname; }
     public void setFullname(String fullname) { this.fullname = fullname; }
 
+    // --- ADD GETTER/SETTER FOR EMAIL ---
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
@@ -46,7 +41,4 @@ public class User {
     public void setHasGeneratedReport(boolean hasGeneratedReport) {
         this.hasGeneratedReport = hasGeneratedReport;
     }
-
-    public byte[] getProfilePicture() { return profilePicture; }
-    public void setProfilePicture(byte[] profilePicture) { this.profilePicture = profilePicture; }
 }

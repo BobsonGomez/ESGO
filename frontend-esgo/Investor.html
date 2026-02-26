@@ -2,94 +2,63 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Fixes Zooming -->
-    <title>Invest in Sustainability - ESGO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESG Invest - Sustainable Industry Index</title>
     <link rel="stylesheet" href="CSS/investor.css">
 </head>
 <body>
 
-<!-- Navbar (Populated by JS) -->
-<nav class="navbar" id="mainNavbar"></nav>
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="logo">ESG Invest</div>
+    <div class="nav-links">
+        <a href="#" class="active">Industries</a>
+        <a href="#" id="userProfileLink">Profile</a>
+    </div>
+    <!-- Added Logout Button -->
+    <div class="nav-actions">
+        <button class="btn-logout" onclick="logout()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:5px; vertical-align: middle;">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Logout
+        </button>
+    </div>
+</nav>
 
 <!-- Hero Section -->
-<div class="hero">
+<header class="hero">
     <h1>Invest in Sustainable Excellence</h1>
-    <p>Discover industries leading the way in Environmental, Social, and Governance standards.</p>
-</div>
+    <p>Discover industries leading the way in Environmental, Social, and Governance standards</p>
 
-<!-- Floating Search Bar -->
-<div class="search-wrapper">
     <div class="search-container">
+        <!-- Filter button removed from inside search bar -->
         <input type="text" id="searchInput" placeholder="Search industries by name, sector, or location..." onkeyup="filterIndustries()">
     </div>
-</div>
+</header>
 
 <!-- Filter Tags -->
 <div class="filter-bar">
-    <button class="filter-tag active" onclick="filterBySector('All', event)">All Industries</button>
-    <button class="filter-tag" onclick="filterBySector('Technology', event)">Technology</button>
-    <button class="filter-tag" onclick="filterBySector('Renewable Energy', event)">Renewable Energy</button>
-    <button class="filter-tag" onclick="filterBySector('Manufacturing', event)">Manufacturing</button>
-    <button class="filter-tag" onclick="filterBySector('Healthcare', event)">Healthcare</button>
-    <button class="filter-tag" onclick="filterBySector('Finance', event)">Finance</button>
+    <button class="filter-tag active" onclick="filterBySector('All')">All Industries</button>
+    <button class="filter-tag" onclick="filterBySector('Technology')">Technology</button>
+    <button class="filter-tag" onclick="filterBySector('Renewable Energy')">Renewable Energy</button>
+    <button class="filter-tag" onclick="filterBySector('Manufacturing')">Manufacturing</button>
+    <button class="filter-tag" onclick="filterBySector('Healthcare')">Healthcare</button>
+    <button class="filter-tag" onclick="filterBySector('Finance')">Finance</button>
 </div>
 
-<!-- Main Grid -->
-<div class="container">
-    <h2 class="section-title">Top ESG-Rated Industries</h2>
-    <p class="section-subtitle">Companies ranked by their latest sustainability reports.</p>
+<!-- Main Content -->
+<main class="container">
+    <h2>Top ESG-Rated Industries</h2>
+    <p class="subtitle">Showing industries with exceptional ESG performance</p>
 
+    <!-- Grid for Cards -->
     <div class="grid-container" id="industryGrid">
         <!-- Cards will be injected here by JS -->
     </div>
-</div>
-
-<!-- Company Details Modal -->
-<div id="companyModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeCompanyModal()">&times;</span>
-
-        <div class="modal-header">
-            <div class="modal-title-group">
-                <h2 id="modalCompanyName">Company Name</h2>
-                <span id="modalSectorBadge" class="modal-badge">Sector</span>
-            </div>
-        </div>
-
-        <div class="modal-body">
-            <div class="modal-section">
-                <p id="modalAddress">📍 Address</p>
-                <p id="modalPhone">📞 Phone</p>
-                <p id="modalEmail">✉️ Email</p>
-            </div>
-
-            <div class="modal-section">
-                <h4>Sustainability Profile</h4>
-                <p id="modalDescription">Description goes here...</p>
-            </div>
-
-            <div class="modal-section">
-                <h4>ESG Performance</h4>
-                <div class="score-grid">
-                    <div class="score-box">
-                        <span id="modalScoreE">0</span> <label>Environment</label>
-                    </div>
-                    <div class="score-box">
-                        <span id="modalScoreS">0</span> <label>Social</label>
-                    </div>
-                    <div class="score-box">
-                        <span id="modalScoreG">0</span> <label>Governance</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-actions">
-                <button id="btnMessageCompany" class="btn-primary">💬 Message</button>
-                <button id="btnDownloadReport" class="btn-secondary">📄 Download Report</button>
-            </div>
-        </div>
-    </div>
-</div>
+</main>
 
 <script src="SCRIPTJS/investor.js"></script>
 </body>

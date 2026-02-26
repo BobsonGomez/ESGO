@@ -1,96 +1,32 @@
-// --- START: FINAL UNIFIED NAVBAR CODE (ROLE-AWARE) ---
-
-function buildNavbar(userRole, activePage) {
-    const navbar = document.getElementById('mainNavbar');
-    const username = localStorage.getItem("currentUsername") || "User";
-    if (!navbar) return;
-
-    let finalLinks = []; // This will hold the links to be displayed
-
-    // Define the links that are available to all users
-    const baseLinks = [
-        { name: 'Industries', href: 'investor.html', id: 'industries' },
-        { name: 'Messages', href: 'chat.html', id: 'messages' },
-        { name: 'Profile', href: 'profile.html', id: 'profile' } // This now ALWAYS points to the profile update page
-    ];
-
-    // Create the final link structure based on the user's role
-    if (userRole === 'industry') {
-        finalLinks = [
-            // An industry user gets a "Dashboard" link first
-            { name: 'Dashboard', href: 'industry_homepage.html', id: 'dashboard' },
-            ...baseLinks // Then add all the common links
-        ];
-    } else { // An investor user does NOT get a dashboard link
-        finalLinks = baseLinks;
-    }
-
-    // Generate the HTML for the links, adding the 'active' class to the current page
-    let navLinksHTML = finalLinks.map(link =>
-        `<a href="${link.href}" class="${link.id === activePage ? 'active' : ''}">${link.name}</a>`
-    ).join('');
-
-    // The complete navbar HTML structure
-    navbar.innerHTML = `
-        <div class="logo">ESG Invest</div>
-        <div class="nav-links">${navLinksHTML}</div>
-        <div class="nav-actions">
-            <span class="welcome-text">Welcome, ${username}</span>
-            <button class="btn-logout" onclick="logout()">Logout</button>
-        </div>
-    `;
-}
-
-function logout() {
-    localStorage.clear();
-    window.location.href = "login.html";
-}
-
-// --- END: FINAL UNIFIED NAVBAR CODE ---
-
 document.addEventListener("DOMContentLoaded", function() {
-    buildNavbar('industry', 'dashboard');
-    localStorage.setItem('userRole', 'industry'); // Also store the role for other pages
+
+    // --- 1. SECURITY CHECK ---
     const token = localStorage.getItem("token");
-    const username = localStorage.getItem("currentUsername");
+    const username = localStorage.getItem("currentUsername"); // Or however you stored it
 
     if (!token) {
         window.location.replace("login.html");
         return;
     }
 
+    // --- 2. FETCH USER DETAILS (For Welcome Message) ---
+    // If you stored the fullname during login, you can use that.
+    // Otherwise, fetch it again:
     const displayElement = document.getElementById("usernameDisplay");
     if (displayElement) {
+        // Fallback to username if fullname isn't saved
         displayElement.innerText = localStorage.getItem("currentUser") || username || "User";
     }
 
+    // --- 3. LOAD THE REPORTS ---
     fetchReportsList();
-    checkExistingProfile();
 });
 
 // --- MAIN FUNCTIONS ---
-// Check existing profile for dashboard button state
-async function checkExistingProfile() {
-    const token = localStorage.getItem("token");
-    const dashboardBtn = document.getElementById("dashboardPublishBtn");
 
-    try {
-        const response = await fetch('http://localhost:8080/api/investor/my-profile', {
-            headers: { 'Authorization': 'Bearer ' + token }
-        });
-
-        if (response.status === 200) {
-            if(dashboardBtn) {
-                dashboardBtn.innerText = "Edit Publication";
-            }
-        } else {
-            if(dashboardBtn) {
-                dashboardBtn.innerText = "Publish Profile";
-            }
-        }
-    } catch (error) {
-        console.log("Error checking profile status.");
-    }
+function logout() {
+    localStorage.clear();
+    window.location.href = "login.html";
 }
 
 // 1. Fetch & Display Reports
@@ -101,167 +37,158 @@ function fetchReportsList() {
 
     fetch("http://localhost:8080/api/report/list", {
         method: "GET",
-        headers: { "Authorization": "Bearer " + token }
+        headers: {
+            "Authorization": "Bearer " + token,
+            "Content-Type": "application/json"
+        }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error("Failed to fetch reports");
+        return response.json();
+    })
     .then(reports => {
-        if(countDisplay) countDisplay.innerText = reports.length;
+        // Update the big number on the dashboard
+        if(countDisplay) {
+            countDisplay.innerText = reports.length;
+        }
+
+        // Clear "Loading..." text
         container.innerHTML = "";
 
         if (reports.length === 0) {
-            container.innerHTML = "<p style='color:#888; padding:20px;'>No reports generated yet.</p>";
+            container.innerHTML = "<p style='color:#888; padding:20px; font-style:italic;'>No reports generated yet.</p>";
             return;
         }
 
+        // Generate Cards
         reports.forEach(report => {
+            // Format Date (assuming report.createdDate is a string or timestamp)
             const dateStr = new Date(report.createdDate).toLocaleDateString();
+
             const html = `
             <div class="card report-item" id="report-${report.id}">
                 <div class="report-left">
-                    <div class="file-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg></div>
-                    <div class="report-details"><h4>${report.reportName || "Untitled"}</h4><p>${report.reportType} • ${dateStr}</p></div>
+                    <div class="file-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                    </div>
+                    <div class="report-details">
+                        <h4>${report.reportName || "Untitled Report"}</h4>
+                        <p>${report.reportType || "BRSR"} • ${dateStr}</p>
+                    </div>
                 </div>
+
                 <div class="action-buttons-group">
-                    <div class="icon-btn edit" onclick="window.location.href='create_report.html?edit=${report.id}'">✏️</div>
-                    <div class="icon-btn download" onclick="downloadReport(${report.id})">⬇️</div>
-                    <div class="icon-btn delete" onclick="deleteReport(${report.id})">🗑️</div>
+                    <!-- EDIT -->
+                    <div class="icon-btn edit" title="Edit Report" onclick="window.location.href='create_report.html?edit=${report.id}'">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8z"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                    </div>
+
+                    <!-- DOWNLOAD -->
+                    <div class="icon-btn download" title="Download" onclick="downloadReport(${report.id})">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </div>
+
+                    <!-- DELETE -->
+                    <div class="icon-btn delete" title="Delete" onclick="deleteReport(${report.id})">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                        </svg>
+                    </div>
                 </div>
-            </div>`;
+            </div>
+            `;
             container.innerHTML += html;
         });
     })
-    .catch(err => container.innerHTML = "<p>Error loading reports.</p>");
+    .catch(err => {
+        console.error("Error loading reports:", err);
+        container.innerHTML = "<p style='color:red; padding:20px;'>Error connecting to server.</p>";
+    });
 }
 
-async function downloadReport(id) {
+// 2. Download Report
+function downloadReport(id) {
     const token = localStorage.getItem("token");
-    if (!token) {
-        alert("Please login first.");
-        return;
-    }
-
-    try {
-        // Show user something is happening
-        document.body.style.cursor = "wait";
-
-        const response = await fetch(`http://localhost:8080/api/report/download/${id}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        });
-
-        if (response.ok) {
-            // 1. Convert the response to a Blob (Binary File)
-            const blob = await response.blob();
-
-            // 2. Create a temporary URL for the Blob
-            const url = window.URL.createObjectURL(blob);
-
-            // 3. Create a hidden link and click it to trigger download
-            const a = document.createElement('a');
-            a.href = url;
-            // Use the ID in the filename, or get filename from headers if possible
-            a.download = `BRSR_Report_${id}.docx`;
-            document.body.appendChild(a);
-            a.click();
-
-            // 4. Cleanup
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        } else {
-            alert("Failed to download report.");
-        }
-    } catch (error) {
-        console.error("Download error:", error);
-        alert("Error downloading file.");
-    } finally {
-        document.body.style.cursor = "default";
-    }
+    // Note: This endpoint (/api/report/download/{id}) must exist in ReportController
+    fetch(`http://localhost:8080/api/report/download/${id}`, {
+        method: "GET",
+        headers: { "Authorization": "Bearer " + token }
+    })
+    .then(res => {
+        if(res.ok) return res.blob();
+        throw new Error("Download failed");
+    })
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `ESG_Report_${id}.docx`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    })
+    .catch(err => alert("Error downloading: " + err));
 }
 
-async function deleteReport(id) {
-    if (!confirm("Are you sure you want to delete this report permanently?")) {
-        return;
-    }
+// 3. Delete Report
+function deleteReport(id) {
+    if(!confirm("Are you sure you want to delete this report?")) return;
 
     const token = localStorage.getItem("token");
+    fetch(`http://localhost:8080/api/report/${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": "Bearer " + token }
+    })
+    .then(response => {
+        if(response.ok) {
+            // Remove from UI immediately
+            const card = document.getElementById(`report-${id}`);
+            if(card) card.remove();
 
-    try {
-        const response = await fetch(`http://localhost:8080/api/report/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        });
-
-        if (response.ok) {
-            // 1. Remove the item from the HTML list visually
-            const item = document.getElementById(`report-${id}`);
-            if (item) {
-                item.style.transition = "opacity 0.3s, transform 0.3s";
-                item.style.opacity = "0";
-                item.style.transform = "translateX(20px)";
-                setTimeout(() => item.remove(), 300);
-            }
-
-            // 2. Update the counter at the top
+            // Update counter
             const countDisplay = document.getElementById("reportCountDisplay");
             if(countDisplay) {
-                let current = parseInt(countDisplay.innerText);
-                if(!isNaN(current) && current > 0) {
-                    countDisplay.innerText = current - 1;
-                }
+                let val = parseInt(countDisplay.innerText);
+                countDisplay.innerText = Math.max(0, val - 1);
             }
-
-            // 3. Show empty state if that was the last one
-            const container = document.getElementById("reportListContainer");
-            if (container.children.length <= 1) { // <= 1 because we haven't removed the element yet
-                 setTimeout(() => {
-                     if(container.children.length === 0) {
-                        container.innerHTML = "<p style='color:#888; padding:20px;'>No reports generated yet.</p>";
-                     }
-                 }, 350);
-            }
-
         } else {
-            const errText = await response.text();
-            alert("Failed to delete: " + errText);
+            alert("Failed to delete report.");
         }
-    } catch (error) {
-        console.error("Delete error:", error);
-        alert("Error connecting to server.");
-    }
+    })
+    .catch(err => console.error(err));
 }
 
-// --- PUBLISH / INVESTOR MODAL LOGIC ---
+
+// --- PUBLISH / INVESTOR MODAL LOGIC (Preserved from your previous step) ---
+
 const modal = document.getElementById("publishModal");
 
+// OPEN MODAL
 async function openPublishModal() {
     modal.style.display = "block";
     const token = localStorage.getItem("token");
 
-    // Default UI
+    // Reset UI states
     document.getElementById("publishForm").reset();
     document.getElementById("modalTitle").innerText = "Publish Company Profile";
     document.getElementById("btnPublish").innerText = "Publish to Investors";
     document.getElementById("btnDeleteProfile").style.display = "none";
     document.getElementById("currentFileText").style.display = "none";
 
-    // 1. Check for AI Generated Scores (Priority 1)
-    const storedScores = localStorage.getItem("latestGeneratedScores");
-    let aiScores = null;
-    if (storedScores) {
-        aiScores = JSON.parse(storedScores);
-        // Fill Visible Inputs
-        document.getElementById("showScoreE").value = aiScores.e;
-        document.getElementById("showScoreS").value = aiScores.s;
-        document.getElementById("showScoreG").value = aiScores.g;
-        document.getElementById("showScoreAvg").value = aiScores.avg;
-        document.getElementById("scoreNote").innerText = "Note: Populated from your latest AI Analysis.";
-    }
-
-    // 2. Fetch existing profile (Priority 2 - but don't overwrite AI scores if they are new)
+    // Fetch existing profile
     try {
         const response = await fetch('http://localhost:8080/api/investor/my-profile', {
             headers: { 'Authorization': 'Bearer ' + token }
@@ -270,24 +197,15 @@ async function openPublishModal() {
         if (response.status === 200) {
             const data = await response.json();
 
-            // Fill Text Fields
-            document.getElementById('compName').value = data.companyName || "";
-            document.getElementById('compSector').value = data.sector || "Technology";
-            document.getElementById('compDesc').value = data.description || "";
-            document.getElementById('compAddress').value = data.address || "";
-            document.getElementById('compPhone').value = data.phone || "";
-            document.getElementById('compEmail').value = data.email || "";
+            // PRE-FILL FORM
+            document.getElementById('compName').value = data.companyName;
+            document.getElementById('compSector').value = data.sector;
+            document.getElementById('compLocation').value = data.location;
+            document.getElementById('scoreE').value = data.scoreE;
+            document.getElementById('scoreS').value = data.scoreS;
+            document.getElementById('scoreG').value = data.scoreG;
 
-            // Fill Scores ONLY if we didn't just generate a new one
-            if (!aiScores) {
-                document.getElementById("showScoreE").value = data.scoreE;
-                document.getElementById("showScoreS").value = data.scoreS;
-                document.getElementById("showScoreG").value = data.scoreG;
-                document.getElementById("showScoreAvg").value = data.scoreAvg;
-                document.getElementById("scoreNote").innerText = "Note: Showing currently published scores.";
-            }
-
-            // Edit Mode UI
+            // Show Edit UI
             document.getElementById("modalTitle").innerText = "Edit Company Profile";
             document.getElementById("btnPublish").innerText = "Update Profile";
             document.getElementById("btnDeleteProfile").style.display = "block";
@@ -298,7 +216,7 @@ async function openPublishModal() {
             }
         }
     } catch (error) {
-        console.log("No existing profile found.");
+        console.log("No existing profile found or error fetching it.");
     }
 }
 
@@ -306,33 +224,27 @@ function closePublishModal() {
     modal.style.display = "none";
 }
 
+// HANDLE PUBLISH / UPDATE
 async function handlePublish(event) {
     event.preventDefault();
     const token = localStorage.getItem("token");
 
-    if (!token) {
-        alert("Session expired. Please login.");
-        window.location.href = "login.html";
-        return;
-    }
+    const e = parseInt(document.getElementById('scoreE').value);
+    const s = parseInt(document.getElementById('scoreS').value);
+    const g = parseInt(document.getElementById('scoreG').value);
+    const avg = Math.round((e + s + g) / 3);
 
+    // Use FormData for Files
     const formData = new FormData();
-
-    // Add Fields
     formData.append("companyName", document.getElementById('compName').value);
     formData.append("sector", document.getElementById('compSector').value);
-    formData.append("description", document.getElementById('compDesc').value || "");
-    formData.append("address", document.getElementById('compAddress').value);
-    formData.append("phone", document.getElementById('compPhone').value);
-    formData.append("email", document.getElementById('compEmail').value);
+    formData.append("location", document.getElementById('compLocation').value);
+    formData.append("scoreE", e);
+    formData.append("scoreS", s);
+    formData.append("scoreG", g);
+    formData.append("scoreAvg", avg);
 
-    // Add Scores
-    formData.append("scoreE", document.getElementById('showScoreE').value || 0);
-    formData.append("scoreS", document.getElementById('showScoreS').value || 0);
-    formData.append("scoreG", document.getElementById('showScoreG').value || 0);
-    formData.append("scoreAvg", document.getElementById('showScoreAvg').value || 0);
-
-    // Add File
+    // Append file only if selected
     const fileInput = document.getElementById('reportFile');
     if (fileInput.files.length > 0) {
         formData.append("file", fileInput.files[0]);
@@ -343,34 +255,23 @@ async function handlePublish(event) {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + token
-                // IMPORTANT: NO Content-Type header here!
             },
             body: formData
         });
 
         if (response.ok) {
             alert("Profile Published/Updated Successfully!");
-            localStorage.removeItem("latestGeneratedScores");
             closePublishModal();
-            checkExistingProfile();
-            fetchDashboardData();
         } else {
-            const errorText = await response.text();
-            console.error("Server Error:", response.status, errorText);
-
-            if (response.status === 403) {
-                // If this still happens, it's definitely the Tomcat limit masking as a 403
-                alert("Upload failed. Server rejected the request size/format.");
-            } else {
-                alert("Failed: " + errorText);
-            }
+            alert("Failed to publish.");
         }
     } catch (error) {
-        console.error("Network Error:", error);
-        alert("Connection Failed.");
+        console.error("Error:", error);
+        alert("Error connecting to server.");
     }
 }
 
+// DELETE PROFILE
 async function deleteProfile() {
     if(!confirm("Are you sure you want to remove your company from the Investor Portal?")) return;
 
@@ -385,11 +286,6 @@ async function deleteProfile() {
         if (response.ok) {
             alert("Profile removed successfully.");
             closePublishModal();
-            const dashboardBtn = document.getElementById("dashboardPublishBtn");
-            if(dashboardBtn) {
-                dashboardBtn.innerText = "Publish Profile";
-                dashboardBtn.style.backgroundColor = "#27ae60";
-            }
         } else {
             alert("Failed to delete.");
         }
@@ -398,38 +294,9 @@ async function deleteProfile() {
     }
 }
 
-async function fetchDashboardData() {
-    const token = localStorage.getItem("token");
-    const scoreDisplay = document.getElementById("esgScoreDisplay");
-
-    try {
-        const response = await fetch('http://localhost:8080/api/investor/my-profile', {
-            headers: { 'Authorization': 'Bearer ' + token }
-        });
-
-        if (response.status === 200) {
-            const data = await response.json();
-            // Update the score display with the average score from the profile
-            if (scoreDisplay) {
-                scoreDisplay.innerText = data.scoreAvg || "--";
-            }
-        } else {
-            // If no profile is published, keep the default "--"
-            if (scoreDisplay) {
-                scoreDisplay.innerText = "--";
-            }
-        }
-    } catch (error) {
-        console.log("Error fetching profile for dashboard score:", error);
-        if (scoreDisplay) {
-            scoreDisplay.innerText = "Error";
-        }
-    }
-}
-
+// Close modal if user clicks outside
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
 }
-
