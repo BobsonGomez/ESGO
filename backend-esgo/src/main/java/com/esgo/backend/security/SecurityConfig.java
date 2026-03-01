@@ -41,6 +41,8 @@ public class SecurityConfig {
 
                         // 4. Authenticated Endpoints
                         .requestMatchers("/api/investor/**").authenticated()
+
+                        .requestMatchers("/api/ai/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

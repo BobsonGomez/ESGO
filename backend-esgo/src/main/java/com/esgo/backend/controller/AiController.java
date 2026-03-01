@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/ai")
@@ -68,5 +71,65 @@ public class AiController {
             e.printStackTrace();
             return ResponseEntity.status(500).body("{\"error\": \"Server Error: " + e.getMessage() + "\"}");
         }
+    }
+
+    @PostMapping("/generate-esg")
+    public ResponseEntity<?> generateContent(@RequestBody Map<String, String> payload) {
+        try {
+            // Use "prompt" or "keywords" based on what you send from JS
+            String userPrompt = payload.get("prompt");
+
+            String generatedText = callGeminiApi(userPrompt);
+
+            // Clean the text: Remove any weird trailing newlines or extra quotes
+            // that Gemini sometimes adds in raw mode
+            generatedText = generatedText.trim();
+
+            Map<String, String> response = new HashMap<>();
+            response.put("text", generatedText);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    private String callGeminiApi(String userPrompt) throws Exception {
+        String apiKey = "AIzaSyCzU-8hDSudUa7nWywreGnxCmz2OwxZCTY";
+        String apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + apiKey;
+
+        // Use a Map for the body to let Jackson handle escaping quotes in the userPrompt
+        Map<String, Object> bodyMap = Map.of(
+                "contents", List.of(
+                        Map.of("parts", List.of(
+                                Map.of("text", userPrompt)
+                        ))
+                )
+        );
+
+        String jsonInputString = new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(bodyMap);
+
+        java.net.http.HttpClient client = java.net.http.HttpClient.newHttpClient();
+        java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder()
+                .uri(java.net.URI.create(apiUrl))
+                .header("Content-Type", "application/json")
+                .POST(java.net.http.HttpRequest.BodyPublishers.ofString(jsonInputString))
+                .build();
+
+        java.net.http.HttpResponse<String> response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
+
+        // PARSE the Gemini response properly
+        com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+        com.fasterxml.jackson.databind.JsonNode root = mapper.readTree(response.body());
+
+        // Path: candidates[0] -> content -> parts[0] -> text
+        if (root.has("candidates") && root.get("candidates").size() > 0) {
+            return root.path("candidates").get(0)
+                    .path("content").path("parts").get(0)
+                    .path("text").asText();
+        }
+
+        return "Error: AI could not generate content.";
     }
 }

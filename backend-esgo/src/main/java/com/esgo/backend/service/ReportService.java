@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+import static javax.swing.text.html.CSS.Attribute.FONT_FAMILY;
+
 @Service
 public class ReportService {
 
@@ -128,12 +130,6 @@ public class ReportService {
 
     public ByteArrayInputStream generateBrsrReport(BrsrReportRequest data) throws IOException {
         try (XWPFDocument doc = new XWPFDocument()) {
-
-            // ... (Rest of your generation logic remains exactly the same as before) ...
-            // ... I am abbreviating here to save space, but DO NOT DELETE the rest of the file ...
-
-            // --- COPY PASTE THE REST OF THE GENERATE METHOD FROM PREVIOUS STEPS ---
-
             // --- TITLE ---
             XWPFParagraph title = doc.createParagraph();
             title.setAlignment(ParagraphAlignment.CENTER);
@@ -145,18 +141,24 @@ public class ReportService {
             titleRun.setColor(COLOR_THEME_GREEN);
             titleRun.setFontFamily("Calibri");
 
-            // --- SECTION A ---
+            // --- SECTION A: GENERAL DISCLOSURES ---
             addSectionHeader(doc, "SECTION A: GENERAL DISCLOSURES");
             addBoldText(doc, "I. Details of the listed entity");
 
             XWPFTable table = doc.createTable();
             table.setWidth("100%");
+
+            // Set specific column widths (30% for Labels, 70% for Data) to look better
+            CTTblGrid grid = table.getCTTbl().addNewTblGrid();
+            grid.addNewGridCol().setW(BigInteger.valueOf(3000));
+            grid.addNewGridCol().setW(BigInteger.valueOf(7000));
+
             XWPFTableRow headerRow = (table.getRow(0) != null) ? table.getRow(0) : table.createRow();
             ensureCells(headerRow, 2);
             styleCell(headerRow.getCell(0), "S. No. Particulars", true);
             styleCell(headerRow.getCell(1), "Details", true);
 
-            // Data Rows
+            // Data Rows 1-12
             addRow(table, "1. Corporate Identity Number (CIN)", data.getCin());
             addRow(table, "2. Name of the Listed Entity", data.getCompanyName());
             addRow(table, "3. Year of incorporation", data.getYearOfInc());
@@ -179,106 +181,123 @@ public class ReportService {
                     checkNull(data.getContactPersonEmail()));
             addRow(table, "12. Contact Person details", contactInfo);
 
-            doc.createParagraph().createRun().addBreak();
+            // --- ADDED 13, 14, 15 to the Table ---
 
-            // --- POINT 13 ---
-            String reportingBoundary = data.getReportingBoundary();
-            if (reportingBoundary != null && !reportingBoundary.trim().isEmpty()) {
-                XWPFParagraph pageBreakPara = doc.createParagraph();
-                pageBreakPara.setPageBreak(true);
+            // 13. Reporting Boundary (Question text added to label)
+            String q13Label = "13. Reporting boundary - Are the disclosures under this report made on a standalone basis (i.e. only for the entity) or on a consolidated basis?";
+            addRow(table, q13Label, checkNull(data.getReportingBoundary()));
 
-                XWPFParagraph p13 = doc.createParagraph();
-                XWPFRun r13Num = p13.createRun();
-                r13Num.setText("13.  ");
-                r13Num.setBold(true);
-                r13Num.setColor(COLOR_THEME_GREEN);
-                r13Num.setFontFamily("Calibri");
+            // 14. Assurance Provider
+            addRow(table, "14. Name of assurance provider", checkNull(data.getAssuranceProviderName()));
 
-                XWPFRun r13Title = p13.createRun();
-                r13Title.setText("Reporting boundary:");
-                r13Title.setBold(true);
-                r13Title.setFontFamily("Calibri");
-
-                XWPFParagraph p13Desc = doc.createParagraph();
-                XWPFRun r13Desc = p13Desc.createRun();
-                r13Desc.setText("Are the disclosures under this report made on a standalone basis (i.e., only for the entity) or on a consolidated basis (i.e., for the entity and all the entities which form a part of its consolidated financial statements, taken together).");
-                r13Desc.setItalic(true);
-                r13Desc.setFontFamily("Calibri");
-
-                XWPFParagraph p13Ans = doc.createParagraph();
-                p13Ans.setSpacingBefore(200);
-                XWPFRun r13Ans = p13Ans.createRun();
-                r13Ans.setText(reportingBoundary);
-                r13Ans.setFontFamily("Calibri");
-                r13Ans.setBold(true);
-            }
+            // 15. Assurance Type
+            addRow(table, "15. Type of assurance obtained", checkNull(data.getAssuranceType()));
 
             doc.createParagraph().createRun().addBreak();
 
-            // ================= SECTION II: PRODUCTS/SERVICES =================
-            addSectionHeader(doc, "II. Products/Services");
+            // --- II. Products/services ---
+            doc.createParagraph().createRun().addBreak(); // Ensure spacing from previous section
+            addBoldText(doc, "II. Products/services");
 
-            // 14. Activities
-            addBoldText(doc, "14. Details of business activities (accounting for 90% of the turnover):");
-            XWPFTable table14 = doc.createTable();
-            table14.setWidth("100%");
-            String[] headers14 = {"S. No.", "Description of Main Activity", "Description of Business Activity", "% of Turnover"};
-            addDynamicHeaderRow(table14, headers14);
+            // Item 16 Text (Regular + Italic part)
+            XWPFParagraph p16 = doc.createParagraph();
+            XWPFRun r16a = p16.createRun();
+            r16a.setText("16. Details of business activities ");
+            r16a.setBold(true); // <-- Added bold
+            r16a.setFontFamily(FONT_FAMILY.toString()); r16a.setFontSize(10); // FIX: Added .toString()
+            XWPFRun r16b = p16.createRun();
+            r16b.setText("(accounting for 90% of the turnover):");
+            r16b.setItalic(true);
+            r16b.setFontFamily(FONT_FAMILY.toString()); r16b.setFontSize(10); // FIX: Added .toString()
 
-            List<BrsrReportRequest.BusinessActivity> activities = data.getBusinessActivities();
-            if (activities != null && !activities.isEmpty()) {
-                int count = 1;
-                for (BrsrReportRequest.BusinessActivity act : activities) {
-                    addDynamicRow(table14, new String[]{
-                            String.valueOf(count++),
-                            checkNull(act.getDescriptionMain()),
-                            checkNull(act.getDescriptionBusiness()),
-                            checkNull(act.getTurnoverPercentage()) + "%"
-                    });
+            // FIX: Renamed to tableProduct16 to avoid conflict with Section III, and use doc.createTable()
+            XWPFTable tableProduct16 = doc.createTable();
+
+            // Set Column Widths: S.No(10%), Main(35%), Business(35%), %(20%)
+            CTTblGrid grid16 = tableProduct16.getCTTbl().addNewTblGrid();
+            grid16.addNewGridCol().setW(BigInteger.valueOf(1000));
+            grid16.addNewGridCol().setW(BigInteger.valueOf(3500));
+            grid16.addNewGridCol().setW(BigInteger.valueOf(3500));
+            grid16.addNewGridCol().setW(BigInteger.valueOf(2000));
+
+            // FIX: Use your existing helper addDynamicHeaderRow
+            addDynamicHeaderRow(tableProduct16, new String[]{"S. No.", "Description of Main Activity", "Description of Business Activity", "% of Turnover of the entity"});
+
+            if (data.getBusinessActivities() != null && !data.getBusinessActivities().isEmpty()) {
+                int i = 1;
+                for (BrsrReportRequest.BusinessActivity ba : data.getBusinessActivities()) {
+                    // FIX: Use your existing helper addDynamicRow
+                    addDynamicRow(tableProduct16, new String[]{String.valueOf(i++), checkNull(ba.getDescriptionMain()), checkNull(ba.getDescriptionBusiness()), checkNull(ba.getTurnoverPercentage()) + "%"});
                 }
-            } else {
-                addDynamicRow(table14, new String[]{"-", "-", "-", "-"});
-            }
+            } else { addDynamicRow(tableProduct16, new String[]{"-", "-", "-", "-"}); }
 
             doc.createParagraph().createRun().addBreak();
 
-            // 15. Products
-            addBoldText(doc, "15. Products/Services sold by the entity:");
-            XWPFTable table15 = doc.createTable();
-            table15.setWidth("100%");
-            String[] headers15 = data.isIncludeConsolidated() ?
-                    new String[]{"S. No.", "Product/Service", "NIC Code", "Turnover (Stand.)", "%", "Turnover (Cons.)", "%"} :
-                    new String[]{"S. No.", "Product/Service", "NIC Code", "% of Total Turnover"};
-            addDynamicHeaderRow(table15, headers15);
+            // Item 17 Text
+            XWPFParagraph p17 = doc.createParagraph();
+            XWPFRun r17a = p17.createRun();
+            r17a.setText("17. Products/Services sold by the entity ");
+            r17a.setBold(true); // <-- Added bold
+            r17a.setFontFamily(FONT_FAMILY.toString()); r17a.setFontSize(10); // FIX: Added .toString()
 
-            List<BrsrReportRequest.ProductService> products = data.getProductsServices();
-            if (products != null && !products.isEmpty()) {
-                int count = 1;
-                for (BrsrReportRequest.ProductService prod : products) {
+            // FIX: Rename variable to avoid conflict later
+            XWPFRun rProduct17b = p17.createRun();
+            rProduct17b.setText("(accounting for 90% of the entity’s Turnover):");
+            rProduct17b.setItalic(true);
+            rProduct17b.setFontFamily(FONT_FAMILY.toString()); rProduct17b.setFontSize(10); // FIX: Added .toString()
+
+            // FIX: Renamed to tableProduct17 to avoid conflict with Section III, and use doc.createTable()
+            XWPFTable tableProduct17 = doc.createTable();
+
+            // Set Column Widths: S.No(10%), Product(40%), NIC(20%), %(30%)
+            CTTblGrid grid17 = tableProduct17.getCTTbl().addNewTblGrid();
+            grid17.addNewGridCol().setW(BigInteger.valueOf(1000));
+            grid17.addNewGridCol().setW(BigInteger.valueOf(4000));
+            grid17.addNewGridCol().setW(BigInteger.valueOf(2000));
+            grid17.addNewGridCol().setW(BigInteger.valueOf(3000));
+
+            // Logic for Consolidated vs Standalone headers
+            String[] headers17;
+            if (data.isIncludeConsolidated()) {
+                headers17 = new String[]{"S. No.", "Product/Service", "NIC Code", "Turnover (Stand.)", "%", "Turnover (Cons.)", "%"};
+                grid17 = tableProduct17.getCTTbl().getTblGrid();
+            } else {
+                headers17 = new String[]{"S. No.", "Product/Service", "NIC Code", "% of total Turnover contributed"};
+            }
+
+            // FIX: Use your existing helper addDynamicHeaderRow
+            addDynamicHeaderRow(tableProduct17, headers17);
+
+            if (data.getProductsServices() != null && !data.getProductsServices().isEmpty()) {
+                int i = 1;
+                for (BrsrReportRequest.ProductService ps : data.getProductsServices()) {
                     if (data.isIncludeConsolidated()) {
-                        addDynamicRow(table15, new String[]{
-                                String.valueOf(count++),
-                                checkNull(prod.getProductName()),
-                                checkNull(prod.getNicCode()),
-                                checkNull(prod.getTurnoverStandalone()),
-                                checkNull(prod.getPercentageStandalone()) + "%",
-                                checkNull(prod.getTurnoverConsolidated()),
-                                checkNull(prod.getPercentageConsolidated()) + "%"
+                        // FIX: Use your existing helper addDynamicRow
+                        addDynamicRow(tableProduct17, new String[]{
+                                String.valueOf(i++),
+                                checkNull(ps.getProductName()),
+                                checkNull(ps.getNicCode()),
+                                checkNull(ps.getTurnoverStandalone()),
+                                checkNull(ps.getPercentageStandalone()) + "%",
+                                checkNull(ps.getTurnoverConsolidated()),
+                                checkNull(ps.getPercentageConsolidated()) + "%"
                         });
                     } else {
-                        addDynamicRow(table15, new String[]{
-                                String.valueOf(count++),
-                                checkNull(prod.getProductName()),
-                                checkNull(prod.getNicCode()),
-                                checkNull(prod.getPercentageStandalone()) + "%"
+                        // FIX: Use your existing helper addDynamicRow
+                        addDynamicRow(tableProduct17, new String[]{
+                                String.valueOf(i++),
+                                checkNull(ps.getProductName()),
+                                checkNull(ps.getNicCode()),
+                                checkNull(ps.getPercentageStandalone()) + "%"
                         });
                     }
                 }
             } else {
-                int cols = data.isIncludeConsolidated() ? 7 : 4;
-                String[] empty = new String[cols];
-                for (int i = 0; i < cols; i++) empty[i] = "-";
-                addDynamicRow(table15, empty);
+                int colCount = data.isIncludeConsolidated() ? 7 : 4;
+                String[] emptyRow = new String[colCount];
+                for(int k=0; k<colCount; k++) emptyRow[k] = "-";
+                // FIX: Use your existing helper addDynamicRow
+                addDynamicRow(tableProduct17, emptyRow);
             }
 
             doc.createParagraph().createRun().addBreak();
@@ -286,70 +305,90 @@ public class ReportService {
             // ================= SECTION III: OPERATIONS =================
             addSectionHeader(doc, "III. Operations");
 
-            // 16. Locations
-            addBoldText(doc, "16. Number of locations:");
-            XWPFTable table16 = doc.createTable();
-            table16.setWidth("100%");
-            String[] headers16 = {"Location", "Number of Plants", "Number of Offices", "Total"};
-            addDynamicHeaderRow(table16, headers16);
-            addDynamicRow(table16, new String[]{ "National", checkNull(data.getPlantsNational()), checkNull(data.getOfficesNational()), checkNull(data.getTotalNational()) });
-            addDynamicRow(table16, new String[]{ "International", checkNull(data.getPlantsInternational()), checkNull(data.getOfficesInternational()), checkNull(data.getTotalInternational()) });
+            // 18. Number of locations
+            addBoldText(doc, "18. Number of locations:");
+            XWPFTable table18 = doc.createTable();
+            table18.setWidth("100%");
+
+            String[] headers18 = {"Location", "Number of Plants", "Number of Offices", "Total"};
+            addDynamicHeaderRow(table18, headers18); // Uses your existing header styler
+
+            addDynamicRow(table18, new String[]{ "National", checkNull(data.getPlantsNational()), checkNull(data.getOfficesNational()), checkNull(data.getTotalNational()) });
+            addDynamicRow(table18, new String[]{ "International", checkNull(data.getPlantsInternational()), checkNull(data.getOfficesInternational()), checkNull(data.getTotalInternational()) });
 
             doc.createParagraph().createRun().addBreak();
 
-            // 17. Markets
-            addBoldText(doc, "17. Markets served by the entity:");
+            // 19. Markets served by the entity
+            addBoldText(doc, "19. Markets served by the entity:");
+
+            // a. Locations Table
             addBoldText(doc, "a. Number of locations");
-            XWPFTable table17 = doc.createTable();
-            table17.setWidth("100%");
-            XWPFTableRow header17 = (table17.getRow(0) != null) ? table17.getRow(0) : table17.createRow();
-            ensureCells(header17, 2);
-            styleCell(header17.getCell(0), "Locations", true);
-            styleCell(header17.getCell(1), "Number", true);
-            addRow(table17, "National (No. of States)", data.getLocationsNationalNumber());
-            addRow(table17, "International (No. of Countries)", data.getLocationsInternationalNumber());
+            XWPFTable table19Markets = doc.createTable();
+            table19Markets.setWidth("100%");
+
+            // Apply the exact same dynamic stylers to Table 19
+            String[] headers19Markets = {"Locations", "Number"};
+            addDynamicHeaderRow(table19Markets, headers19Markets);
+
+            addDynamicRow(table19Markets, new String[]{"National (No. of States)", checkNull(data.getLocationsNationalNumber())});
+            addDynamicRow(table19Markets, new String[]{"International (No. of Countries)", checkNull(data.getLocationsInternationalNumber())});
 
             doc.createParagraph().createRun().addBreak();
-            addBoldText(doc, "b. Contribution of exports:");
-            XWPFParagraph p17b = doc.createParagraph();
-            XWPFRun r17b = p17b.createRun();
-            r17b.setText(checkNull(data.getContributionExports()));
-            r17b.setFontFamily("Calibri");
-            p17b.setSpacingAfter(200);
 
+            // b. Contribution of exports (AI Output formatted cleanly)
+            addBoldText(doc, "b. What is the contribution of exports as a percentage of total turnover?");
+            XWPFParagraph p19b = doc.createParagraph();
+            p19b.setSpacingAfter(200);
+            // Uses your existing setTextWithBreaks to handle Gemini's paragraph formatting flawlessly
+            setTextWithBreaks(p19b.createRun(), checkNull(data.getContributionExports()));
+
+            // c. Types of customers (AI Output formatted cleanly)
             addBoldText(doc, "c. A brief on types of customers:");
-            XWPFParagraph p17c = doc.createParagraph();
-            XWPFRun r17c = p17c.createRun();
-            r17c.setText(checkNull(data.getTypesOfCustomers()));
-            r17c.setFontFamily("Calibri");
-            p17c.setSpacingAfter(200);
+            XWPFParagraph p19c = doc.createParagraph();
+            p19c.setSpacingAfter(200);
+            setTextWithBreaks(p19c.createRun(), checkNull(data.getTypesOfCustomers()));
+
+            doc.createParagraph().createRun().addBreak();
 
             doc.createParagraph().createRun().addBreak();
 
             // ================= SECTION IV: EMPLOYEES =================
             addSectionHeader(doc, "IV. Employees");
 
-            addBoldText(doc, "18. Details as at the end of Financial Year:");
+            addBoldText(doc, "20. Details as at the end of Financial Year:");
             addBoldText(doc, "a. Employees and workers (including differently abled):");
 
             XWPFTable table18a = doc.createTable();
             table18a.setWidth("100%");
-            String[] headers18 = {"Particulars", "Total (A)", "Male (No)", "Male (%)", "Female (No)", "Female (%)"};
-            addDynamicHeaderRow(table18a, headers18);
+            setTableBorders(table18a); // FIX: Ensures gridlines are visible
+
+// FIX: Set strict column widths (Particulars wide, numbers narrow)
+            org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblGrid grid18a = table18a.getCTTbl().addNewTblGrid();
+            grid18a.addNewGridCol().setW(java.math.BigInteger.valueOf(3000)); // Particulars
+            grid18a.addNewGridCol().setW(java.math.BigInteger.valueOf(1400)); // Total (A)
+            grid18a.addNewGridCol().setW(java.math.BigInteger.valueOf(1400)); // Male (No)
+            grid18a.addNewGridCol().setW(java.math.BigInteger.valueOf(1400)); // Male (%)
+            grid18a.addNewGridCol().setW(java.math.BigInteger.valueOf(1400)); // Female (No)
+            grid18a.addNewGridCol().setW(java.math.BigInteger.valueOf(1400)); // Female (%)
+
+            String[] headers18a = {"Particulars", "Total (A)", "Male (No)", "Male (%)", "Female (No)", "Female (%)"};
+            addDynamicHeaderRow(table18a, headers18a);
 
             addSectionTitleRow(table18a, "EMPLOYEES", 6);
-            String[] empPerm = { "Permanent (D)", checkNull(data.getEmpPermTotal()), checkNull(data.getEmpPermMaleNo()), checkNull(data.getEmpPermMalePerc()), checkNull(data.getEmpPermFemaleNo()), checkNull(data.getEmpPermFemalePerc()) };
-            String[] empTemp = { "Other than Permanent (E)", checkNull(data.getEmpTempTotal()), checkNull(data.getEmpTempMaleNo()), checkNull(data.getEmpTempMalePerc()), checkNull(data.getEmpTempFemaleNo()), checkNull(data.getEmpTempFemalePerc()) };
+            String[] empPerm = { "Permanent (D)", checkNull(data.getEmpPermTotal()), checkNull(data.getEmpPermMaleNo()), checkNull(data.getEmpPermMalePerc())+"%", checkNull(data.getEmpPermFemaleNo()), checkNull(data.getEmpPermFemalePerc())+"%" };
+            String[] empTemp = { "Other than Permanent (E)", checkNull(data.getEmpTempTotal()), checkNull(data.getEmpTempMaleNo()), checkNull(data.getEmpTempMalePerc())+"%", checkNull(data.getEmpTempFemaleNo()), checkNull(data.getEmpTempFemalePerc())+"%" };
             addDynamicRow(table18a, empPerm);
             addDynamicRow(table18a, empTemp);
             addDynamicRow(table18a, calculateTotalRow("Total Employees (D+E)", empPerm, empTemp));
 
             addSectionTitleRow(table18a, "WORKERS", 6);
-            String[] workPerm = { "Permanent (F)", checkNull(data.getWorkPermTotal()), checkNull(data.getWorkPermMaleNo()), checkNull(data.getWorkPermMalePerc()), checkNull(data.getWorkPermFemaleNo()), checkNull(data.getWorkPermFemalePerc()) };
-            String[] workTemp = { "Other than Permanent (G)", checkNull(data.getWorkTempTotal()), checkNull(data.getWorkTempMaleNo()), checkNull(data.getWorkTempMalePerc()), checkNull(data.getWorkTempFemaleNo()), checkNull(data.getWorkTempFemalePerc()) };
+            String[] workPerm = { "Permanent (F)", checkNull(data.getWorkPermTotal()), checkNull(data.getWorkPermMaleNo()), checkNull(data.getWorkPermMalePerc())+"%", checkNull(data.getWorkPermFemaleNo()), checkNull(data.getWorkPermFemalePerc())+"%" };
+            String[] workTemp = { "Other than Permanent (G)", checkNull(data.getWorkTempTotal()), checkNull(data.getWorkTempMaleNo()), checkNull(data.getWorkTempMalePerc())+"%", checkNull(data.getWorkTempFemaleNo()), checkNull(data.getWorkTempFemalePerc())+"%" };
             addDynamicRow(table18a, workPerm);
             addDynamicRow(table18a, workTemp);
             addDynamicRow(table18a, calculateTotalRow("Total Workers (F+G)", workPerm, workTemp));
+
+// Adds the AI generated note cleanly below the table
             addNote(doc, data.getEmployeeNotesA());
 
             doc.createParagraph().createRun().addBreak();
@@ -357,23 +396,45 @@ public class ReportService {
             addBoldText(doc, "b. Differently abled Employees and workers:");
             XWPFTable table18b = doc.createTable();
             table18b.setWidth("100%");
-            addDynamicHeaderRow(table18b, headers18);
+            setTableBorders(table18b); // FIX: Ensures gridlines are visible
+
+// Apply the exact same column widths to Table B
+            org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblGrid grid18b = table18b.getCTTbl().addNewTblGrid();
+            grid18b.addNewGridCol().setW(java.math.BigInteger.valueOf(3000));
+            grid18b.addNewGridCol().setW(java.math.BigInteger.valueOf(1400));
+            grid18b.addNewGridCol().setW(java.math.BigInteger.valueOf(1400));
+            grid18b.addNewGridCol().setW(java.math.BigInteger.valueOf(1400));
+            grid18b.addNewGridCol().setW(java.math.BigInteger.valueOf(1400));
+            grid18b.addNewGridCol().setW(java.math.BigInteger.valueOf(1400));
+
+            addDynamicHeaderRow(table18b, headers18a);
 
             addSectionTitleRow(table18b, "DIFFERENTLY ABLED EMPLOYEES", 6);
-            addDynamicRow(table18b, new String[]{"Permanent (D)", checkNull(data.getDaEmpPermTotal()), checkNull(data.getDaEmpPermMaleNo()), checkNull(data.getDaEmpPermMalePerc()), checkNull(data.getDaEmpPermFemaleNo()), checkNull(data.getDaEmpPermFemalePerc())});
-            addDynamicRow(table18b, new String[]{"Other than Permanent (E)", checkNull(data.getDaEmpTempTotal()), checkNull(data.getDaEmpTempMaleNo()), checkNull(data.getDaEmpTempMalePerc()), checkNull(data.getDaEmpTempFemaleNo()), checkNull(data.getDaEmpTempFemalePerc())});
+            addDynamicRow(table18b, new String[]{"Permanent (D)", checkNull(data.getDaEmpPermTotal()), checkNull(data.getDaEmpPermMaleNo()), checkNull(data.getDaEmpPermMalePerc())+"%", checkNull(data.getDaEmpPermFemaleNo()), checkNull(data.getDaEmpPermFemalePerc())+"%"});
+            addDynamicRow(table18b, new String[]{"Other than Permanent (E)", checkNull(data.getDaEmpTempTotal()), checkNull(data.getDaEmpTempMaleNo()), checkNull(data.getDaEmpTempMalePerc())+"%", checkNull(data.getDaEmpTempFemaleNo()), checkNull(data.getDaEmpTempFemalePerc())+"%"});
 
             addSectionTitleRow(table18b, "DIFFERENTLY ABLED WORKERS", 6);
-            addDynamicRow(table18b, new String[]{"Permanent (F)", checkNull(data.getDaWorkPermTotal()), checkNull(data.getDaWorkPermMaleNo()), checkNull(data.getDaWorkPermMalePerc()), checkNull(data.getDaWorkPermFemaleNo()), checkNull(data.getDaWorkPermFemalePerc())});
-            addDynamicRow(table18b, new String[]{"Other than Permanent (G)", checkNull(data.getDaWorkTempTotal()), checkNull(data.getDaWorkTempMaleNo()), checkNull(data.getDaWorkTempMalePerc()), checkNull(data.getDaWorkTempFemaleNo()), checkNull(data.getDaWorkTempFemalePerc())});
+            addDynamicRow(table18b, new String[]{"Permanent (F)", checkNull(data.getDaWorkPermTotal()), checkNull(data.getDaWorkPermMaleNo()), checkNull(data.getDaWorkPermMalePerc())+"%", checkNull(data.getDaWorkPermFemaleNo()), checkNull(data.getDaWorkPermFemalePerc())+"%"});
+            addDynamicRow(table18b, new String[]{"Other than Permanent (G)", checkNull(data.getDaWorkTempTotal()), checkNull(data.getDaWorkTempMaleNo()), checkNull(data.getDaWorkTempMalePerc())+"%", checkNull(data.getDaWorkTempFemaleNo()), checkNull(data.getDaWorkTempFemalePerc())+"%"});
+
+// Adds the AI generated note cleanly below the table
             addNote(doc, data.getEmployeeNotesB());
 
             doc.createParagraph().createRun().addBreak();
 
-            // --- 19. Women Representation ---
-            addBoldText(doc, "19. Participation/Inclusion/Representation of women:");
+            // --- 21. Women Representation ---
+            addBoldText(doc, "21. Participation/Inclusion/Representation of women:");
             XWPFTable table19 = doc.createTable();
             table19.setWidth("100%");
+            setTableBorders(table19); // FIX: Ensures gridlines are visible
+
+            // FIX: Set specific column widths to prevent ugly stretching
+            org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblGrid grid19 = table19.getCTTbl().addNewTblGrid();
+            grid19.addNewGridCol().setW(java.math.BigInteger.valueOf(4000)); // Category (Wide)
+            grid19.addNewGridCol().setW(java.math.BigInteger.valueOf(2000)); // Total (A)
+            grid19.addNewGridCol().setW(java.math.BigInteger.valueOf(2000)); // Female (B)
+            grid19.addNewGridCol().setW(java.math.BigInteger.valueOf(2000)); // % (B/A)
+
             XWPFTableRow header19 = (table19.getRow(0) != null) ? table19.getRow(0) : table19.createRow();
             ensureCells(header19, 4);
             styleCell(header19.getCell(0), "Category", true);
@@ -384,19 +445,34 @@ public class ReportService {
             List<BrsrReportRequest.WomenRepresentation> womenList = data.getWomenRepresentationList();
             if (womenList != null && !womenList.isEmpty()) {
                 for (BrsrReportRequest.WomenRepresentation row : womenList) {
-                    addDynamicRow(table19, new String[]{ checkNull(row.getCategory()), checkNull(row.getTotalA()), checkNull(row.getFemaleNoB()), checkNull(row.getFemalePerc()) + "%" });
+                    addDynamicRow(table19, new String[]{
+                            checkNull(row.getCategory()),
+                            checkNull(row.getTotalA()),
+                            checkNull(row.getFemaleNoB()),
+                            checkNull(row.getFemalePerc()) + "%"
+                    });
                 }
             } else {
                 addDynamicRow(table19, new String[]{"-", "-", "-", "-"});
             }
+
+            // Appends the AI note perfectly below the table
             addNote(doc, data.getWomenRepresentationNotes());
 
             doc.createParagraph().createRun().addBreak();
 
             // --- 20. TURNOVER RATE ---
-            addBoldText(doc, "20. Turnover rate for permanent employees and workers (Disclose trends for the past 3 years):");
+            addBoldText(doc, "22. Turnover rate for permanent employees and workers (Disclose trends for the past 3 years):");
             XWPFTable table20 = doc.createTable();
             table20.setWidth("100%");
+            setTableBorders(table20); // FIX: Ensures gridlines are visible
+
+            // FIX: Set specific column widths for 10 columns so they fit the page perfectly
+            org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblGrid grid20 = table20.getCTTbl().addNewTblGrid();
+            grid20.addNewGridCol().setW(java.math.BigInteger.valueOf(1900)); // Category column (Wider)
+            for(int i = 0; i < 9; i++) {
+                grid20.addNewGridCol().setW(java.math.BigInteger.valueOf(800)); // 9 Number columns
+            }
 
             XWPFTableRow hRow1 = table20.getRow(0);
             ensureCells(hRow1, 10);
@@ -415,7 +491,7 @@ public class ReportService {
 
             XWPFTableRow hRow2 = table20.createRow();
             ensureCells(hRow2, 10);
-            styleCell(hRow2.getCell(0), "", true);
+            styleCell(hRow2.getCell(0), "", true); // Blank under category
             for(int i=0; i<3; i++) {
                 int base = 1 + (i*3);
                 styleCell(hRow2.getCell(base), "Male", true);
@@ -436,19 +512,41 @@ public class ReportService {
             rowWork20[4] = checkNull(data.getTurnoverWorkPrevMale()); rowWork20[5] = checkNull(data.getTurnoverWorkPrevFemale()); rowWork20[6] = checkNull(data.getTurnoverWorkPrevTotal());
             rowWork20[7] = checkNull(data.getTurnoverWorkPriorMale()); rowWork20[8] = checkNull(data.getTurnoverWorkPriorFemale()); rowWork20[9] = checkNull(data.getTurnoverWorkPriorTotal());
             addDynamicRow(table20, rowWork20);
+
+            // Appends the AI note perfectly below the table
             addNote(doc, data.getTurnoverNotes());
 
             doc.createParagraph().createRun().addBreak();
 
             // ================= SECTION V =================
             addSectionHeader(doc, "V. Holding, Subsidiary and Associate Companies");
-            addBoldText(doc, "21. (a) Names of holding / subsidiary / associate companies / joint ventures:");
+            addBoldText(doc, "23. (a) Details of holding/subsidiary/associate companies (including joint ventures):");
 
             List<BrsrReportRequest.HoldingCompany> holdingList = data.getHoldingCompanies();
+            String note = data.getHoldingCompanyNote();
+
+// Mode A: Table Data Exists
             if (holdingList != null && !holdingList.isEmpty()) {
                 XWPFTable table21 = doc.createTable();
                 table21.setWidth("100%");
-                String[] headers21 = {"S. No.", "Name of Company (A)", "Type", "% Shares", "Participates in BR?"};
+                setTableBorders(table21); // FIX: Ensures gridlines are visible
+
+                // FIX: Define column widths so the table fits the page perfectly
+                org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblGrid grid21 = table21.getCTTbl().addNewTblGrid();
+                grid21.addNewGridCol().setW(java.math.BigInteger.valueOf(800));  // S.No
+                grid21.addNewGridCol().setW(java.math.BigInteger.valueOf(3000)); // Name of Company
+                grid21.addNewGridCol().setW(java.math.BigInteger.valueOf(2500)); // Type
+                grid21.addNewGridCol().setW(java.math.BigInteger.valueOf(1200)); // % Shares
+                grid21.addNewGridCol().setW(java.math.BigInteger.valueOf(2000)); // Participates in BR
+
+                // Exact BRSR Standard Headers
+                String[] headers21 = {
+                        "S. No.",
+                        "Name of the holding / subsidiary / associate companies / joint ventures (A)",
+                        "Indicate whether holding/ Subsidiary/ Associate/ Joint Venture",
+                        "% of shares held by listed entity",
+                        "Does the entity indicated at column A, participate in the Business Responsibility initiatives of the listed entity? (Yes/No)"
+                };
                 addDynamicHeaderRow(table21, headers21);
 
                 int count = 1;
@@ -457,19 +555,21 @@ public class ReportService {
                             String.valueOf(count++),
                             checkNull(company.getName()),
                             checkNull(company.getType()),
-                            checkNull(company.getSharesHeld()) + "%",
+                            checkNull(company.getSharesHeld()) + "%", // Appends the % sign automatically
                             checkNull(company.getParticipateBusinessResponsibility())
                     });
                 }
-            } else {
-                String note = data.getHoldingCompanyNote();
-                if (note != null && !note.trim().isEmpty()) {
-                    XWPFParagraph pNote = doc.createParagraph();
-                    pNote.createRun().setText(note);
-                } else {
-                    XWPFParagraph pNone = doc.createParagraph();
-                    pNone.createRun().setText("Not Applicable / No Data Provided");
-                }
+            }
+// Mode B: Note / Text Mode
+            else if (note != null && !note.trim().isEmpty()) {
+                XWPFParagraph pNote = doc.createParagraph();
+                // Use your existing helper to ensure line-breaks in the textarea render correctly in Word
+                setTextWithBreaks(pNote.createRun(), note);
+            }
+// Fallback: Nothing Provided
+            else {
+                XWPFParagraph pNone = doc.createParagraph();
+                pNone.createRun().setText("Not Applicable / No Data Provided");
             }
 
             doc.createParagraph().createRun().addBreak();
@@ -487,17 +587,17 @@ public class ReportService {
             styleCell(hRow22.getCell(2), "Company Particulars", true);
 
             XWPFTableRow r1 = table22.createRow();
-            styleCell(r1.getCell(0), "22. i)", false);
+            styleCell(r1.getCell(0), "24. i)", false);
             styleCell(r1.getCell(1), "Whether CSR is applicable as per section 135 of Companies Act, 2013?", false);
             styleCell(r1.getCell(2), checkNull(data.getCsrApplicable()), false);
 
             XWPFTableRow r2 = table22.createRow();
-            styleCell(r2.getCell(0), "22. ii)", false);
+            styleCell(r2.getCell(0), "24. ii)", false);
             styleCell(r2.getCell(1), "Turnover (in Rs.)", false);
             styleCell(r2.getCell(2), checkNull(data.getCsrTurnover()), false);
 
             XWPFTableRow r3 = table22.createRow();
-            styleCell(r3.getCell(0), "22. iii)", false);
+            styleCell(r3.getCell(0), "24. iii)", false);
             styleCell(r3.getCell(1), "Net worth (in Rs.)", false);
             styleCell(r3.getCell(2), checkNull(data.getCsrNetWorth()), false);
 
@@ -505,7 +605,7 @@ public class ReportService {
 
             // ================= SECTION VII: TRANSPARENCY =================
             addSectionHeader(doc, "VII. Transparency and Disclosures Compliances");
-            addBoldText(doc, "23. Complaints/Grievances on any of the principles (Principles 1 to 9):");
+            addBoldText(doc, "25. Complaints/Grievances on any of the principles (Principles 1 to 9):");
 
             List<BrsrReportRequest.Complaint> complaints = data.getComplaintsList();
 
@@ -579,212 +679,288 @@ public class ReportService {
 
             doc.createParagraph().createRun().addBreak();
 
-            // --- 24. Material Issues ---
-            addBoldText(doc, "24. Overview of the entity's material responsible business conduct issues");
+            // --- 26. Material Issues ---
+            addBoldText(doc, "26. Overview of the entity's material responsible business conduct issues");
 
-            XWPFParagraph p24Desc = doc.createParagraph();
-            XWPFRun r24Desc = p24Desc.createRun();
-            r24Desc.setText("Please indicate material responsible business conduct and sustainability issues pertaining to environmental and social matters that present a risk or an opportunity to your business, rationale for identifying the same, approach to adapt or mitigate the risk along-with its financial implications, as per the following format:");
-            r24Desc.setFontFamily("Calibri");
-            r24Desc.setFontSize(10);
-            p24Desc.setSpacingAfter(200);
+            XWPFParagraph p26Desc = doc.createParagraph();
+            XWPFRun r26Desc = p26Desc.createRun();
+            r26Desc.setText("Please indicate material responsible business conduct and sustainability issues pertaining to environmental and social matters that present a risk or an opportunity to your business, rationale for identifying the same, approach to adapt or mitigate the risk along-with its financial implications, as per the following format:");
+            r26Desc.setFontFamily("Calibri");
+            r26Desc.setFontSize(10);
+            p26Desc.setSpacingAfter(200);
 
+            // Print the introductory note if it exists
             addNote(doc, data.getMaterialIssuesNote());
-            doc.createParagraph().createRun().addBreak();
 
-            XWPFTable table24 = doc.createTable();
-            table24.setWidth("100%");
+            XWPFTable table26 = doc.createTable();
+            table26.setWidth("100%");
+            setTableBorders(table26); // FIX: Ensure gridlines render
 
-            CTTblGrid grid24 = table24.getCTTbl().addNewTblGrid();
-            grid24.addNewGridCol().setW(BigInteger.valueOf(400));
-            grid24.addNewGridCol().setW(BigInteger.valueOf(1400));
-            grid24.addNewGridCol().setW(BigInteger.valueOf(800));
-            grid24.addNewGridCol().setW(BigInteger.valueOf(3200));
-            grid24.addNewGridCol().setW(BigInteger.valueOf(3200));
-            grid24.addNewGridCol().setW(BigInteger.valueOf(1000));
+            // Set specific column widths
+            org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblGrid grid26 = table26.getCTTbl().addNewTblGrid();
+            grid26.addNewGridCol().setW(java.math.BigInteger.valueOf(500));  // S.No
+            grid26.addNewGridCol().setW(java.math.BigInteger.valueOf(1800)); // Issue
+            grid26.addNewGridCol().setW(java.math.BigInteger.valueOf(1000)); // R/O
+            grid26.addNewGridCol().setW(java.math.BigInteger.valueOf(2800)); // Rationale
+            grid26.addNewGridCol().setW(java.math.BigInteger.valueOf(2800)); // Approach
+            grid26.addNewGridCol().setW(java.math.BigInteger.valueOf(1100)); // Financial Implication
 
-            XWPFTableRow hRow24 = table24.getRow(0);
-            ensureCells(hRow24, 6);
-            styleCell(hRow24.getCell(0), "S. No.", true);
-            styleCell(hRow24.getCell(1), "Material issue identified", true);
-            styleCell(hRow24.getCell(2), "Indicate whether risk or opportunity (R/O)", true);
-            styleCell(hRow24.getCell(3), "Rationale for identifying the risk / opportunity", true);
-            styleCell(hRow24.getCell(4), "In case of risk, approach to adapt or mitigate", true);
-            styleCell(hRow24.getCell(5), "Financial implications (Positive/Negative)", true);
+            XWPFTableRow hRow26 = table26.getRow(0);
+            ensureCells(hRow26, 6);
+            styleCell(hRow26.getCell(0), "S. No.", true);
+            styleCell(hRow26.getCell(1), "Material issue identified", true);
+            styleCell(hRow26.getCell(2), "Indicate whether risk or opportunity (R/O)", true);
+            styleCell(hRow26.getCell(3), "Rationale for identifying the risk / opportunity", true);
+            styleCell(hRow26.getCell(4), "In case of risk, approach to adapt or mitigate", true);
+            styleCell(hRow26.getCell(5), "Financial implications (Positive/Negative)", true);
 
             List<BrsrReportRequest.MaterialIssue> issues = data.getMaterialIssues();
             if (issues != null && !issues.isEmpty()) {
                 int count = 1;
                 for (BrsrReportRequest.MaterialIssue issue : issues) {
-                    XWPFTableRow row = table24.createRow();
+                    XWPFTableRow row = table26.createRow();
                     ensureCells(row, 6);
                     styleCell(row.getCell(0), String.valueOf(count++), false);
                     styleCell(row.getCell(1), checkNull(issue.getDescription()), false);
                     styleCell(row.getCell(2), checkNull(issue.getRiskOrOpportunity()), false);
-                    fillCellWithNewlines(row.getCell(3), checkNull(issue.getRationale()));
-                    fillCellWithNewlines(row.getCell(4), checkNull(issue.getApproach()));
+                    fillCellWithNewlines(row.getCell(3), checkNull(issue.getRationale())); // Handles AI linebreaks
+                    fillCellWithNewlines(row.getCell(4), checkNull(issue.getApproach()));  // Handles AI linebreaks
                     styleCell(row.getCell(5), checkNull(issue.getFinancialImplications()), false);
                 }
             } else {
-                addDynamicRow(table24, new String[]{"-", "-", "-", "-", "-", "-"});
+                addDynamicRow(table26, new String[]{"-", "-", "-", "-", "-", "-"});
             }
 
             doc.createParagraph().createRun().addBreak();
 
             // ================= SECTION B: MANAGEMENT =================
-            // --- SECTION B HEADER ---
-            XWPFParagraph pSecB = doc.createParagraph();
-            pSecB.setPageBreak(true);
-            XWPFRun rSecB = pSecB.createRun();
-            rSecB.setText("SECTION B: MANAGEMENT AND PROCESS DISCLOSURES");
-            rSecB.setBold(true);
-            rSecB.setFontSize(14);
-            rSecB.setColor("108a55");
+            doc.createParagraph().setPageBreak(true); // Pushes Section B to a new page
+            addSectionHeader(doc, "SECTION B: MANAGEMENT AND PROCESS DISCLOSURES");
 
-// --- Q1: Policy Matrix ---
-            addBoldText(doc, "1. Policy and management processes");
-            XWPFTable tableQ1 = doc.createTable();
-            tableQ1.setWidth("100%");
-            XWPFTableRow hQ1 = tableQ1.getRow(0);
-            ensureCells(hQ1, 12);
-            styleCell(hQ1.getCell(0), "Policy Name", true);
-            for(int k=1; k<=9; k++) styleCell(hQ1.getCell(k), "P"+k, true);
-            styleCell(hQ1.getCell(10), "Board Appr", true);
-            styleCell(hQ1.getCell(11), "Web Link", true);
+            XWPFParagraph pSecBDesc = doc.createParagraph();
+            pSecBDesc.createRun().setText("This section is aimed at helping businesses demonstrate the structures, policies and processes put in place towards adopting the NGRBC Principles and Core Elements.");
+            pSecBDesc.setSpacingAfter(200);
 
-            if(data.getQ1Policies() != null) {
-                for(BrsrReportRequest.PolicyMapping pm : data.getQ1Policies()) {
-                    XWPFTableRow r = tableQ1.createRow();
-                    ensureCells(r, 12);
-                    styleCell(r.getCell(0), checkNull(pm.getName()), false);
-                    styleCell(r.getCell(1), pm.isP1()?"Y":"", false);
-                    styleCell(r.getCell(2), pm.isP2()?"Y":"", false);
-                    styleCell(r.getCell(3), pm.isP3()?"Y":"", false);
-                    styleCell(r.getCell(4), pm.isP4()?"Y":"", false);
-                    styleCell(r.getCell(5), pm.isP5()?"Y":"", false);
-                    styleCell(r.getCell(6), pm.isP6()?"Y":"", false);
-                    styleCell(r.getCell(7), pm.isP7()?"Y":"", false);
-                    styleCell(r.getCell(8), pm.isP8()?"Y":"", false);
-                    styleCell(r.getCell(9), pm.isP9()?"Y":"", false);
-                    styleCell(r.getCell(10), checkNull(pm.getBoardApproved()), false);
-                    styleCell(r.getCell(11), checkNull(pm.getWebLink()), false);
-                }
-            }
-            doc.createParagraph().createRun().addBreak();
+            // --- UNIFIED MATRIX (Q1 to Q6) ---
+            XWPFTable tableUnified = doc.createTable();
+            tableUnified.setWidth("100%");
+            setTableBorders(tableUnified);
 
-// --- Q2: Procedures ---
-            addBoldText(doc, "2. Whether the entity has translated the policy into procedures. (Yes/No)");
-            XWPFParagraph pQ2 = doc.createParagraph();
-// Handle line breaks from textarea
-            String[] q2Lines = checkNull(data.getQ2Procedures()).split("\n");
-            for(String line : q2Lines) {
-                XWPFRun r = pQ2.createRun();
-                r.setText(line);
-                r.addBreak();
+            // Define 10 columns: 1 wide for Questions, 9 narrow for P1-P9
+            org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblGrid gridUnified = tableUnified.getCTTbl().addNewTblGrid();
+            gridUnified.addNewGridCol().setW(java.math.BigInteger.valueOf(3800)); // Disclosure Questions
+            for(int k=1; k<=9; k++) {
+                gridUnified.addNewGridCol().setW(java.math.BigInteger.valueOf(500)); // P1 to P9
             }
 
-// --- Q3: Value Chain ---
-            addBoldText(doc, "3. Do the enlisted policies extend to your value chain partners? (Yes/No)");
-            XWPFParagraph pQ3 = doc.createParagraph();
-            pQ3.createRun().setText(checkNull(data.getQ3ValueChain()));
-            doc.createParagraph().createRun().addBreak();
+            // HEADER ROW
+            XWPFTableRow hRowUnified = tableUnified.getRow(0);
+            ensureCells(hRowUnified, 10);
+            styleCell(hRowUnified.getCell(0), "Disclosure Questions", true);
+            for(int k=1; k<=9; k++) {
+                styleCell(hRowUnified.getCell(k), "P " + k, true);
+            }
 
-// --- Q4: Standards Matrix ---
-            addBoldText(doc, "4. Name of national and international standards adopted");
-            XWPFTable tableQ4 = doc.createTable();
-            tableQ4.setWidth("100%");
-            XWPFTableRow hQ4 = tableQ4.getRow(0);
-            ensureCells(hQ4, 10);
-            styleCell(hQ4.getCell(0), "Standard Name", true);
-            for(int k=1; k<=9; k++) styleCell(hQ4.getCell(k), "P"+k, true);
+            // SUB-HEADER ROW
+            XWPFTableRow subHeadRow = tableUnified.createRow();
+            ensureCells(subHeadRow, 10);
+            styleCell(subHeadRow.getCell(0), "Policy and management processes", true);
+            mergeCellsHorizontal(subHeadRow, 0, 9); // Spans all columns
 
-            if(data.getQ4Standards() != null) {
+            // 1a. Policies Cover
+            XWPFTableRow r1a = tableUnified.createRow();
+            ensureCells(r1a, 10);
+            styleCell(r1a.getCell(0), "1. a. Whether your entity's policy/policies cover each principle and its core elements of the NGRBCs. (Yes/No)", false);
+            for(int k=1; k<=9; k++) styleCell(r1a.getCell(k), getYN(data.getQ1a(), k), false);
+
+            // 1b. Board Approved
+            XWPFTableRow r1b = tableUnified.createRow();
+            ensureCells(r1b, 10);
+            styleCell(r1b.getCell(0), "   b. Has the policy been approved by the Board? (Yes/No)", false);
+            for(int k=1; k<=9; k++) styleCell(r1b.getCell(k), getYN(data.getQ1b(), k), false);
+
+            // 1c. Web Link (Merged Cells 1-9)
+            XWPFTableRow r1c = tableUnified.createRow();
+            ensureCells(r1c, 10);
+            styleCell(r1c.getCell(0), "   c. Web Link of the Policies, if available", false);
+            styleCell(r1c.getCell(1), checkNull(data.getQ1WebLink()), false);
+            mergeCellsHorizontal(r1c, 1, 9);
+
+            // 2. Translated to procedures
+            XWPFTableRow rowQ2 = tableUnified.createRow(); // Renamed from r2
+            ensureCells(rowQ2, 10);
+            styleCell(rowQ2.getCell(0), "2. Whether the entity has translated the policy into procedures. (Yes / No)", false);
+            for(int k=1; k<=9; k++) styleCell(rowQ2.getCell(k), getYN(data.getQ2(), k), false);
+
+            // 3. Value Chain
+            XWPFTableRow rowQ3 = tableUnified.createRow(); // Renamed from r3
+            ensureCells(rowQ3, 10);
+            styleCell(rowQ3.getCell(0), "3. Do the enlisted policies extend to your value chain partners? (Yes/No)", false);
+            for(int k=1; k<=9; k++) styleCell(rowQ3.getCell(k), getYN(data.getQ3(), k), false);
+
+            // 4. ISO Standards Header
+            XWPFTableRow r4Head = tableUnified.createRow();
+            ensureCells(r4Head, 10);
+            styleCell(r4Head.getCell(0), "4. Name of the national and international codes/certifications/labels/ standards adopted by your entity and mapped to each principle.", false);
+            mergeCellsHorizontal(r4Head, 0, 9);
+
+            // 4. ISO Standards Data Rows
+            if(data.getQ4Standards() != null && !data.getQ4Standards().isEmpty()) {
                 for(BrsrReportRequest.StandardMapping sm : data.getQ4Standards()) {
-                    XWPFTableRow r = tableQ4.createRow();
-                    ensureCells(r, 10);
-                    styleCell(r.getCell(0), checkNull(sm.getName()), false);
-                    styleCell(r.getCell(1), sm.isP1()?"Y":"", false);
-                    styleCell(r.getCell(2), sm.isP2()?"Y":"", false);
-                    styleCell(r.getCell(3), sm.isP3()?"Y":"", false);
-                    styleCell(r.getCell(4), sm.isP4()?"Y":"", false);
-                    styleCell(r.getCell(5), sm.isP5()?"Y":"", false);
-                    styleCell(r.getCell(6), sm.isP6()?"Y":"", false);
-                    styleCell(r.getCell(7), sm.isP7()?"Y":"", false);
-                    styleCell(r.getCell(8), sm.isP8()?"Y":"", false);
-                    styleCell(r.getCell(9), sm.isP9()?"Y":"", false);
+                    XWPFTableRow r4Data = tableUnified.createRow();
+                    ensureCells(r4Data, 10);
+                    styleCell(r4Data.getCell(0), "   " + checkNull(sm.getName()), false);
+                    styleCell(r4Data.getCell(1), sm.isP1()?"Y":"N", false);
+                    styleCell(r4Data.getCell(2), sm.isP2()?"Y":"N", false);
+                    styleCell(r4Data.getCell(3), sm.isP3()?"Y":"N", false);
+                    styleCell(r4Data.getCell(4), sm.isP4()?"Y":"N", false);
+                    styleCell(r4Data.getCell(5), sm.isP5()?"Y":"N", false);
+                    styleCell(r4Data.getCell(6), sm.isP6()?"Y":"N", false);
+                    styleCell(r4Data.getCell(7), sm.isP7()?"Y":"N", false);
+                    styleCell(r4Data.getCell(8), sm.isP8()?"Y":"N", false);
+                    styleCell(r4Data.getCell(9), sm.isP9()?"Y":"N", false);
                 }
             }
+
+            // 5. Commitments (Merged Cells 1-9)
+            XWPFTableRow r5 = tableUnified.createRow();
+            ensureCells(r5, 10);
+            styleCell(r5.getCell(0), "5. Specific commitments, goals and targets set by the entity with defined timelines, if any.", false);
+            fillCellWithNewlines(r5.getCell(1), checkNull(data.getQ5Commitments()));
+            mergeCellsHorizontal(r5, 1, 9);
+
+            // 6. Performance (Merged Cells 1-9)
+            XWPFTableRow r6 = tableUnified.createRow();
+            ensureCells(r6, 10);
+            styleCell(r6.getCell(0), "6. Performance of the entity against the specific commitments, goals and targets along-with reasons in case the same are not met.", false);
+            fillCellWithNewlines(r6.getCell(1), checkNull(data.getQ6Performance()));
+            mergeCellsHorizontal(r6, 1, 9);
+
             doc.createParagraph().createRun().addBreak();
 
-// --- Q5: Commitments ---
-            addBoldText(doc, "5. Specific commitments, goals and targets set by the entity");
-            XWPFParagraph pQ5 = doc.createParagraph();
-            String[] q5Lines = checkNull(data.getQ5Commitments()).split("\n");
-            for(String line : q5Lines) {
-                XWPFRun r = pQ5.createRun();
-                r.setText(line);
-                r.addBreak();
+            // --- Governance (Q7, Q8, Q9) - Two Column Table ---
+            addBoldText(doc, "Governance, leadership and oversight");
+
+            XWPFTable tableQ789 = doc.createTable();
+            tableQ789.setWidth("100%");
+            setTableBorders(tableQ789);
+
+            // Set column widths: 40% for the question, 60% for the answer
+            org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblGrid gridQ789 = tableQ789.getCTTbl().addNewTblGrid();
+            gridQ789.addNewGridCol().setW(java.math.BigInteger.valueOf(3500));
+            gridQ789.addNewGridCol().setW(java.math.BigInteger.valueOf(5000));
+
+            // Row 7
+            XWPFTableRow r7 = tableQ789.getRow(0); // Row 0 is created by default when creating table
+            ensureCells(r7, 2);
+            styleCell(r7.getCell(0), "7. Statement by director responsible for the business responsibility report, highlighting ESG related challenges, targets and achievements (listed entity has flexibility regarding the placement of this disclosure)", false);
+            fillCellWithNewlines(r7.getCell(1), checkNull(data.getGovernanceStatement()));
+
+            // Row 8
+            XWPFTableRow r8 = tableQ789.createRow();
+            ensureCells(r8, 2);
+            styleCell(r8.getCell(0), "8. Details of the highest authority responsible for implementation and oversight of the Business Responsibility policy (ies).", false);
+            styleCell(r8.getCell(1), checkNull(data.getOversightAuthority()), false);
+
+            // Row 9
+            XWPFTableRow r9 = tableQ789.createRow();
+            ensureCells(r9, 2);
+            styleCell(r9.getCell(0), "9. Does the entity have a specified Committee of the Board/ Director responsible for decision making on sustainability related issues? (Yes / No). If yes, provide details.", false);
+            fillCellWithNewlines(r9.getCell(1), checkNull(data.getQ9Committee()));
+
+            doc.createParagraph().createRun().addBreak();
+
+            // --- Q10 & Q11: Matrix Table ---
+            addBoldText(doc, "10. Details of Review of NGRBCs by the Company:");
+
+            XWPFTable tableQ1011 = doc.createTable();
+            tableQ1011.setWidth("100%");
+            setTableBorders(tableQ1011);
+
+            // Same 10-column layout as the Q1-Q6 matrix
+            org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblGrid gridQ1011 = tableQ1011.getCTTbl().addNewTblGrid();
+            gridQ1011.addNewGridCol().setW(java.math.BigInteger.valueOf(3800)); // Questions
+            for(int k=1; k<=9; k++) {
+                gridQ1011.addNewGridCol().setW(java.math.BigInteger.valueOf(500)); // P1 to P9
             }
 
-// --- Q6: Performance ---
-            addBoldText(doc, "6. Performance of the entity against the specific commitments");
-            XWPFParagraph pQ6 = doc.createParagraph();
-            pQ6.createRun().setText(checkNull(data.getQ6Performance()));
+            // Header Row
+            XWPFTableRow hRowQ1011 = tableQ1011.getRow(0);
+            ensureCells(hRowQ1011, 10);
+            styleCell(hRowQ1011.getCell(0), "Questions", true);
+            for(int k=1; k<=9; k++) {
+                styleCell(hRowQ1011.getCell(k), "P " + k, true);
+            }
 
-            // --- Q9 ---
-            addBoldText(doc, "9. Specified Committee of the Board/Director responsible for decision making");
-            XWPFParagraph pQ9 = doc.createParagraph();
-            setTextWithBreaks(pQ9.createRun(), checkNull(data.getQ9Committee()));
+            // 10a. Performance Review
+            XWPFTableRow r10a = tableQ1011.createRow();
+            ensureCells(r10a, 10);
+            styleCell(r10a.getCell(0), "Performance against above policies and follow up action", false);
+            fillCellWithNewlines(r10a.getCell(1), checkNull(data.getQ10PerformanceReview()));
+            mergeCellsHorizontal(r10a, 1, 9); // Spans text across P1-P9
 
-// --- Q10: Review Details (Table) ---
-            addBoldText(doc, "10. Details of Review of NGRBCs by the Company");
-            XWPFTable tableQ10 = doc.createTable();
-            tableQ10.setWidth("100%");
-            XWPFTableRow hQ10 = tableQ10.getRow(0);
-            ensureCells(hQ10, 2);
-            styleCell(hQ10.getCell(0), "Subject for Review", true);
-            styleCell(hQ10.getCell(1), "Reviewer & Frequency", true);
+            // 10b. Compliance Review
+            XWPFTableRow r10b = tableQ1011.createRow();
+            ensureCells(r10b, 10);
+            styleCell(r10b.getCell(0), "Compliance with statutory requirements of relevance to the principles, and, rectification of any non-compliances", false);
+            fillCellWithNewlines(r10b.getCell(1), checkNull(data.getQ10ComplianceReview()));
+            mergeCellsHorizontal(r10b, 1, 9); // Spans text across P1-P9
 
-            XWPFTableRow r10_1 = tableQ10.createRow();
-            ensureCells(r10_1, 2);
-            styleCell(r10_1.getCell(0), "Performance against above policies", false);
-            styleCell(r10_1.getCell(1), checkNull(data.getQ10PerformanceReview()), false);
+            // 11. Independent Assessment (Visual Separator Row)
+            XWPFTableRow r11Label = tableQ1011.createRow();
+            ensureCells(r11Label, 10);
+            styleCell(r11Label.getCell(0), "11.", false);
+            for(int k=1; k<=9; k++) styleCell(r11Label.getCell(k), String.valueOf(k), true);
 
-            XWPFTableRow r10_2 = tableQ10.createRow();
-            ensureCells(r10_2, 2);
-            styleCell(r10_2.getCell(0), "Compliance with statutory requirements", false);
-            styleCell(r10_2.getCell(1), checkNull(data.getQ10ComplianceReview()), false);
+            // 11. Independent Assessment Data
+            XWPFTableRow r11 = tableQ1011.createRow();
+            ensureCells(r11, 10);
+            styleCell(r11.getCell(0), "Has the entity carried out independent Assessment/ evaluation of the working of its policies by an external agency? (Yes/No). If yes, provide name of the Agency.", false);
+            fillCellWithNewlines(r11.getCell(1), checkNull(data.getQ11Assessment()));
+            mergeCellsHorizontal(r11, 1, 9); // Spans text across P1-P9
+
             doc.createParagraph().createRun().addBreak();
 
-// --- Q11: Assessment ---
-            addBoldText(doc, "11. Has the entity carried out independent assessment/ evaluation?");
-            XWPFParagraph pQ11 = doc.createParagraph();
-            setTextWithBreaks(pQ11.createRun(), checkNull(data.getQ11Assessment()));
+            // --- Q12: Reasons for "No" ---
+            addBoldText(doc, "12. If answer to question (1) above is “No” i.e. not all Principles are covered by a policy, reasons to be stated:");
 
-// --- Q12: Reasons for No ---
-            addBoldText(doc, "12. If answer to question (1) above is “No”, reasons to be stated:");
             XWPFTable tableQ12 = doc.createTable();
             tableQ12.setWidth("100%");
+            setTableBorders(tableQ12); // Ensures gridlines are visible
 
-            XWPFTableRow hQ12 = tableQ12.getRow(0);
-            ensureCells(hQ12, 10);
-            styleCell(hQ12.getCell(0), "Reason", true);
-            for(int k=1; k<=9; k++) styleCell(hQ12.getCell(k), "P"+k, true);
+            // Align column widths exactly with the previous matrices (38% for questions, rest for P1-P9)
+            org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblGrid gridQ12 = tableQ12.getCTTbl().addNewTblGrid();
+            gridQ12.addNewGridCol().setW(java.math.BigInteger.valueOf(3800)); // Questions
+            for(int k=1; k<=9; k++) {
+                gridQ12.addNewGridCol().setW(java.math.BigInteger.valueOf(500)); // P1 to P9
+            }
 
+            // Header Row
+            XWPFTableRow hRowQ12 = tableQ12.getRow(0);
+            ensureCells(hRowQ12, 10);
+            styleCell(hRowQ12.getCell(0), "Questions", true);
+            for(int k=1; k<=9; k++) {
+                styleCell(hRowQ12.getCell(k), "P " + k, true);
+            }
+
+            // Populate Data Rows
             if(data.getQ12Reasons() != null) {
                 for(BrsrReportRequest.ReasonMapping rm : data.getQ12Reasons()) {
                     XWPFTableRow r = tableQ12.createRow();
                     ensureCells(r, 10);
+
                     styleCell(r.getCell(0), checkNull(rm.getQuestionText()), false);
-                    styleCell(r.getCell(1), rm.isP1()?"Y":"", false);
-                    styleCell(r.getCell(2), rm.isP2()?"Y":"", false);
-                    styleCell(r.getCell(3), rm.isP3()?"Y":"", false);
-                    styleCell(r.getCell(4), rm.isP4()?"Y":"", false);
-                    styleCell(r.getCell(5), rm.isP5()?"Y":"", false);
-                    styleCell(r.getCell(6), rm.isP6()?"Y":"", false);
-                    styleCell(r.getCell(7), rm.isP7()?"Y":"", false);
-                    styleCell(r.getCell(8), rm.isP8()?"Y":"", false);
-                    styleCell(r.getCell(9), rm.isP9()?"Y":"", false);
+
+                    // Prints "Y" if checked, and "N" if unchecked
+                    styleCell(r.getCell(1), rm.isP1() ? "Y" : "N", false);
+                    styleCell(r.getCell(2), rm.isP2() ? "Y" : "N", false);
+                    styleCell(r.getCell(3), rm.isP3() ? "Y" : "N", false);
+                    styleCell(r.getCell(4), rm.isP4() ? "Y" : "N", false);
+                    styleCell(r.getCell(5), rm.isP5() ? "Y" : "N", false);
+                    styleCell(r.getCell(6), rm.isP6() ? "Y" : "N", false);
+                    styleCell(r.getCell(7), rm.isP7() ? "Y" : "N", false);
+                    styleCell(r.getCell(8), rm.isP8() ? "Y" : "N", false);
+                    styleCell(r.getCell(9), rm.isP9() ? "Y" : "N", false);
                 }
             }
 
@@ -2167,7 +2343,7 @@ public class ReportService {
             addBoldText(doc, "14. Assessments for the year:");
 
             XWPFTable table14P3 = doc.createTable();
-            table14.setWidth("100%");
+            table14P3.setWidth("100%");
 
             // Set Widths: Label (40%), Percentage (60%)
             setColumnWidths(table14P3, 4000, 6000);
@@ -3805,11 +3981,11 @@ public class ReportService {
         }
     }
 
-    private void addDynamicHeaderRow(XWPFTable table, String[] headers) {
+    /*private void addDynamicHeaderRow(XWPFTable table, String[] headers) {
         XWPFTableRow row = (table.getRow(0) != null) ? table.getRow(0) : table.createRow();
         ensureCells(row, headers.length);
         for (int i = 0; i < headers.length; i++) styleCell(row.getCell(i), headers[i], true);
-    }
+    }*/
 
     private void addDynamicRow(XWPFTable table, String[] values) {
         XWPFTableRow row = table.createRow();
@@ -4057,5 +4233,89 @@ public class ReportService {
         styleCell(row.getCell(0), label, false);
         styleCell(row.getCell(1), checkNull(val1), false);
         styleCell(row.getCell(2), checkNull(val2), false);
+    }
+
+    /**
+     * Formats AI-generated paragraphs with a bold label and spacing.
+     */
+    private void formatAISection(XWPFDocument doc, String question, String answer) {
+        XWPFParagraph p = doc.createParagraph();
+        p.setSpacingBefore(200); // Adds professional gap between sections
+
+        // The Question (Bold)
+        XWPFRun runQ = p.createRun();
+        runQ.setBold(true);
+        runQ.setFontFamily("Calibri");
+        runQ.setText(question);
+        runQ.addBreak(); // Forces answer to start on a new line
+
+        // The AI Answer (Regular)
+        XWPFRun runA = p.createRun();
+        runA.setFontFamily("Calibri");
+        // Fallback if AI generation failed or was empty
+        runA.setText(answer != null && !answer.trim().isEmpty() ? answer : "Not disclosed.");
+    }
+
+    /**
+     * Standardizes spacing between sections.
+     */
+    private void addSpacing(XWPFDocument doc) {
+        XWPFParagraph spacer = doc.createParagraph();
+        spacer.createRun().addBreak();
+    }
+
+    /**
+     * Ensures table headers are styled consistently.
+     */
+    private void addDynamicHeaderRow(XWPFTable table, String[] headers) {
+        XWPFTableRow headerRow = table.getRow(0); // Tables created with 1 row by default
+        for (int i = 0; i < headers.length; i++) {
+            XWPFTableCell cell = (i == 0) ? headerRow.getCell(0) : headerRow.addNewTableCell();
+            XWPFParagraph p = cell.getParagraphs().get(0);
+            p.setAlignment(ParagraphAlignment.CENTER);
+            XWPFRun r = p.createRun();
+            r.setBold(true);
+            r.setText(headers[i]);
+            cell.setColor("F2F2F2"); // Light grey background
+        }
+    }
+
+    /**
+     * Fixes "Invisible Tables" by forcing grid borders to appear in Word.
+     */
+    private void setTableBorders(XWPFTable table) {
+        org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblPr tblPr = table.getCTTbl().getTblPr();
+        if (tblPr == null) {
+            tblPr = table.getCTTbl().addNewTblPr();
+        }
+
+        org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblBorders borders = tblPr.isSetTblBorders() ? tblPr.getTblBorders() : tblPr.addNewTblBorders();
+
+        // Set all borders (Top, Bottom, Left, Right, InsideH, InsideV) to a Single Line
+        org.openxmlformats.schemas.wordprocessingml.x2006.main.STBorder.Enum lineStyle = org.openxmlformats.schemas.wordprocessingml.x2006.main.STBorder.SINGLE;
+
+        if (!borders.isSetBottom()) borders.addNewBottom().setVal(lineStyle);
+        if (!borders.isSetTop()) borders.addNewTop().setVal(lineStyle);
+        if (!borders.isSetLeft()) borders.addNewLeft().setVal(lineStyle);
+        if (!borders.isSetRight()) borders.addNewRight().setVal(lineStyle);
+        if (!borders.isSetInsideH()) borders.addNewInsideH().setVal(lineStyle);
+        if (!borders.isSetInsideV()) borders.addNewInsideV().setVal(lineStyle);
+    }
+
+    // Helper to convert boolean to Y/N
+    private String getYN(BrsrReportRequest.PrincipleBooleans pb, int p) {
+        if (pb == null) return "N";
+        switch (p) {
+            case 1: return pb.isP1() ? "Y" : "N";
+            case 2: return pb.isP2() ? "Y" : "N";
+            case 3: return pb.isP3() ? "Y" : "N";
+            case 4: return pb.isP4() ? "Y" : "N";
+            case 5: return pb.isP5() ? "Y" : "N";
+            case 6: return pb.isP6() ? "Y" : "N";
+            case 7: return pb.isP7() ? "Y" : "N";
+            case 8: return pb.isP8() ? "Y" : "N";
+            case 9: return pb.isP9() ? "Y" : "N";
+            default: return "N";
+        }
     }
 }

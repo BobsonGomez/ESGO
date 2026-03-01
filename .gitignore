@@ -1,7 +1,7 @@
-# Ignore ML model
-ai-engine/models/final_esg_model/model.safetensors
+# Ignore large ML model
+ai-engine/model.pt
 
-# IDE
+# IDE files
 .idea/
 .vscode/
 

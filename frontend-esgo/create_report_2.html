@@ -26,125 +26,116 @@
 
         <!-- Q1: Policies -->
         <div class="form-section">
-            <div class="section-header">1. Policy Matrix</div>
-            <p class="hint">a. Whether your entity's policies cover each principle (P1-P9).<br>b. Has the policy been approved by the Board?<br>c. Web Link of the Policies.</p>
+            <div class="section-header">Policy and Management Processes</div>
+            <p class="hint">Please indicate the integration of NGRBC Principles (P1 to P9) within your entity's processes.</p>
 
             <div style="overflow-x:auto;">
-                <table class="input-table matrix-table" id="q1Table">
+                <table class="input-table matrix-table" id="unifiedMatrixTable">
                     <thead>
                     <tr>
-                        <th style="width: 25%;">Policy Name</th>
+                        <th style="width: 40%; text-align: left;">Disclosure Questions</th>
                         <th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>P5</th><th>P6</th><th>P7</th><th>P8</th><th>P9</th>
-                        <th style="width: 10%;">Board Approved?</th>
-                        <th style="width: 15%;">Web Link</th>
-                        <th></th>
                     </tr>
                     </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <button type="button" class="btn-add-row" onclick="addQ1Row()">+ Add Policy</button>
-        </div>
+                    <tbody>
+                    <tr id="row-1a">
+                        <td style="text-align: left;">1. a. Whether your entity's policy/policies cover each principle and its core elements of the NGRBCs. (Yes/No)</td>
+                    </tr>
+                    <tr id="row-1b">
+                        <td style="text-align: left; padding-left: 20px;">b. Has the policy been approved by the Board? (Yes/No)</td>
+                    </tr>
+                    <tr id="row-1c">
+                        <td style="text-align: left; padding-left: 20px;">c. Web Link of the Policies, if available</td>
+                        <td colspan="9">
+                            <input type="text" id="unifiedWebLink" class="full-width-text" placeholder="e.g. www.company.com/policies" style="text-align: center;">
+                        </td>
+                    </tr>
+                    <tr id="row-2">
+                        <td style="text-align: left;">2. Whether the entity has translated the policy into procedures. (Yes / No)</td>
+                    </tr>
+                    <tr id="row-3">
+                        <td style="text-align: left;">3. Do the enlisted policies extend to your value chain partners? (Yes/No)</td>
+                    </tr>
 
-        <!-- Q2: Procedures -->
-        <div class="form-section">
-            <div class="section-header">2. Translation into Procedures</div>
-            <p class="hint">Whether the entity has translated the policy into procedures. List committees or stages of implementation.</p>
-            <textarea id="q2" rows="5" class="full-width-text" placeholder="Yes, all policies have been translated... List committees here."></textarea>
-        </div>
-
-        <!-- Q3: Value Chain -->
-        <div class="form-section">
-            <div class="section-header">3. Value Chain Extension</div>
-            <p class="hint">Do the enlisted policies extend to your value chain partners? (Yes/No and details)</p>
-            <textarea id="q3" rows="3" class="full-width-text" placeholder="Yes, Tata Steel's Code of Conduct..."></textarea>
-        </div>
-
-        <!-- Q4: Standards -->
-        <div class="form-section">
-            <div class="section-header">4. National & International Standards</div>
-            <p class="hint">Name of standards (ISO, SA8000, BIS, etc.) adopted and mapped to principles.</p>
-
-            <div style="overflow-x:auto;">
-                <table class="input-table matrix-table" id="q4Table">
-                    <thead>
+                    <tr style="background-color: #f8fafc;">
+                        <td style="text-align: left; font-weight: bold;">
+                            4. Name of national and international codes/certifications/labels/standards adopted by your entity and mapped to each principle.
+                            <br><button type="button" class="btn-add-row" onclick="addUnifiedISO()" style="margin-top: 5px; padding: 4px 8px; font-size: 11px;">+ Add Standard</button>
+                        </td>
+                        <td colspan="9"></td>
+                    </tr>
                     <tr>
-                        <th style="width: 40%;">Standard Name (e.g. ISO 14001)</th>
-                        <th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>P5</th><th>P6</th><th>P7</th><th>P8</th><th>P9</th>
-                        <th></th>
+                        <td style="text-align: left;">5. Specific commitments, goals and targets set by the entity with defined timelines, if any.</td>
+                        <td colspan="9">
+                            <textarea id="q5Unified" rows="3" class="full-width-text" placeholder="e.g. The Company targets to achieve..."></textarea>
+                        </td>
                     </tr>
-                    </thead>
-                    <tbody></tbody>
+                    <tr>
+                        <td style="text-align: left;">6. Performance of the entity against the specific commitments, goals and targets along-with reasons in case the same are not met.</td>
+                        <td colspan="9">
+                            <textarea id="q6Unified" rows="3" class="full-width-text" placeholder="e.g. The Company has achieved a turnover target..."></textarea>
+                        </td>
+                    </tr>
+                    </tbody>
                 </table>
             </div>
-            <button type="button" class="btn-add-row" onclick="addQ4Row()">+ Add Standard</button>
-        </div>
-
-        <!-- Q5: Commitments -->
-        <div class="form-section">
-            <div class="section-header">5. Specific Commitments & Goals</div>
-            <p class="hint">Specific commitments, goals and targets set by the entity with defined timelines.</p>
-            <textarea id="q5" rows="8" class="full-width-text" placeholder="1. Climate Change: Net Zero by 2045...&#10;2. Water: Achieve specific freshwater consumption..."></textarea>
-        </div>
-
-        <!-- Q6: Performance -->
-        <div class="form-section">
-            <div class="section-header">6. Performance against Goals</div>
-            <p class="hint">Performance against specific commitments, along with reasons if not met.</p>
-            <textarea id="q6" rows="4" class="full-width-text" placeholder="Please refer to the ESG Factsheet..."></textarea>
         </div>
 
         <!-- Governance -->
         <div class="form-section">
-            <div class="section-header">Governance & Oversight</div>
-            <div class="form-group">
-                <label>7. Director's Statement on ESG</label>
-                <textarea id="q7" rows="4" class="full-width-text"></textarea>
-            </div>
-            <div class="form-group">
-                <label>8. Highest Authority for Oversight</label>
-                <input type="text" id="q8" class="full-width-text">
-            </div>
-            <!-- Q9: Committee -->
-            <div class="form-section">
-                <div class="section-header">9. Specified Committee for Decision Making</div>
-                <p class="hint">Does the entity have a specified Committee of the Board/Director responsible for decision making on sustainability related issues? (Yes/No). If yes, provide details.</p>
-                <textarea id="q9" rows="5" class="full-width-text" placeholder="Yes, the Board of Tata Steel has constituted various Board committees..."></textarea>
-            </div>
+            <div class="section-header">Governance, Leadership and Oversight</div>
 
-            <!-- Q10: Review Details -->
-            <div class="form-section">
-                <div class="section-header">10. Details of Review of NGRBCs</div>
-                <p class="hint">Indicate who reviews the performance and compliance, and how frequently.</p>
-
-                <div style="overflow-x:auto;">
-                    <table class="input-table proc-table">
-                        <thead>
-                        <tr>
-                            <th style="width: 30%;">Subject for Review</th>
-                            <th>Reviewer & Frequency Details</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td class="q-col">Performance against above policies and follow up action</td>
-                            <td><textarea id="q10_1" rows="3" class="text-input" placeholder="e.g. The Senior Management regularly reviews..."></textarea></td>
-                        </tr>
-                        <tr>
-                            <td class="q-col">Compliance with statutory requirements of relevance to principles</td>
-                            <td><textarea id="q10_2" rows="3" class="text-input" placeholder="e.g. The Company is in compliance with existing regulations..."></textarea></td>
-                        </tr>
-                        </tbody>
-                    </table>
+            <div class="form-group" style="margin-bottom: 25px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label>7. Statement by director responsible for the business responsibility report, highlighting ESG related challenges, targets and achievements</label>
+                    <button type="button" class="btn-ai" onclick="generateNoteFromInput('q7', 'Director statement on ESG challenges and achievements')">✨ AI Generate</button>
                 </div>
+                <textarea id="q7" rows="4" class="full-width-text" placeholder="e.g. At ACIL, our commitment to society and environment..."></textarea>
             </div>
 
-            <!-- Q11: Independent Assessment -->
-            <div class="form-section">
-                <div class="section-header">11. Independent Assessment</div>
-                <p class="hint">Has the entity carried out independent assessment/evaluation of the working of its policies by an external agency? (Yes/No). If yes, provide name.</p>
-                <textarea id="q11" rows="4" class="full-width-text" placeholder="Yes, Tata Steel undergoes the Tata Business Excellence Model (TBEM) Assessment..."></textarea>
+            <div class="form-group" style="margin-bottom: 25px;">
+                <label>8. Details of the highest authority responsible for implementation and oversight of the Business Responsibility policy(ies).</label>
+                <input type="text" id="q8" class="full-width-text" placeholder="e.g. Mr. Bikramjit Ahluwalia, Chairman & Managing Director">
             </div>
+
+            <div class="form-group" style="margin-bottom: 25px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label>9. Does the entity have a specified Committee of the Board/ Director responsible for decision making on sustainability related issues? (Yes / No). If yes, provide details.</label>
+                    <button type="button" class="btn-ai" onclick="generateNoteFromInput('q9', 'ESG / Sustainability Committee details')">✨ AI Generate</button>
+                </div>
+                <textarea id="q9" rows="4" class="full-width-text" placeholder="e.g. Yes. The Company has formulated a Risk Management Committee..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+            <div class="section-header" style="border-bottom: none; padding-bottom: 0;">10. Details of Review of NGRBCs by the Company</div>
+            <p class="hint">Your narrative answers here will span across all principles (P1-P9) in the generated matrix table.</p>
+
+            <div class="form-group" style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label>Performance against above policies and follow up action</label>
+                    <button type="button" class="btn-ai" onclick="generateNoteFromInput('q10_1', 'Review of performance against ESG policies')">✨ AI Generate</button>
+                </div>
+                <textarea id="q10_1" rows="4" class="full-width-text" placeholder="e.g. Importantly, the outcome of this system directly influences..."></textarea>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 25px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label>Compliance with statutory requirements of relevance to the principles, and rectification of any non-compliances</label>
+                    <button type="button" class="btn-ai" onclick="generateNoteFromInput('q10_2', 'Review of compliance with statutory ESG requirements')">✨ AI Generate</button>
+                </div>
+                <textarea id="q10_2" rows="3" class="full-width-text" placeholder="e.g. The company strongly believes in conducting business with ethics..."></textarea>
+            </div>
+
+            <div class="section-header" style="border-bottom: none; padding-bottom: 0;">11. Independent Assessment</div>
+            <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label>Has the entity carried out independent Assessment/ evaluation of the working of its policies by an external agency? (Yes/No). If yes, provide name of the Agency.</label>
+                    <button type="button" class="btn-ai" onclick="generateNoteFromInput('q11', 'Independent assessment of ESG policies')">✨ AI Generate</button>
+                </div>
+                <textarea id="q11" rows="4" class="full-width-text" placeholder="e.g. No. The Statutory and Internal Auditors review procedures..."></textarea>
+            </div>
+        </div>
 
             <!-- Q12: Reasons for "No" -->
             <div class="form-section">

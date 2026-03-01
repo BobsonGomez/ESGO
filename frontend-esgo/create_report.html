@@ -58,6 +58,18 @@
                 <label style="font-weight:normal; font-size:12px; color:#666;">Describe the disclosures (Standalone vs Consolidated) and any specific notes.</label>
                 <textarea id="reportingBoundary" rows="4" style="width:100%; padding:10px; border:1px solid #e2e8f0; border-radius:6px; font-family:inherit;"></textarea>
             </div>
+
+            <!-- 14 & 15 Assurance Details -->
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>14. Name of assurance provider</label>
+                    <input type="text" id="assuranceProviderName" placeholder="Name of firm/agency">
+                </div>
+                <div class="form-group">
+                    <label>15. Type of assurance obtained</label>
+                    <input type="text" id="assuranceType" placeholder="e.g. Limited/Reasonable">
+                </div>
+            </div>
         </div>
 
         <!-- SECTION II: Products/Services -->
@@ -68,14 +80,15 @@
             </div>
 
             <!-- 14. Business Activities Table -->
-            <label class="sub-label">14. Details of Business Activities</label>
+            <label class="sub-label">16. Details of business activities (accounting for 90% of the turnover)</label>
             <table class="input-table" id="activitiesTable">
                 <thead>
                 <tr>
-                    <th>Main Activity Description</th>
-                    <th>Business Activity Description</th>
-                    <th>% Turnover</th>
-                    <th>Action</th>
+                    <!-- Updated Headers to match Screenshot 16 -->
+                    <th>Description of Main Activity</th>
+                    <th>Description of Business Activity</th>
+                    <th>% of Turnover of the entity</th>
+                    <th style="width: 50px;"></th> <!-- Action Column -->
                 </tr>
                 </thead>
                 <tbody>
@@ -88,7 +101,9 @@
 
             <!-- 15. Products Table -->
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <label class="sub-label">15. Products/Services Sold</label>
+                <label class="sub-label">17. Products/Services sold by the entity (accounting for 90% of the entity's Turnover)</label>
+
+                <!-- Keep this toggle for functionality, even though screenshot is static -->
                 <div style="font-size:13px;">
                     <input type="checkbox" id="includeConsolidated" onchange="toggleConsolidatedColumns()" style="width:auto;">
                     <label for="includeConsolidated" style="display:inline;">Include Consolidated Data</label>
@@ -98,13 +113,19 @@
             <table class="input-table" id="productsTable">
                 <thead>
                 <tr>
+                    <!-- Updated Headers to match Screenshot 17 -->
                     <th>Product/Service</th>
                     <th>NIC Code</th>
-                    <th>Turnover (Stand.)</th>
-                    <th>% (Stand.)</th>
-                    <th class="cons-col" style="display:none;">Turnover (Cons.)</th>
-                    <th class="cons-col" style="display:none;">% (Cons.)</th>
-                    <th>Action</th>
+
+                    <!-- Default Columns (Standalone) -->
+                    <th>Turnover (Standalone)</th>
+                    <th>% of total Turnover contributed</th> <!-- MATCHED SCREENSHOT -->
+
+                    <!-- Consolidated Columns (Hidden by default) -->
+                    <th class="cons-col" style="display:none;">Turnover (Consolidated)</th>
+                    <th class="cons-col" style="display:none;">% of total Turnover (Cons.)</th>
+
+                    <th style="width: 50px;"></th> <!-- Action Column -->
                 </tr>
                 </thead>
                 <tbody>
@@ -122,7 +143,7 @@
                 Section III: Operations
             </div>
 
-            <label class="sub-label">16. Number of Locations</label>
+            <label class="sub-label">18. Number of Locations</label>
 
             <!-- National Row -->
             <label style="font-size: 12px; color: #666;">National (India)</label>
@@ -160,7 +181,7 @@
 
         <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
 
-        <label class="sub-label">17. Markets served by the entity</label>
+        <label class="sub-label">19. Markets served by the entity</label>
 
         <!-- 17.a Table Inputs -->
         <label style="font-size: 13px; font-weight: 600; color: #444;">a. Number of Locations</label>
@@ -176,17 +197,21 @@
         </div>
 
         <!-- 17.b Exports -->
-        <div class="form-group">
-            <label>b. What is the contribution of exports as a percentage of total turnover?</label>
-            <textarea id="contributionExports" rows="4" placeholder="Describe the contribution..."></textarea>
-        </div>
-
+            <div class="form-group">
+                <label>b. What is the contribution of exports as a percentage of total turnover?
+                    <button type="button" class="btn-ai" onclick="generateAIContent('contributionExports')">✨ Auto-generate</button>
+                </label>
+                <textarea id="contributionExports" rows="4" placeholder="e.g. 20% to Europe and Asia..."></textarea>
+            </div>
         <!-- 17.c Customers -->
-        <div class="form-group">
-            <label>c. A brief on types of customers</label>
-            <textarea id="typesOfCustomers" rows="4" placeholder="Describe your customer base..."></textarea>
+            <div class="form-group">
+                <label>c. A brief on types of customers
+                    <button type="button" class="btn-ai" onclick="generateAIContent('typesOfCustomers')">✨ Auto-generate</button>
+                </label>
+                <textarea id="typesOfCustomers" rows="4" placeholder="e.g. B2B clients in the automotive sector..."></textarea>
+            </div>
         </div>
-        </div> <!-- End of Section III div -->
+        <!-- End of Section III div -->
 
         <!-- SECTION IV: Employees -->
         <div class="form-section">
@@ -195,8 +220,8 @@
                 Section IV: Employees
             </div>
 
-            <!-- 18.a EMPLOYEES & WORKERS -->
-            <label class="sub-label">18.a Employees & Workers (Details)</label>
+            <!-- 20.a EMPLOYEES & WORKERS -->
+            <label class="sub-label">20.a Employees & Workers (Details)</label>
             <div style="overflow-x:auto;">
                 <table class="input-table">
                     <thead>
@@ -276,13 +301,15 @@
             </div>
 
             <div class="form-group" style="margin-top: 15px; margin-bottom: 30px;">
-                <label>Notes for Table 18.a</label>
-                <textarea id="employeeNotesA" rows="3" placeholder="e.g. 'Others' includes transgender personnel..."></textarea>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label>Notes for Table 18.a</label>
+                    <button type="button" class="btn-ai" onclick="generateNoteFromInput('employeeNotesA', 'Employee and Worker Demographics')">✨ AI Generate</button>
+                </div>
+                <textarea id="employeeNotesA" rows="3" placeholder="Type keywords here, then click AI Generate..."></textarea>
             </div>
 
-
-            <!-- 18.b DIFFERENTLY ABLED -->
-            <label class="sub-label">18.b Differently Abled Employees & Workers</label>
+            <!-- 20.b DIFFERENTLY ABLED -->
+            <label class="sub-label">20.b Differently Abled Employees & Workers</label>
             <div style="overflow-x:auto;">
                 <table class="input-table">
                     <thead>
@@ -361,14 +388,17 @@
 
             <!-- NOTE B -->
             <div class="form-group" style="margin-top: 15px;">
-                <label>Notes for Table 18.b</label>
-                <textarea id="employeeNotesB" rows="3" placeholder="Notes regarding differently abled workforce..."></textarea>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label>Notes for Table 18.b</label>
+                    <button type="button" class="btn-ai" onclick="generateNoteFromInput('employeeNotesB', 'Differently Abled Workforce')">✨ AI Generate</button>
+                </div>
+                <textarea id="employeeNotesB" rows="3" placeholder="Type keywords here, then click AI Generate..."></textarea>
             </div>
 
             <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
 
-            <!-- 19. Participation of Women -->
-            <label class="sub-label">19. Participation/Inclusion/Representation of women</label>
+            <!-- 21. Participation of Women -->
+            <label class="sub-label">21. Participation/Inclusion/Representation of women</label>
 
             <table class="input-table" id="womenRepTable">
                 <thead>
@@ -387,16 +417,19 @@
 
             <button type="button" class="btn-add-row" onclick="addWomenRepRow()">+ Add Row</button>
 
-            <!-- Notes for Q19 -->
+            <!-- Notes for Q21 -->
             <div class="form-group" style="margin-top: 15px;">
-                <label>Notes (Optional)</label>
-                <textarea id="womenRepresentationNotes" rows="2" placeholder="e.g. Data as of March 31st..."></textarea>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label>Notes (Optional)</label>
+                    <button type="button" class="btn-ai" onclick="generateNoteFromInput('womenRepresentationNotes', 'Women Representation and Inclusion')">✨ Generate Note from Input</button>
+                </div>
+                <textarea id="womenRepresentationNotes" rows="3" placeholder="Type a few keywords (e.g., 'increased female hires by 10%' or 'board diversity policies') and click Generate..."></textarea>
             </div>
 
             <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
 
-            <!-- 20. TURNOVER RATE -->
-            <label class="sub-label">20. Turnover rate for permanent employees and workers</label>
+            <!-- 22. TURNOVER RATE -->
+            <label class="sub-label">22. Turnover rate for permanent employees and workers</label>
             <p style="font-size:12px; color:#666; margin-bottom:10px;">(Disclose trends for the past 3 years)</p>
 
             <div style="overflow-x:auto;">
@@ -463,8 +496,11 @@
 
             <!-- Notes -->
             <div class="form-group" style="margin-top: 15px;">
-                <label>Notes for Turnover (Q20)</label>
-                <textarea id="turnoverNotes" rows="2" placeholder="e.g. Turnover includes resignations and retirement..."></textarea>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label>Notes for Turnover (Q22)</label>
+                    <button type="button" class="btn-ai" onclick="generateNoteFromInput('turnoverNotes', 'Turnover rate for permanent employees and workers over the past 3 years')">✨ Generate Note from Input</button>
+                </div>
+                <textarea id="turnoverNotes" rows="3" placeholder="Type keywords (e.g., 'attrition increased post-covid' or 'mainly voluntary resignations') and click Generate..."></textarea>
             </div>
         </div>
 
@@ -511,7 +547,13 @@
 
             <!-- MODE B: NOTE -->
             <div id="holdingNoteContainer" style="display:none;">
-                <textarea id="holdingCompanyNote" rows="5" placeholder="Enter details or provide a link (e.g. 'List provided in Annexure A...')"></textarea>
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <label>Holding Companies Details</label>
+                        <button type="button" class="btn-ai" onclick="generateNoteFromInput('holdingCompanyNote', 'Holding, Subsidiary and Associate Companies (including joint ventures)')">✨ Generate Note from Input</button>
+                    </div>
+                    <textarea id="holdingCompanyNote" rows="5" placeholder="Type keywords here (e.g., '3 subsidiaries in Europe, 100% owned, all participate in BR initiatives') and click Generate..."></textarea>
+                </div>
             </div>
         </div>
 
@@ -549,69 +591,74 @@
                 Section VII: Transparency & Disclosures
             </div>
 
-            <label class="sub-label">23. Complaints/Grievances</label>
+            <label class="sub-label">25. Complaints/Grievances on any of the principles (Principles 1 to 9)</label>
 
             <div style="overflow-x:auto;">
                 <table class="input-table" id="complaintsTable">
                     <thead>
                     <tr>
-                        <th rowspan="2" style="width: 150px;">Stakeholder Group</th>
-                        <th rowspan="2" style="width: 300px;">Grievance Mechanism (Web-link/Details)</th>
-                        <!-- FY INPUTS -->
+                        <th rowspan="2" style="width: 15%;">Stakeholder Group</th>
+                        <th rowspan="2" style="width: 31%;">Grievance Mechanism (Web-link/Details)</th>
                         <th colspan="3" style="text-align:center; background:#e0f2fe;">
                             <input type="text" id="complaintsFyCurrentHeader" placeholder="Current FY (e.g. 2023-24)" style="text-align:center; background:transparent; border:none; width:100%; font-weight:bold;">
                         </th>
                         <th colspan="3" style="text-align:center; background:#f0fdf4;">
                             <input type="text" id="complaintsFyPreviousHeader" placeholder="Previous FY (e.g. 2022-23)" style="text-align:center; background:transparent; border:none; width:100%; font-weight:bold;">
                         </th>
-                        <th rowspan="2">Action</th>
+                        <th rowspan="2" style="width: 5%;">Action</th>
                     </tr>
                     <tr>
-                        <!-- Current -->
-                        <th style="width: 60px;">Filed</th> <th style="width: 60px;">Pending</th> <th>Remarks</th>
-                        <!-- Previous -->
-                        <th style="width: 60px;">Filed</th> <th style="width: 60px;">Pending</th> <th>Remarks</th>
+                        <th style="width: 8%;">Filed</th> <th style="width: 8%;">Pending</th> <th style="width: 11%;">Remarks</th>
+                        <th style="width: 8%;">Filed</th> <th style="width: 8%;">Pending</th> <th style="width: 11%;">Remarks</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <!-- Rows added via JS -->
                     </tbody>
                 </table>
             </div>
             <button type="button" class="btn-add-row" onclick="addComplaintRow()">+ Add Stakeholder Row</button>
 
-            <!-- Question 24: Material Issues -->
-            <div class="form-section">
-                <div class="section-header">
-                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    24. Material Business Conduct Issues
+            <div class="form-group" style="margin-top: 25px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label>Notes on Complaints & Grievances (Optional)</label>
+                    <button type="button" class="btn-ai" onclick="generateNoteFromTable('complaintsTable', 'complaintsNote', 'Summary of stakeholder complaints, grievances filed, and resolutions over the past two financial years')">✨ Generate Note from Table</button>
                 </div>
-
-                <div class="form-group">
-                    <label>Introductory Note (Optional)</label>
-                    <textarea id="materialIssuesNote" rows="2" placeholder="e.g. Tata Steel has a structured Materiality Assessment process..."></textarea>
-                </div>
-
-                <label class="sub-label">Details of Material Issues</label>
-                <div style="overflow-x:auto;">
-                    <table class="input-table" id="materialIssuesTable">
-                        <thead>
-                        <tr>
-                            <th style="width: 15%;">Material Issue</th>
-                            <th style="width: 10%;">Indicate (R/O)</th>
-                            <th style="width: 30%;">Rationale</th>
-                            <th style="width: 30%;">Approach to Adapt/Mitigate</th>
-                            <th style="width: 10%;">Financial Implication</th>
-                            <th style="width: 5%;">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <!-- Rows added via JS -->
-                        </tbody>
-                    </table>
-                </div>
-                <button type="button" class="btn-add-row" onclick="addMaterialIssueRow()">+ Add Issue</button>
+                <textarea id="complaintsNote" rows="3" placeholder="Click the AI button to summarize your grievance data, or type your own notes..."></textarea>
             </div>
+        </div>
+
+        <div class="form-section">
+            <div class="section-header">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                26. Material Business Conduct Issues
+            </div>
+
+            <div class="form-group" style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label>Introductory Note (Optional)</label>
+                    <button type="button" class="btn-ai" onclick="generateNoteFromInput('materialIssuesNote', 'Materiality Assessment Process Overview')">✨ Generate Note from Input</button>
+                </div>
+                <textarea id="materialIssuesNote" rows="2" placeholder="e.g. 'Tata Steel has a structured Materiality Assessment process...'"></textarea>
+            </div>
+
+            <label class="sub-label">Details of Material Issues</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="materialIssuesTable">
+                    <thead>
+                    <tr>
+                        <th style="width: 15%;">Material Issue</th>
+                        <th style="width: 10%;">Indicate (R/O)</th>
+                        <th style="width: 30%;">Rationale</th>
+                        <th style="width: 30%;">Approach to Adapt/Mitigate</th>
+                        <th style="width: 10%;">Financial Implication</th>
+                        <th style="width: 5%;">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addMaterialIssueRow()">+ Add Issue</button>
         </div>
 
         <!-- BUTTON -->

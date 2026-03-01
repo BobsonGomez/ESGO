@@ -1,271 +1,385 @@
-/* --- Shared Variables --- */
+/* ==========================================================================
+   Base Reset & Variables
+   ========================================================================== */
 :root {
-    --primary-green: #108a55; /* Tata-style Green */
-    --primary-green-hover: #0d7045;
-    --bg-color: #f8fafc;
-    --border-color: #e2e8f0;
-    --text-dark: #1e293b;
+    /* Color Palette */
+    --primary-color: #0f766e; /* Elegant Corporate Teal */
+    --primary-hover: #115e59;
+    --secondary-color: #2563eb; /* Blue for AI/Actions */
+    --bg-color: #f4f7f9;
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
     --text-muted: #64748b;
-    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --border-color: #cbd5e1;
+    --border-light: #e2e8f0;
+    --danger-color: #ef4444;
+    --ai-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+
+    /* Typography */
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    /* Effects */
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+    --radius-md: 8px;
+    --radius-sm: 4px;
 }
 
-/* --- Page Background --- */
-body {
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    font-family: var(--font-family);
     background-color: var(--bg-color);
-    color: var(--text-dark);
-    padding-top: 80px; /* Space for Navbar */
+    color: var(--text-main);
+    line-height: 1.5;
+    padding-bottom: 60px;
 }
 
-/* --- Main Card Container --- */
-.container {
-    max-width: 900px;
-    margin: 40px auto;
-    background: white;
-    padding: 40px;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-    box-shadow: var(--card-shadow);
+/* ==========================================================================
+   Navigation
+   ========================================================================== */
+.navbar {
+    background-color: var(--card-bg);
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--border-light);
 }
 
-/* --- Typography --- */
-h2.page-title {
-    color: var(--primary-green);
-    font-size: 24px;
+.logo {
+    font-size: 1.25rem;
     font-weight: 700;
-    margin-bottom: 10px;
-    margin-top: 0;
+    color: var(--primary-color);
+    letter-spacing: -0.5px;
+}
+
+/* ==========================================================================
+   Layout Containers
+   ========================================================================== */
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #0f172a;
 }
 
 .subtitle {
     color: var(--text-muted);
-    margin-bottom: 30px;
-    font-size: 14px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--border-color);
+    font-size: 1rem;
+    margin-bottom: 32px;
 }
 
-/* --- Form Sections --- */
+/* Form Sections (Cards) */
 .form-section {
-    margin-bottom: 30px;
-    padding: 24px;
-    background: #ffffff;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    /* Optional: Subtle background distinction for the section */
-    background-color: #fafafa;
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    margin-bottom: 32px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-light);
 }
 
 .section-header {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--primary-green);
-    margin-bottom: 20px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #e2e8f0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border-light);
 }
 
 .section-header svg {
-    width: 20px;
-    height: 20px;
-    stroke: var(--primary-green);
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    color: var(--primary-color);
 }
 
-/* --- Sub-labels (e.g. "Contact Person") --- */
 .sub-label {
     display: block;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 15px;
-    margin-top: 25px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-left: 3px solid var(--primary-green);
-    padding-left: 10px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #334155;
+    margin: 24px 0 12px 0;
 }
 
-/* --- Grid Layouts --- */
+/* Grids */
 .grid-2 {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
 
-/* --- Inputs --- */
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* ==========================================================================
+   Form Elements
+   ========================================================================== */
 .form-group {
     margin-bottom: 16px;
 }
 
 label {
     display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 6px;
-}
-
-input, select {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 14px;
-    color: var(--text-dark);
-    box-sizing: border-box;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    background-color: white;
-}
-
-input:focus, select:focus {
-    border-color: var(--primary-green);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(16, 138, 85, 0.1);
-}
-
-input::placeholder {
-    color: #cbd5e1;
-}
-
-/* --- Submit Button --- */
-.btn-submit {
-    width: 100%;
-    padding: 14px;
-    background-color: var(--primary-green);
-    color: white;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-    transition: background-color 0.2s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-}
-
-.btn-submit:hover {
-    background-color: var(--primary-green-hover);
-}
-
-/* --- Navbar (Fixed at top) --- */
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    background: white;
-    border-bottom: 1px solid var(--border-color);
-    height: 64px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 40px;
-}
-
-.logo {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--primary-green);
-    margin: 0;
-}
-
-.btn-logout {
-    padding: 8px 16px;
-    background: white;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    cursor: pointer;
+    font-size: 0.875rem;
     font-weight: 500;
-    font-size: 14px;
-    color: var(--text-dark);
-    transition: background 0.2s;
+    margin-bottom: 6px;
+    color: #475569;
 }
 
-.btn-logout:hover {
-    background: #f1f5f9;
-}
-
-/* Table Inputs */
-.input-table {
+input[type="text"],
+input[type="email"],
+input[type="number"],
+select,
+textarea {
     width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 10px;
-    font-size: 13px;
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    background-color: #fff;
+    transition: all 0.2s ease;
 }
 
-.input-table th {
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+input[readonly] {
     background-color: #f1f5f9;
-    padding: 10px;
-    text-align: left;
-    color: var(--text-dark);
-    border: 1px solid var(--border-color);
+    color: #94a3b8;
+    cursor: not-allowed;
+    border-color: var(--border-light);
 }
 
-.input-table td {
-    padding: 5px;
-    border: 1px solid var(--border-color);
-}
-
-.input-table input {
-    border: none;
-    padding: 8px;
-    width: 100%;
-}
-
-.btn-add-row {
-    background: white;
-    border: 1px dashed var(--primary-green);
-    color: var(--primary-green);
-    padding: 8px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
-}
-.btn-add-row:hover { background: #f0fdf4; }
-
-.btn-remove {
-    color: #ef4444;
-    cursor: pointer;
-    text-align: center;
-    font-weight: bold;
-}
-
-/* --- Radio Button Group Alignment --- */
+/* Radio Button Group */
 .radio-group {
     display: flex;
-    align-items: center;
-    gap: 20px; /* Space between the "Table" option and "Note" option */
-    margin-bottom: 15px;
+    gap: 20px;
+    margin-bottom: 20px;
 }
 
 .radio-option {
     display: flex;
     align-items: center;
-    gap: 8px; /* Space between the radio dot and the text label */
-    cursor: pointer;
+    gap: 8px;
 }
 
-/* Reset default margins on radio inputs to prevent floating */
-input[type="radio"] {
-    margin: 0;
-    width: auto; /* Prevent it from stretching like text inputs */
-    cursor: pointer;
+.radio-option input[type="radio"] {
+    width: auto;
+    accent-color: var(--primary-color);
 }
 
-/* Ensure labels inside radio options don't have bottom margins */
 .radio-option label {
     margin-bottom: 0;
-    font-weight: normal;
-    font-size: 14px;
     cursor: pointer;
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+.input-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+    font-size: 0.85rem;
+}
+
+.input-table th,
+.input-table td {
+    border: 1px solid var(--border-light);
+    padding: 10px;
+    vertical-align: middle;
+}
+
+.input-table th {
+    background-color: #f8fafc;
+    font-weight: 600;
+    color: #475569;
+    text-align: left;
+}
+
+/* Clean inputs inside tables */
+.input-table td input[type="text"],
+.input-table td input[type="number"],
+.input-table td select,
+.input-table td textarea {
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 8px;
+    width: 100%;
+    background-color: transparent;
+}
+
+.input-table td input:hover,
+.input-table td textarea:hover {
+    background-color: #f1f5f9;
+}
+
+.input-table td input:focus,
+.input-table td textarea:focus {
+    background-color: #fff;
+    border-color: var(--secondary-color);
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+button {
+    font-family: inherit;
+    border: none;
+    outline: none;
+}
+
+.btn-logout {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-logout:hover {
+    background-color: #f1f5f9;
+}
+
+.btn-add-row {
+    background-color: #f1f5f9;
+    color: #334155;
+    border: 1px dashed var(--border-color);
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+    width: auto;
+}
+
+.btn-add-row:hover {
+    background-color: #e2e8f0;
+    border-color: #94a3b8;
+}
+
+.btn-remove {
+    background-color: #fee2e2;
+    color: var(--danger-color);
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-align: center;
+}
+
+.btn-remove:hover {
+    background-color: #fca5a5;
+}
+
+.btn-submit {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn-submit:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-submit:active {
+    transform: translateY(1px);
+}
+
+/* --- AI Button Magic --- */
+.btn-ai {
+    background: #fff;
+    color: #4f46e5;
+    border: 1px solid #c7d2fe;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 1px 2px rgba(79, 70, 229, 0.1);
+}
+
+.btn-ai:hover {
+    background: var(--ai-gradient);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
+}
+
+.btn-ai-mini {
+    background: transparent;
+    color: #6366f1;
+    border: none;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.btn-ai-mini:hover {
+    background: #e0e7ff;
+    color: #4338ca;
+}
+
+/* ==========================================================================
+   Responsiveness
+   ========================================================================== */
+@media (max-width: 768px) {
+    .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .form-section {
+        padding: 20px;
+    }
 }

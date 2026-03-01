@@ -51,6 +51,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
 
                 // 4. Fill Section IV: Women Representation
+                setTimeout(() => {
+                                    if (typeof calcOpsTotal === 'function') calcOpsTotal();
+                                    if (typeof calcEmployeeTotals === 'function') calcEmployeeTotals();
+                                    if (typeof calcWorkerTotals === 'function') calcWorkerTotals();
+                                    if (typeof calcDiffAbledTotals === 'function') calcDiffAbledTotals();
+                                }, 100);
                 const womenBody = document.querySelector("#womenRepTable tbody");
                 womenBody.innerHTML = "";
                 if (data.womenRepresentationList && data.womenRepresentationList.length > 0) {
@@ -134,7 +140,7 @@ function fillStandardFields(data) {
         "email", "telephone", "website", "reportingYear", "stockExchanges",
         "paidUpCapital", "reportingBoundary", "contactPersonName",
         "contactPersonDesignation", "contactPersonAddress", "contactPersonEmail",
-        "contactPersonTelephone",
+        "contactPersonTelephone", "assuranceProviderName", "assuranceType",
 
         // Section 3 (Operations) - MUST BE IN THIS LIST TO SHOW UP
         "plantsNational", "officesNational", "totalNational",
@@ -429,6 +435,7 @@ function addComplaintRow(data = null) {
 }
 
 // --- ROW MANAGEMENT (Q24) ---
+// --- ROW MANAGEMENT (Q26 Material Issues) ---
 function addMaterialIssueRow(data = null) {
     const tbody = document.querySelector("#materialIssuesTable tbody");
     const d = data || {};
@@ -443,28 +450,306 @@ function addMaterialIssueRow(data = null) {
     const row = `
         <tr>
             <td><input type="text" class="mi-desc" value="${d.description || ''}" placeholder="e.g. Climate Change"></td>
-            
+
             <td>
                 <select class="mi-ro">
                     <option value="Risk" ${selRisk}>Risk</option>
                     <option value="Opportunity" ${selOpp}>Opportunity</option>
                 </select>
             </td>
-            
-            <td><textarea class="mi-rat" rows="3" style="width:100%">${d.rationale || ''}</textarea></td>
-            <td><textarea class="mi-app" rows="3" style="width:100%">${d.approach || ''}</textarea></td>
-            
+
+            <td>
+                <div style="display:flex; justify-content:flex-end; margin-bottom:2px;">
+                    <button type="button" class="btn-ai-mini" onclick="generateTableFieldAI(this, 'rationale')" style="background:none; border:none; color:#2563eb; font-size:11px; cursor:pointer; font-weight:bold;">✨ AI Expand</button>
+                </div>
+                <textarea class="mi-rat" rows="3" style="width:100%; font-size:12px;" placeholder="Keywords...">${d.rationale || ''}</textarea>
+            </td>
+
+            <td>
+                <div style="display:flex; justify-content:flex-end; margin-bottom:2px;">
+                    <button type="button" class="btn-ai-mini" onclick="generateTableFieldAI(this, 'approach')" style="background:none; border:none; color:#2563eb; font-size:11px; cursor:pointer; font-weight:bold;">✨ AI Expand</button>
+                </div>
+                <textarea class="mi-app" rows="3" style="width:100%; font-size:12px;" placeholder="Keywords...">${d.approach || ''}</textarea>
+            </td>
+
             <td>
                 <select class="mi-fin">
                     <option value="Positive" ${selPos}>Positive</option>
                     <option value="Negative" ${selNeg}>Negative</option>
                 </select>
             </td>
-            
+
             <td class="btn-remove" onclick="this.parentElement.remove()">X</td>
         </tr>
     `;
     tbody.insertAdjacentHTML('beforeend', row);
+}
+
+// --- HELPER: Auto-calculate Totals for Section III (Operations) ---
+function calcOpsTotal() {
+    // National Calculation
+    const plantsN = parseFloat(document.getElementById('plantsNational').value) || 0;
+    const officesN = parseFloat(document.getElementById('officesNational').value) || 0;
+    document.getElementById('totalNational').value = plantsN + officesN;
+
+    // International Calculation
+    const plantsI = parseFloat(document.getElementById('plantsInternational').value) || 0;
+    const officesI = parseFloat(document.getElementById('officesInternational').value) || 0;
+    document.getElementById('totalInternational').value = plantsI + officesI;
+}
+
+//generate ai content
+async function generateAIContent(fieldId) {
+    const textarea = document.getElementById(fieldId);
+    const userInput = textarea.value;
+    const companyName = document.getElementById('companyName').value || "the company";
+
+    if (!userInput || userInput.length < 5) {
+        alert("Please type a few keywords first (e.g., '20% to USA' or 'Retail B2B')");
+        return;
+    }
+
+    textarea.placeholder = "Gemini is thinking...";
+
+    try {
+        const response = await fetch("http://localhost:8080/api/ai/generate-esg", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            },
+            body: JSON.stringify({
+                prompt: `Write a professional ESG paragraph about ${fieldId} using these notes: ${userInput}`
+            })
+        });
+
+        const data = await response.json();
+        textarea.value = data.text; // This matches response.put("text", ...)
+    } catch (err) {
+        console.error("AI Error:", err);
+        alert("Could not reach AI service.");
+    }
+}
+
+// --- ROW MANAGEMENT ---
+function addComplaintRow(data = null) {
+    const tbody = document.querySelector("#complaintsTable tbody");
+
+    // Safety check nulls
+    const d = data || {};
+
+    const row = `
+        <tr>
+            <td><input type="text" class="c-stake" value="${d.stakeholder || ''}" placeholder="Group Name"></td>
+
+            <td>
+                <div style="display:flex; justify-content:flex-end; margin-bottom:2px;">
+                    <button type="button" class="btn-ai-mini" onclick="generateTableFieldAI(this, 'mechanism')" style="background:none; border:none; color:#2563eb; font-size:11px; cursor:pointer; font-weight:bold;">✨ AI Expand</button>
+                </div>
+                <textarea class="c-mech" rows="3" style="width:100%; font-size:12px;" placeholder="Keywords (e.g. 'portal and toll free number')...">${d.mechanism || ''}</textarea>
+            </td>
+
+            <td><input type="number" class="c-cur-f" value="${d.currFiled || ''}" style="width:60px;"></td>
+            <td><input type="number" class="c-cur-p" value="${d.currPending || ''}" style="width:60px;"></td>
+            <td>
+                <div style="display:flex; justify-content:flex-end; margin-bottom:2px;">
+                    <button type="button" class="btn-ai-mini" onclick="generateTableFieldAI(this, 'remarks')" style="background:none; border:none; color:#2563eb; font-size:11px; cursor:pointer; font-weight:bold;">✨ AI</button>
+                </div>
+                <input type="text" class="c-cur-r" value="${d.currRemarks || ''}" placeholder="Keywords...">
+            </td>
+
+            <td><input type="number" class="c-pre-f" value="${d.prevFiled || ''}" style="width:60px;"></td>
+            <td><input type="number" class="c-pre-p" value="${d.prevPending || ''}" style="width:60px;"></td>
+            <td>
+                <div style="display:flex; justify-content:flex-end; margin-bottom:2px;">
+                    <button type="button" class="btn-ai-mini" onclick="generateTableFieldAI(this, 'remarks')" style="background:none; border:none; color:#2563eb; font-size:11px; cursor:pointer; font-weight:bold;">✨ AI</button>
+                </div>
+                <input type="text" class="c-pre-r" value="${d.prevRemarks || ''}" placeholder="Keywords...">
+            </td>
+
+            <td class="btn-remove" onclick="this.parentElement.remove()">X</td>
+        </tr>
+    `;
+    tbody.insertAdjacentHTML('beforeend', row);
+}
+
+// --- SMART CELL-LEVEL AI GENERATOR ---
+async function generateTableFieldAI(buttonElement, fieldType) {
+    // 1. Find the input/textarea right below the clicked button's container
+    const container = buttonElement.parentElement;
+    const inputField = container.nextElementSibling;
+
+    if (!inputField) {
+        console.error("Could not find input field next to the button container.");
+        return;
+    }
+
+    const userInput = inputField.value.trim();
+
+    if (!userInput || userInput.length < 3) {
+        alert("Please type a few keywords in the box first (e.g., 'portal and toll free').");
+        return;
+    }
+
+    // 2. SAFELY get the context depending on which table we are in
+    const row = buttonElement.closest('tr');
+
+    // Attempt to find both elements (one will be null depending on the table)
+    const stakeElem = row.querySelector('.c-stake');
+    const issueElem = row.querySelector('.mi-desc');
+
+    // Safely extract the value without crashing
+    const stakeholder = stakeElem ? (stakeElem.value || "this stakeholder group") : "the stakeholder";
+    const issue = issueElem ? (issueElem.value || "this material issue") : "the issue";
+
+    // 3. UI Feedback
+    inputField.disabled = true;
+    const originalPlaceholder = inputField.placeholder;
+    inputField.placeholder = "Gemini is writing...";
+
+    // 4. Build the dynamic prompt based on which column was clicked
+    let promptText = "";
+    if (fieldType === 'mechanism') {
+        promptText = `You are an expert ESG consultant writing a BRSR report. Expand the following notes into a concise, professional Grievance Redressal Mechanism description (1-2 sentences) specifically for '${stakeholder}'. Notes: ${userInput}`;
+    } else if (fieldType === 'remarks') {
+        promptText = `You are an expert ESG consultant writing a BRSR report. Expand the following notes into a very short, professional remark (1 sentence) explaining the status of complaints for '${stakeholder}'. Notes: ${userInput}`;
+    } else if (fieldType === 'rationale') {
+        promptText = `You are an expert ESG consultant writing a BRSR report. Expand these notes into a professional rationale (1-2 sentences) explaining why '${issue}' is a material risk or opportunity for the business. Notes: ${userInput}`;
+    } else if (fieldType === 'approach') {
+        promptText = `You are an expert ESG consultant writing a BRSR report. Expand these notes into a professional strategy (1-2 sentences) detailing how the company is mitigating the risk or adapting to the opportunity presented by '${issue}'. Notes: ${userInput}`;
+    }
+
+    // 5. Call the API
+    try {
+        const response = await fetch("http://localhost:8080/api/ai/generate-esg", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            },
+            body: JSON.stringify({ prompt: promptText })
+        });
+
+        const data = await response.json();
+        inputField.value = data.text;
+    } catch (err) {
+        console.error("AI Error:", err);
+        alert("Could not reach AI service.");
+    } finally {
+        // Restore UI
+        inputField.disabled = false;
+        inputField.placeholder = originalPlaceholder;
+    }
+}
+
+// --- GENERATE AI NOTE FROM USER INPUT ---
+async function generateNoteFromInput(fieldId, sectionContext) {
+    const textarea = document.getElementById(fieldId);
+    const userInput = textarea.value.trim();
+
+    // Check if the user actually typed something
+    if (!userInput || userInput.length < 3) {
+        alert("Please type a few keywords first (e.g., 'provides health insurance' or 'wheelchair accessible').");
+        return;
+    }
+
+    // UI Feedback
+    textarea.disabled = true;
+    const originalPlaceholder = textarea.placeholder;
+    textarea.placeholder = "Gemini is writing...";
+
+    // Build the prompt for Gemini
+    const promptText = `You are an expert ESG consultant writing a BRSR report.
+    Expand the following rough notes into a professional, concise paragraph (1-2 sentences) for the '${sectionContext}' section.
+    Notes: ${userInput}`;
+
+    try {
+        const response = await fetch("http://localhost:8080/api/ai/generate-esg", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            },
+            body: JSON.stringify({ prompt: promptText })
+        });
+
+        const data = await response.json();
+        textarea.value = data.text;
+    } catch (err) {
+        console.error("AI Error:", err);
+        alert("Could not reach AI service.");
+    } finally {
+        // Restore UI
+        textarea.disabled = false;
+        textarea.placeholder = originalPlaceholder;
+    }
+}
+
+// --- UNIVERSAL AI TABLE SUMMARIZER ---
+async function generateNoteFromTable(tableId, noteId, sectionContext) {
+    const table = document.getElementById(tableId);
+    const textarea = document.getElementById(noteId);
+
+    if (!table) {
+        alert("Could not find the data table.");
+        return;
+    }
+
+    // 1. Scrape the table data dynamically
+    let tableData = "";
+    const rows = table.querySelectorAll('tr');
+
+    rows.forEach(row => {
+        let rowData = [];
+        const cells = row.querySelectorAll('th, td');
+
+        cells.forEach(cell => {
+            // Check if there is an input field inside the cell
+            const input = cell.querySelector('input, select');
+            if (input) {
+                rowData.push(input.value || "0");
+            } else {
+                // Otherwise, just get the text (like headers or row labels)
+                rowData.push(cell.innerText.trim().replace(/\n/g, ' '));
+            }
+        });
+
+        if (rowData.length > 0) {
+            tableData += rowData.join(" | ") + "\n";
+        }
+    });
+
+    // 2. Build the prompt
+    const promptText = `You are an expert ESG consultant writing a BRSR report.
+    Analyze the following data table regarding '${sectionContext}'.
+    Write a concise, professional summary note (1 to 2 sentences) highlighting the key insights.
+    Do not just list the numbers; provide a corporate narrative.
+
+    Table Data:
+    ${tableData}`;
+
+    // 3. Call the API
+    textarea.placeholder = "Gemini is analyzing the table data...";
+    textarea.disabled = true;
+
+    try {
+        const response = await fetch("http://localhost:8080/api/ai/generate-esg", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            },
+            body: JSON.stringify({ prompt: promptText })
+        });
+
+        const data = await response.json();
+        textarea.value = data.text;
+    } catch (err) {
+        console.error("AI Error:", err);
+        alert("Could not reach AI service.");
+    } finally {
+        textarea.disabled = false;
+    }
 }
 
 // --- MAIN GENERATE FUNCTION ---
@@ -514,6 +799,8 @@ function saveAndNext() {
         stockExchanges: document.getElementById("stockExchanges").value,
         paidUpCapital: document.getElementById("paidUpCapital").value,
         reportingBoundary: document.getElementById("reportingBoundary").value,
+        assuranceProviderName: document.getElementById("assuranceProviderName").value,
+        assuranceType: document.getElementById("assuranceType").value,
 
         // Contact Person
         contactPersonName: document.getElementById("contactPersonName").value,

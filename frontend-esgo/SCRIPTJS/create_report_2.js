@@ -6,7 +6,13 @@ document.addEventListener("DOMContentLoaded", function() {
         window.location.href = "create_report.html";
         return;
     }
-    // Initialize Q12 Table (Fixed Rows)
+    // 1. Initialize the Y/N checkbox matrix for standard rows
+        initUnifiedRow("row-1a", "q1a");
+        initUnifiedRow("row-1b", "q1b");
+        initUnifiedRow("row-2", "q2");
+        initUnifiedRow("row-3", "q3");
+
+        // 2. Initialize Q12 Matrix (Keep your existing Q12 logic)
         initQ12Table();
     fetchData();
 });
@@ -34,6 +40,42 @@ function initQ12Table() {
     }
 }
 
+// Helper to inject 9 checkboxes into a specific row
+function initUnifiedRow(rowId, prefix) {
+    const tr = document.getElementById(rowId);
+    let cells = '';
+    for(let i=1; i<=9; i++) {
+        cells += `<td><input type="checkbox" class="${prefix}-p${i}"></td>`;
+    }
+    tr.insertAdjacentHTML('beforeend', cells);
+}
+
+// Q4: Dynamic ISO Row Adder
+function addUnifiedISO(data = {}) {
+    const name = data.name || "";
+    const tbody = document.querySelector("#unifiedMatrixTable tbody");
+    const check = (idx) => (data["p"+idx]) ? "checked" : "";
+
+    // Find where to insert (right before row 5)
+    const q5Row = document.getElementById("q5Unified").closest("tr");
+
+    let rowHTML = `<tr class="iso-row">
+        <td>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span onclick="this.closest('tr').remove()" style="color:red; cursor:pointer; font-weight:bold;">X</span>
+                <input type="text" class="text-input iso-name" value="${name}" placeholder="e.g. ISO 9001:2015" style="text-align: left;">
+            </div>
+        </td>`;
+
+    for(let i=1; i<=9; i++) {
+        rowHTML += `<td><input type="checkbox" class="iso-p${i}" ${check(i)}></td>`;
+    }
+    rowHTML += `</tr>`;
+
+    q5Row.insertAdjacentHTML('beforebegin', rowHTML);
+}
+
+// --- DATA FETCHING (LOADING) ---
 function fetchData() {
     const token = localStorage.getItem("token");
     fetch(`http://localhost:8080/api/report/${currentReportId}`, {
@@ -41,50 +83,58 @@ function fetchData() {
     })
     .then(res => res.json())
     .then(data => {
-        // Text Areas
-        if(data.q2Procedures) document.getElementById("q2").value = data.q2Procedures;
-        if(data.q3ValueChain) document.getElementById("q3").value = data.q3ValueChain;
-        if(data.q5Commitments) document.getElementById("q5").value = data.q5Commitments;
-        if(data.q6Performance) document.getElementById("q6").value = data.q6Performance;
+        console.log("Loaded Section B Data:", data);
+
+        // Helper to check the boxes for the matrix rows
+        const setRowBooleans = (prefix, dataObj) => {
+            if (!dataObj) return;
+            for(let i=1; i<=9; i++) {
+                const cb = document.querySelector(`.${prefix}-p${i}`);
+                if(cb) cb.checked = dataObj["p"+i];
+            }
+        };
+
+        // 1. Matrix Checkboxes (Q1a, 1b, 2, 3)
+        setRowBooleans("q1a", data.q1a);
+        setRowBooleans("q1b", data.q1b);
+        setRowBooleans("q2", data.q2);
+        setRowBooleans("q3", data.q3);
+
+        // 2. Text fields & Links (Unified Matrix)
+        if(data.q1WebLink) document.getElementById("unifiedWebLink").value = data.q1WebLink;
+        if(data.q5Commitments) document.getElementById("q5Unified").value = data.q5Commitments;
+        if(data.q6Performance) document.getElementById("q6Unified").value = data.q6Performance;
+
+        // 3. ISO Rows (Q4)
+        document.querySelectorAll(".iso-row").forEach(r => r.remove()); // Clear defaults
+        if (data.q4Standards && data.q4Standards.length > 0) {
+            data.q4Standards.forEach(s => addUnifiedISO(s));
+        } else {
+            addUnifiedISO({name: "ISO 9001: 2015"}); // Default starting row
+        }
+
+        // 4. Governance & Oversight (Q7, 8, 9, 10, 11) - FIXED!
         if(data.governanceStatement) document.getElementById("q7").value = data.governanceStatement;
         if(data.oversightAuthority) document.getElementById("q8").value = data.oversightAuthority;
+        if(data.q9Committee) document.getElementById("q9").value = data.q9Committee;
+        if(data.q10PerformanceReview) document.getElementById("q10_1").value = data.q10PerformanceReview;
+        if(data.q10ComplianceReview) document.getElementById("q10_2").value = data.q10ComplianceReview;
+        if(data.q11Assessment) document.getElementById("q11").value = data.q11Assessment;
 
-        // Q1 Table
-        const tb1 = document.querySelector("#q1Table tbody");
-        tb1.innerHTML = "";
-        if (data.q1Policies && data.q1Policies.length > 0) {
-            data.q1Policies.forEach(p => addQ1Row(p));
-        } else {
-            addQ1Row({name: "Ethics & Anti-Bribery Policy"}); // Default
-        }
-
-        // Q4 Table
-        const tb4 = document.querySelector("#q4Table tbody");
-        tb4.innerHTML = "";
-        if (data.q4Standards && data.q4Standards.length > 0) {
-            data.q4Standards.forEach(s => addQ4Row(s));
-        } else {
-            addQ4Row({name: "ISO 14001 Environmental Management"}); // Default
-        }
-
-         // NEW FIELDS
-                if(data.q9Committee) document.getElementById("q9").value = data.q9Committee;
-                if(data.q10PerformanceReview) document.getElementById("q10_1").value = data.q10PerformanceReview;
-                if(data.q10ComplianceReview) document.getElementById("q10_2").value = data.q10ComplianceReview;
-                if(data.q11Assessment) document.getElementById("q11").value = data.q11Assessment;
-
-                // Q12 Matrix (Checkbox mapping)
-                if(data.q12Reasons && data.q12Reasons.length > 0) {
-                    const rows = document.querySelectorAll("#q12Table tbody tr");
-                    data.q12Reasons.forEach((item, idx) => {
-                        if(rows[idx]) {
-                            for(let i=1; i<=9; i++) {
-                                 rows[idx].querySelector(`.q12-p${i}`).checked = item["p"+i];
-                            }
-                        }
-                    });
+        // 5. Q12 Matrix
+        if(data.q12Reasons && data.q12Reasons.length > 0) {
+            const rows = document.querySelectorAll("#q12Table tbody tr");
+            data.q12Reasons.forEach((item, idx) => {
+                if(rows[idx]) {
+                    for(let i=1; i<=9; i++) {
+                        const cb = rows[idx].querySelector(`.q12-p${i}`);
+                        if (cb) cb.checked = item["p"+i];
+                    }
                 }
-    });
+            });
+        }
+    })
+    .catch(err => console.error("Error fetching data:", err));
 }
 
 // --- Q1 ROW BUILDER ---
@@ -121,69 +171,62 @@ function addQ4Row(data = {}) {
     tbody.insertAdjacentHTML('beforeend', row);
 }
 
+// --- DATA SAVING ---
 function saveAndNext() {
     const token = localStorage.getItem("token");
 
-    // Scrape Q1
-    const q1Policies = Array.from(document.querySelectorAll("#q1Table tbody tr")).map(row => ({
-        name: row.querySelector(".q1-name").value,
-        boardApproved: row.querySelector(".q1-app").value,
-        webLink: row.querySelector(".q1-link").value,
-        p1: row.querySelector(".q1-p1").checked,
-        p2: row.querySelector(".q1-p2").checked,
-        p3: row.querySelector(".q1-p3").checked,
-        p4: row.querySelector(".q1-p4").checked,
-        p5: row.querySelector(".q1-p5").checked,
-        p6: row.querySelector(".q1-p6").checked,
-        p7: row.querySelector(".q1-p7").checked,
-        p8: row.querySelector(".q1-p8").checked,
-        p9: row.querySelector(".q1-p9").checked
-    }));
+    // Helper to scrape P1-P9 for a given row prefix
+    const getRowBooleans = (prefix) => {
+        let obj = {};
+        for(let i=1; i<=9; i++) {
+            const cb = document.querySelector(`.${prefix}-p${i}`);
+            obj["p"+i] = cb ? cb.checked : false;
+        }
+        return obj;
+    };
 
-    // Scrape Q4
-    const q4Standards = Array.from(document.querySelectorAll("#q4Table tbody tr")).map(row => ({
-        name: row.querySelector(".q4-name").value,
-        p1: row.querySelector(".q4-p1").checked,
-        p2: row.querySelector(".q4-p2").checked,
-        p3: row.querySelector(".q4-p3").checked,
-        p4: row.querySelector(".q4-p4").checked,
-        p5: row.querySelector(".q4-p5").checked,
-        p6: row.querySelector(".q4-p6").checked,
-        p7: row.querySelector(".q4-p7").checked,
-        p8: row.querySelector(".q4-p8").checked,
-        p9: row.querySelector(".q4-p9").checked
-    }));
+    // Scrape ISO rows
+    const q4Standards = Array.from(document.querySelectorAll(".iso-row")).map(row => {
+        let obj = { name: row.querySelector(".iso-name").value };
+        for(let i=1; i<=9; i++) {
+            obj["p"+i] = row.querySelector(`.iso-p${i}`).checked;
+        }
+        return obj;
+    });
 
-     // Scrape Q12
-        const q12Reasons = Array.from(document.querySelectorAll("#q12Table tbody tr")).map(row => ({
-            questionText: row.querySelector(".q12-text").innerText,
-            p1: row.querySelector(".q12-p1").checked,
-            p2: row.querySelector(".q12-p2").checked,
-            p3: row.querySelector(".q12-p3").checked,
-            p4: row.querySelector(".q12-p4").checked,
-            p5: row.querySelector(".q12-p5").checked,
-            p6: row.querySelector(".q12-p6").checked,
-            p7: row.querySelector(".q12-p7").checked,
-            p8: row.querySelector(".q12-p8").checked,
-            p9: row.querySelector(".q12-p9").checked
-        }));
+    // Scrape Q12 rows
+    const q12Reasons = Array.from(document.querySelectorAll("#q12Table tbody tr")).map(row => {
+        let obj = { questionText: row.querySelector(".q12-text").innerText };
+        for(let i=1; i<=9; i++) {
+            obj["p"+i] = row.querySelector(`.q12-p${i}`).checked;
+        }
+        return obj;
+    });
 
+    // Build the complete payload
     const formData = {
         id: parseInt(currentReportId),
-        q1Policies: q1Policies,
-        q2Procedures: document.getElementById("q2").value,
-        q3ValueChain: document.getElementById("q3").value,
+
+        // Matrix Rows
+        q1a: getRowBooleans("q1a"),
+        q1b: getRowBooleans("q1b"),
+        q1WebLink: document.getElementById("unifiedWebLink").value,
+        q2: getRowBooleans("q2"),
+        q3: getRowBooleans("q3"),
+
         q4Standards: q4Standards,
-        q5Commitments: document.getElementById("q5").value,
-        q6Performance: document.getElementById("q6").value,
+        q5Commitments: document.getElementById("q5Unified").value,
+        q6Performance: document.getElementById("q6Unified").value,
+
+        // Governance fields
         governanceStatement: document.getElementById("q7").value,
         oversightAuthority: document.getElementById("q8").value,
-
         q9Committee: document.getElementById("q9").value,
-                q10PerformanceReview: document.getElementById("q10_1").value,
-                q10ComplianceReview: document.getElementById("q10_2").value,
-                q11Assessment: document.getElementById("q11").value,
-                q12Reasons: q12Reasons
+        q10PerformanceReview: document.getElementById("q10_1").value,
+        q10ComplianceReview: document.getElementById("q10_2").value,
+        q11Assessment: document.getElementById("q11").value,
+
+        q12Reasons: q12Reasons
     };
 
     fetch("http://localhost:8080/api/report/save", {
@@ -193,7 +236,55 @@ function saveAndNext() {
     })
     .then(res => res.json())
     .then(data => {
-        if(data.status === "success") window.location.href = "create_report_3.html";
-        else alert("Save failed");
-    });
+        if(data.status === "success") {
+            console.log("Successfully saved!");
+            window.location.href = "create_report_3.html";
+        } else {
+            alert("Save failed");
+        }
+    })
+    .catch(err => console.error("Error saving data:", err));
+}
+
+// --- GENERATE AI NOTE FROM USER INPUT ---
+async function generateNoteFromInput(fieldId, sectionContext) {
+    const textarea = document.getElementById(fieldId);
+    const userInput = textarea.value.trim();
+
+    // Check if the user actually typed something
+    if (!userInput || userInput.length < 3) {
+        alert("Please type a few keywords first (e.g., 'provides health insurance' or 'wheelchair accessible').");
+        return;
+    }
+
+    // UI Feedback
+    textarea.disabled = true;
+    const originalPlaceholder = textarea.placeholder;
+    textarea.placeholder = "Gemini is writing...";
+
+    // Build the prompt for Gemini
+    const promptText = `You are an expert ESG consultant writing a BRSR report.
+    Expand the following rough notes into a professional, concise paragraph (1-2 sentences) for the '${sectionContext}' section.
+    Notes: ${userInput}`;
+
+    try {
+        const response = await fetch("http://localhost:8080/api/ai/generate-esg", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            },
+            body: JSON.stringify({ prompt: promptText })
+        });
+
+        const data = await response.json();
+        textarea.value = data.text;
+    } catch (err) {
+        console.error("AI Error:", err);
+        alert("Could not reach AI service.");
+    } finally {
+        // Restore UI
+        textarea.disabled = false;
+        textarea.placeholder = originalPlaceholder;
+    }
 }
