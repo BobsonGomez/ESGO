@@ -1863,6 +1863,221 @@ public class BrsrReportRequest {
     public String getCorrectiveActionDetails() { return correctiveActionDetails; }
     public void setCorrectiveActionDetails(String correctiveActionDetails) { this.correctiveActionDetails = correctiveActionDetails; }
 
+    // --- Principle 1: Q8 Accounts Payable ---
+    private String accountsPayableCurr;
+    private String accountsPayablePrev;
+
+    // --- Principle 1: Q9 Openness of Business ---
+    private String purTradingPercCurr;
+    private String purTradingPercPrev;
+    private String purTradingNumCurr;
+
+    public String getPurTradingNumPrev() {
+        return purTradingNumPrev;
+    }
+
+    public void setPurTradingNumPrev(String purTradingNumPrev) {
+        this.purTradingNumPrev = purTradingNumPrev;
+    }
+
+    public String getAccountsPayableCurr() {
+        return accountsPayableCurr;
+    }
+
+    public void setAccountsPayableCurr(String accountsPayableCurr) {
+        this.accountsPayableCurr = accountsPayableCurr;
+    }
+
+    public String getAccountsPayablePrev() {
+        return accountsPayablePrev;
+    }
+
+    public void setAccountsPayablePrev(String accountsPayablePrev) {
+        this.accountsPayablePrev = accountsPayablePrev;
+    }
+
+    public String getPurTradingPercCurr() {
+        return purTradingPercCurr;
+    }
+
+    public void setPurTradingPercCurr(String purTradingPercCurr) {
+        this.purTradingPercCurr = purTradingPercCurr;
+    }
+
+    public String getPurTradingPercPrev() {
+        return purTradingPercPrev;
+    }
+
+    public void setPurTradingPercPrev(String purTradingPercPrev) {
+        this.purTradingPercPrev = purTradingPercPrev;
+    }
+
+    public String getPurTradingNumCurr() {
+        return purTradingNumCurr;
+    }
+
+    public void setPurTradingNumCurr(String purTradingNumCurr) {
+        this.purTradingNumCurr = purTradingNumCurr;
+    }
+
+    public String getPurTop10PercCurr() {
+        return purTop10PercCurr;
+    }
+
+    public void setPurTop10PercCurr(String purTop10PercCurr) {
+        this.purTop10PercCurr = purTop10PercCurr;
+    }
+
+    public String getPurTop10PercPrev() {
+        return purTop10PercPrev;
+    }
+
+    public void setPurTop10PercPrev(String purTop10PercPrev) {
+        this.purTop10PercPrev = purTop10PercPrev;
+    }
+
+    public String getSalesDealerPercCurr() {
+        return salesDealerPercCurr;
+    }
+
+    public void setSalesDealerPercCurr(String salesDealerPercCurr) {
+        this.salesDealerPercCurr = salesDealerPercCurr;
+    }
+
+    public String getSalesDealerPercPrev() {
+        return salesDealerPercPrev;
+    }
+
+    public void setSalesDealerPercPrev(String salesDealerPercPrev) {
+        this.salesDealerPercPrev = salesDealerPercPrev;
+    }
+
+    public String getSalesDealerNumCurr() {
+        return salesDealerNumCurr;
+    }
+
+    public void setSalesDealerNumCurr(String salesDealerNumCurr) {
+        this.salesDealerNumCurr = salesDealerNumCurr;
+    }
+
+    public String getSalesDealerNumPrev() {
+        return salesDealerNumPrev;
+    }
+
+    public void setSalesDealerNumPrev(String salesDealerNumPrev) {
+        this.salesDealerNumPrev = salesDealerNumPrev;
+    }
+
+    public String getSalesTop10PercCurr() {
+        return salesTop10PercCurr;
+    }
+
+    public void setSalesTop10PercCurr(String salesTop10PercCurr) {
+        this.salesTop10PercCurr = salesTop10PercCurr;
+    }
+
+    public String getSalesTop10PercPrev() {
+        return salesTop10PercPrev;
+    }
+
+    public void setSalesTop10PercPrev(String salesTop10PercPrev) {
+        this.salesTop10PercPrev = salesTop10PercPrev;
+    }
+
+    public String getRptPurCurr() {
+        return rptPurCurr;
+    }
+
+    public void setRptPurCurr(String rptPurCurr) {
+        this.rptPurCurr = rptPurCurr;
+    }
+
+    public String getRptPurPrev() {
+        return rptPurPrev;
+    }
+
+    public void setRptPurPrev(String rptPurPrev) {
+        this.rptPurPrev = rptPurPrev;
+    }
+
+    public String getRptSalesCurr() {
+        return rptSalesCurr;
+    }
+
+    public void setRptSalesCurr(String rptSalesCurr) {
+        this.rptSalesCurr = rptSalesCurr;
+    }
+
+    public String getRptSalesPrev() {
+        return rptSalesPrev;
+    }
+
+    public void setRptSalesPrev(String rptSalesPrev) {
+        this.rptSalesPrev = rptSalesPrev;
+    }
+
+    public String getRptLoansCurr() {
+        return rptLoansCurr;
+    }
+
+    public void setRptLoansCurr(String rptLoansCurr) {
+        this.rptLoansCurr = rptLoansCurr;
+    }
+
+    public String getRptLoansPrev() {
+        return rptLoansPrev;
+    }
+
+    public void setRptLoansPrev(String rptLoansPrev) {
+        this.rptLoansPrev = rptLoansPrev;
+    }
+
+    public String getRptInvestCurr() {
+        return rptInvestCurr;
+    }
+
+    public void setRptInvestCurr(String rptInvestCurr) {
+        this.rptInvestCurr = rptInvestCurr;
+    }
+
+    public String getRptInvestPrev() {
+        return rptInvestPrev;
+    }
+
+    public void setRptInvestPrev(String rptInvestPrev) {
+        this.rptInvestPrev = rptInvestPrev;
+    }
+
+    public String getOpennessNote() {
+        return opennessNote;
+    }
+
+    public void setOpennessNote(String opennessNote) {
+        this.opennessNote = opennessNote;
+    }
+
+    private String purTradingNumPrev;
+    private String purTop10PercCurr;
+    private String purTop10PercPrev;
+
+    private String salesDealerPercCurr;
+    private String salesDealerPercPrev;
+    private String salesDealerNumCurr;
+    private String salesDealerNumPrev;
+    private String salesTop10PercCurr;
+    private String salesTop10PercPrev;
+
+    private String rptPurCurr;
+    private String rptPurPrev;
+    private String rptSalesCurr;
+    private String rptSalesPrev;
+    private String rptLoansCurr;
+    private String rptLoansPrev;
+    private String rptInvestCurr;
+    private String rptInvestPrev;
+
+    private String opennessNote;
+
     //SECTION C LEADERSHIP INDICATORS 1
     public String getLeadershipIndicatorNote() { return leadershipIndicatorNote; }
     public void setLeadershipIndicatorNote(String leadershipIndicatorNote) { this.leadershipIndicatorNote = leadershipIndicatorNote; }
@@ -1908,6 +2123,53 @@ public class BrsrReportRequest {
     //--section c : principle 2 question 4
     public String getEprDetails() { return eprDetails; }
     public void setEprDetails(String eprDetails) { this.eprDetails = eprDetails; }
+
+    // --- Principle 2 Leadership NA Flags ---
+    private boolean p2Lead1NA;
+    private boolean p2Lead2NA;
+    private boolean p2Lead3NA;
+    private boolean p2Lead4NA;
+    private boolean p2Lead5NA;
+
+    public boolean isP2Lead4NA() {
+        return p2Lead4NA;
+    }
+
+    public void setP2Lead4NA(boolean p2Lead4NA) {
+        this.p2Lead4NA = p2Lead4NA;
+    }
+
+    public boolean isP2Lead1NA() {
+        return p2Lead1NA;
+    }
+
+    public void setP2Lead1NA(boolean p2Lead1NA) {
+        this.p2Lead1NA = p2Lead1NA;
+    }
+
+    public boolean isP2Lead2NA() {
+        return p2Lead2NA;
+    }
+
+    public void setP2Lead2NA(boolean p2Lead2NA) {
+        this.p2Lead2NA = p2Lead2NA;
+    }
+
+    public boolean isP2Lead3NA() {
+        return p2Lead3NA;
+    }
+
+    public void setP2Lead3NA(boolean p2Lead3NA) {
+        this.p2Lead3NA = p2Lead3NA;
+    }
+
+    public boolean isP2Lead5NA() {
+        return p2Lead5NA;
+    }
+
+    public void setP2Lead5NA(boolean p2Lead5NA) {
+        this.p2Lead5NA = p2Lead5NA;
+    }
 
     //--section c : princple 2 leadership indicators q1
     public String getLcaNote() { return lcaNote; } public void setLcaNote(String s) { this.lcaNote = s; }
@@ -2022,6 +2284,54 @@ public class BrsrReportRequest {
 
     public String getWellBeingNote() { return wellBeingNote; }
     public void setWellBeingNote(String s) { this.wellBeingNote = s; }
+
+    // Principle 3 - Q1 Additions
+    private String empWellBeingNote;
+    private String workWellBeingNote;
+    private String wbCostCurr;
+
+    public String getWbCostPrev() {
+        return wbCostPrev;
+    }
+
+    public void setWbCostPrev(String wbCostPrev) {
+        this.wbCostPrev = wbCostPrev;
+    }
+
+    public String getEmpWellBeingNote() {
+        return empWellBeingNote;
+    }
+
+    public void setEmpWellBeingNote(String empWellBeingNote) {
+        this.empWellBeingNote = empWellBeingNote;
+    }
+
+    public String getWorkWellBeingNote() {
+        return workWellBeingNote;
+    }
+
+    public void setWorkWellBeingNote(String workWellBeingNote) {
+        this.workWellBeingNote = workWellBeingNote;
+    }
+
+    public String getWbCostCurr() {
+        return wbCostCurr;
+    }
+
+    public void setWbCostCurr(String wbCostCurr) {
+        this.wbCostCurr = wbCostCurr;
+    }
+
+    public String getWbCostNote() {
+        return wbCostNote;
+    }
+
+    public void setWbCostNote(String wbCostNote) {
+        this.wbCostNote = wbCostNote;
+    }
+
+    private String wbCostPrev;
+    private String wbCostNote;
 
     //--- PRINCIPLE 3 Q2 ---
     public List<RetirementBenefit> getRetirementBenefits() { return retirementBenefits; } public void setRetirementBenefits(List<RetirementBenefit> l) { this.retirementBenefits = l; }
@@ -2592,6 +2902,16 @@ public class BrsrReportRequest {
 
     public List<ValueChainAction> getVcCorrectiveActions() { return vcCorrectiveActions; }
     public void setVcCorrectiveActions(List<ValueChainAction> list) { this.vcCorrectiveActions = list; }
+
+    public String getTransitionAssistanceYN() {
+        return transitionAssistanceYN;
+    }
+
+    public void setTransitionAssistanceYN(String transitionAssistanceYN) {
+        this.transitionAssistanceYN = transitionAssistanceYN;
+    }
+
+    private String transitionAssistanceYN;
 
     //princple 4 essential 1
     public String getPrinciple4Q1Intro() { return principle4Q1Intro; }
@@ -4345,6 +4665,16 @@ public class BrsrReportRequest {
 
     private String compOtherHrRemarksPrev;
 
+    public String getHrComplaintsNote() {
+        return hrComplaintsNote;
+    }
+
+    public void setHrComplaintsNote(String hrComplaintsNote) {
+        this.hrComplaintsNote = hrComplaintsNote;
+    }
+
+    private String hrComplaintsNote;
+
     //principle 5 essential 7
     public String getPoshTotalCurr() { return poshTotalCurr; } public void setPoshTotalCurr(String s) { this.poshTotalCurr = s; }
     public String getPoshTotalPrev() { return poshTotalPrev; } public void setPoshTotalPrev(String s) { this.poshTotalPrev = s; }
@@ -4414,6 +4744,62 @@ public class BrsrReportRequest {
     //princple 5 leadership 5
     public String getP5LeadValueChainCorrectiveActions() { return p5LeadValueChainCorrectiveActions; }
     public void setP5LeadValueChainCorrectiveActions(String s) { this.p5LeadValueChainCorrectiveActions = s; }
+
+    public String getP5LeadVcAssessShPerc() {
+        return p5LeadVcAssessShPerc;
+    }
+
+    public void setP5LeadVcAssessShPerc(String p5LeadVcAssessShPerc) {
+        this.p5LeadVcAssessShPerc = p5LeadVcAssessShPerc;
+    }
+
+    public String getP5LeadVcAssessDiscrimPerc() {
+        return p5LeadVcAssessDiscrimPerc;
+    }
+
+    public void setP5LeadVcAssessDiscrimPerc(String p5LeadVcAssessDiscrimPerc) {
+        this.p5LeadVcAssessDiscrimPerc = p5LeadVcAssessDiscrimPerc;
+    }
+
+    public String getP5LeadVcAssessChildPerc() {
+        return p5LeadVcAssessChildPerc;
+    }
+
+    public void setP5LeadVcAssessChildPerc(String p5LeadVcAssessChildPerc) {
+        this.p5LeadVcAssessChildPerc = p5LeadVcAssessChildPerc;
+    }
+
+    public String getP5LeadVcAssessForcedPerc() {
+        return p5LeadVcAssessForcedPerc;
+    }
+
+    public void setP5LeadVcAssessForcedPerc(String p5LeadVcAssessForcedPerc) {
+        this.p5LeadVcAssessForcedPerc = p5LeadVcAssessForcedPerc;
+    }
+
+    public String getP5LeadVcAssessWagesPerc() {
+        return p5LeadVcAssessWagesPerc;
+    }
+
+    public void setP5LeadVcAssessWagesPerc(String p5LeadVcAssessWagesPerc) {
+        this.p5LeadVcAssessWagesPerc = p5LeadVcAssessWagesPerc;
+    }
+
+    public String getP5LeadVcAssessOthersPerc() {
+        return p5LeadVcAssessOthersPerc;
+    }
+
+    public void setP5LeadVcAssessOthersPerc(String p5LeadVcAssessOthersPerc) {
+        this.p5LeadVcAssessOthersPerc = p5LeadVcAssessOthersPerc;
+    }
+
+    // Principle 5 - Leadership Q4 (Value Chain Assessments)
+    private String p5LeadVcAssessShPerc;
+    private String p5LeadVcAssessDiscrimPerc;
+    private String p5LeadVcAssessChildPerc;
+    private String p5LeadVcAssessForcedPerc;
+    private String p5LeadVcAssessWagesPerc;
+    private String p5LeadVcAssessOthersPerc;
 
     // --- GETTERS AND SETTERS FOR ALL NEW FIELDS --- princple 6,7,8 and 9
     // (Generate standard getters/setters for all String fields and Lists above)

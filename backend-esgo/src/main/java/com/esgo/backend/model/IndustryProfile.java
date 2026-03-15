@@ -31,8 +31,8 @@ public class IndustryProfile {
     // --- NEW: File Storage ---
     private String reportFileName;
 
-    @Lob // Large Object for storing file data
-    @Column(length = 25000000) // Allow large files
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
     private byte[] reportFile;
 
     // --- Link to User (One User = One Profile) ---

@@ -321,33 +321,49 @@ async function handlePublish(event) {
     btn.disabled = true;
     btn.innerText = "Uploading...";
 
-    const formData = new FormData();
-    formData.append("companyName", document.getElementById('compName').value);
-    formData.append("sector", document.getElementById('compSector').value);
-    formData.append("description", document.getElementById('compDesc').value);
-    formData.append("address", document.getElementById('compAddress').value);
-    formData.append("phone", document.getElementById('compPhone').value);
-    formData.append("email", document.getElementById('compEmail').value);
-
-    formData.append("scoreE", document.getElementById('showScoreE').value);
-    formData.append("scoreS", document.getElementById('showScoreS').value);
-    formData.append("scoreG", document.getElementById('showScoreG').value);
-    formData.append("scoreAvg", document.getElementById('showScoreAvg').value);
-
-    // --- FILE HANDLING ---
-    const fileInput = document.getElementById('reportFile');
-    if (fileInput.files.length > 0) {
-        formData.append("file", fileInput.files[0]);
-    }
+    // Helper function to read the file as a Base64 string
+    const getBase64 = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
 
     try {
+        let fileBase64 = null;
+        let fileName = null;
+
+        // Grab the file if the user selected one
+        const fileInput = document.getElementById('reportFile');
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            fileName = file.name;
+            fileBase64 = await getBase64(file); // Convert to Base64 String
+        }
+
+        // Build standard JSON payload instead of FormData
+        const payload = {
+            companyName: document.getElementById('compName').value,
+            sector: document.getElementById('compSector').value,
+            description: document.getElementById('compDesc').value,
+            address: document.getElementById('compAddress').value,
+            phone: document.getElementById('compPhone').value,
+            email: document.getElementById('compEmail').value,
+            scoreE: document.getElementById('showScoreE').value,
+            scoreS: document.getElementById('showScoreS').value,
+            scoreG: document.getElementById('showScoreG').value,
+            scoreAvg: document.getElementById('showScoreAvg').value,
+            reportFileName: fileName,
+            reportFileBase64: fileBase64
+        };
+
         const response = await fetch('http://localhost:8080/api/investor/publish', {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + token
-                // NOTE: Content-Type header MUST be undefined for FormData to work
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json' // Force JSON
             },
-            body: formData
+            body: JSON.stringify(payload)
         });
 
         if (response.ok) {

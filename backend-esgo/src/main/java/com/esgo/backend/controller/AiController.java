@@ -96,8 +96,8 @@ public class AiController {
     }
 
     private String callGeminiApi(String userPrompt) throws Exception {
-        String apiKey = "AIzaSyCzU-8hDSudUa7nWywreGnxCmz2OwxZCTY";
-        String apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + apiKey;
+        String apiKey = "AIzaSyBqUOA9l0HY8Vo-4fvTsVjhdImkXjGO5F4";
+        String apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=" + apiKey;
 
         // Use a Map for the body to let Jackson handle escaping quotes in the userPrompt
         Map<String, Object> bodyMap = Map.of(
@@ -120,16 +120,24 @@ public class AiController {
         java.net.http.HttpResponse<String> response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
 
         // PARSE the Gemini response properly
+        // PARSE the Gemini response properly
         com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
         com.fasterxml.jackson.databind.JsonNode root = mapper.readTree(response.body());
 
-        // Path: candidates[0] -> content -> parts[0] -> text
+        // 1. Check if Google sent an error back
+        if (root.has("error")) {
+            String googleErrorMessage = root.path("error").path("message").asText();
+            System.err.println("GEMINI API ERROR: " + googleErrorMessage);
+            return "API Error: " + googleErrorMessage;
+        }
+
+        // 2. Path: candidates[0] -> content -> parts[0] -> text
         if (root.has("candidates") && root.get("candidates").size() > 0) {
             return root.path("candidates").get(0)
                     .path("content").path("parts").get(0)
                     .path("text").asText();
         }
 
-        return "Error: AI could not generate content.";
+        return "Error: AI could not generate content. Raw response: " + response.body();
     }
 }

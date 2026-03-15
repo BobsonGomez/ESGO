@@ -1,7 +1,10 @@
 const currentReportId = localStorage.getItem("currentReportId");
 
-// --- INITIALIZATION ---
+// ============================================================================
+// --- INITIALIZATION & DATA FETCHING ---
+// ============================================================================
 document.addEventListener("DOMContentLoaded", function() {
+    // 1. Check for active report
     if (!currentReportId) {
         alert("No report started. Redirecting to Part 1.");
         window.location.href = "create_report.html";
@@ -10,627 +13,471 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const token = localStorage.getItem("token");
 
-    // Fetch existing data
+    // 2. Fetch existing data from backend
     fetch(`http://localhost:8080/api/report/${currentReportId}`, {
         method: "GET",
         headers: { "Authorization": "Bearer " + token }
     })
-        .then(res => res.json())
-        .then(data => {
-            console.log("Loaded Part 3 Data:", data);
+    .then(res => res.json())
+    .then(data => {
+        console.log("Loaded Part 3 Data:", data);
 
-            // 1. Fill Standard Fields (Energy, Emissions, Waste, Notes)
-            const fields = [
-                "electricityConsumption", "fuelConsumption", "energyIntensity",
-                "scope1Emissions", "scope2Emissions", "emissionIntensity",
-                "plasticWaste", "eWaste", "hazardousWaste",
-                "totalWasteGenerated", "totalWasteRecycled",
-                "trainingNote", "legalActionNote",
+        // ==========================================================
+        // 3A. BATCH LOAD STANDARD TEXT / SELECT FIELDS
+        // ==========================================================
+        const fields = [
+            // --- Core Environmental Fields ---
+            "electricityConsumption", "fuelConsumption", "energyIntensity",
+            "scope1Emissions", "scope2Emissions", "emissionIntensity",
+            "plasticWaste", "eWaste", "hazardousWaste",
+            "totalWasteGenerated", "totalWasteRecycled",
 
-                "antiCorruptionPolicy", "antiCorruptionLink", "antiCorruptionDetails",
+            // --- Principle 1 Notes & Policies ---
+            "trainingNote", "legalActionNote",
+            "antiCorruptionPolicy", "antiCorruptionLink", "antiCorruptionDetails",
+            "correctiveActionDetails", "leadershipIndicatorNote",
+            "conflictOfInterestProcess", "conflictOfInterestDetails",
 
-                "disciplinaryFyCurrentHeader", "disciplinaryFyPreviousHeader",
-                "discDirectorsCurr", "discKmpsCurr", "discEmployeesCurr", "discWorkersCurr",
-                "discDirectorsPrev", "discKmpsPrev", "discEmployeesPrev", "discWorkersPrev",
+            // --- Principle 1: Disciplinary & COI Tables (Direct Inputs) ---
+            "disciplinaryFyCurrentHeader", "disciplinaryFyPreviousHeader",
+            "discDirectorsCurr", "discKmpsCurr", "discEmployeesCurr", "discWorkersCurr",
+            "discDirectorsPrev", "discKmpsPrev", "discEmployeesPrev", "discWorkersPrev",
+            "coiDirectorsCurrNum", "coiDirectorsCurrRem", "coiDirectorsPrevNum", "coiDirectorsPrevRem",
+            "coiKmpsCurrNum", "coiKmpsCurrRem", "coiKmpsPrevNum", "coiKmpsPrevRem",
 
-                "coiDirectorsCurrNum", "coiDirectorsCurrRem", "coiDirectorsPrevNum", "coiDirectorsPrevRem",
-                "coiKmpsCurrNum", "coiKmpsCurrRem", "coiKmpsPrevNum", "coiKmpsPrevRem",
+            // --- Principle 1: Q8 Accounts Payable ---
+            "accountsPayableCurr", "accountsPayablePrev",
 
-                "correctiveActionDetails",
-                "leadershipIndicatorNote",
+            // --- Principle 1: Q9 Openness of Business ---
+            "purTradingPercCurr", "purTradingPercPrev", "purTradingNumCurr", "purTradingNumPrev", "purTop10PercCurr", "purTop10PercPrev",
+            "salesDealerPercCurr", "salesDealerPercPrev", "salesDealerNumCurr", "salesDealerNumPrev", "salesTop10PercCurr", "salesTop10PercPrev",
+            "rptPurCurr", "rptPurPrev", "rptSalesCurr", "rptSalesPrev", "rptLoansCurr", "rptLoansPrev", "rptInvestCurr", "rptInvestPrev",
+            "opennessNote",
 
-                "conflictOfInterestProcess", "conflictOfInterestDetails",
+            // --- Principle 2 Fields ---
+            "rdCurrentYear", "rdPreviousYear", "rdDetails",
+            "capexCurrentYear", "capexPreviousYear", "capexDetails",
+            "principle2Note", "sustainableSourcingProcedures", "sustainableSourcingDetails",
+            "sustainableSourcingPercentage", "sustainableSourcingRemarks",
+            "reclaimProcessDetails", "eprDetails",
 
-                "rdCurrentYear", "rdPreviousYear", "rdDetails",
-                "capexCurrentYear", "capexPreviousYear", "capexDetails",
-                "principle2Note",
+            // --- Principle 3 Fields (Wellbeing, Retirement, Accessibility) ---
+            "empWellBeingNote", "workWellBeingNote", "wbCostCurr", "wbCostPrev", "wbCostNote",
+            "retirementBenefitNote", "accessibilityDetails",
+            "equalOppPolicy", "equalOppLink", "equalOppDetails",
+            "plEmpMaleReturn", "plEmpMaleRetain", "plWorkMaleReturn", "plWorkMaleRetain",
+            "plEmpFemaleReturn", "plEmpFemaleRetain", "plWorkFemaleReturn", "plWorkFemaleRetain",
+            "plEmpTotalReturn", "plEmpTotalRetain", "plWorkTotalReturn", "plWorkTotalRetain",
+            "parentalLeaveNote", "grievancePermWorkers", "grievanceTempWorkers",
+            "grievancePermEmployees", "grievanceTempEmployees",
 
-                "sustainableSourcingProcedures", "sustainableSourcingDetails",
-                "sustainableSourcingPercentage", "sustainableSourcingRemarks",
+            // --- Principle 3: Union Membership ---
+            "unionCurrEmpTotalA", "unionCurrEmpUnionB", "unionCurrEmpPerc",
+            "unionCurrEmpMaleTotal", "unionCurrEmpMaleUnion", "unionCurrEmpMalePerc",
+            "unionCurrEmpFemaleTotal", "unionCurrEmpFemaleUnion", "unionCurrEmpFemalePerc",
+            "unionCurrWorkTotalA", "unionCurrWorkUnionB", "unionCurrWorkPerc",
+            "unionCurrWorkMaleTotal", "unionCurrWorkMaleUnion", "unionCurrWorkMalePerc",
+            "unionCurrWorkFemaleTotal", "unionCurrWorkFemaleUnion", "unionCurrWorkFemalePerc",
+            "unionPrevEmpTotalC", "unionPrevEmpUnionD", "unionPrevEmpPerc",
+            "unionPrevEmpMaleTotal", "unionPrevEmpMaleUnion", "unionPrevEmpMalePerc",
+            "unionPrevEmpFemaleTotal", "unionPrevEmpFemaleUnion", "unionPrevEmpFemalePerc",
+            "unionPrevWorkTotalC", "unionPrevWorkUnionD", "unionPrevWorkPerc",
+            "unionPrevWorkMaleTotal", "unionPrevWorkMaleUnion", "unionPrevWorkMalePerc",
+            "unionPrevWorkFemaleTotal", "unionPrevWorkFemaleUnion", "unionPrevWorkFemalePerc",
+            "unionMembershipNote",
 
-                "reclaimProcessDetails",
+            // --- Principle 3: Training Details (Q8) ---
+            "trainEmpMaleTotal", "trainEmpMaleHealthNo", "trainEmpMaleHealthPerc", "trainEmpMaleSkillNo", "trainEmpMaleSkillPerc",
+            "trainEmpFemaleTotal", "trainEmpFemaleHealthNo", "trainEmpFemaleHealthPerc", "trainEmpFemaleSkillNo", "trainEmpFemaleSkillPerc",
+            "trainEmpGenTotal", "trainEmpGenHealthNo", "trainEmpGenHealthPerc", "trainEmpGenSkillNo", "trainEmpGenSkillPerc",
+            "trainEmpMaleTotalPrev", "trainEmpMaleHealthNoPrev", "trainEmpMaleHealthPercPrev", "trainEmpMaleSkillNoPrev", "trainEmpMaleSkillPercPrev",
+            "trainEmpFemaleTotalPrev", "trainEmpFemaleHealthNoPrev", "trainEmpFemaleHealthPercPrev", "trainEmpFemaleSkillNoPrev", "trainEmpFemaleSkillPercPrev",
+            "trainEmpGenTotalPrev", "trainEmpGenHealthNoPrev", "trainEmpGenHealthPercPrev", "trainEmpGenSkillNoPrev", "trainEmpGenSkillPercPrev",
+            "trainWorkMaleTotal", "trainWorkMaleHealthNo", "trainWorkMaleHealthPerc", "trainWorkMaleSkillNo", "trainWorkMaleSkillPerc",
+            "trainWorkFemaleTotal", "trainWorkFemaleHealthNo", "trainWorkFemaleHealthPerc", "trainWorkFemaleSkillNo", "trainWorkFemaleSkillPerc",
+            "trainWorkGenTotal", "trainWorkGenHealthNo", "trainWorkGenHealthPerc", "trainWorkGenSkillNo", "trainWorkGenSkillPerc",
+            "trainWorkMaleTotalPrev", "trainWorkMaleHealthNoPrev", "trainWorkMaleHealthPercPrev", "trainWorkMaleSkillNoPrev", "trainWorkMaleSkillPercPrev",
+            "trainWorkFemaleTotalPrev", "trainWorkFemaleHealthNoPrev", "trainWorkFemaleHealthPercPrev", "trainWorkFemaleSkillNoPrev", "trainWorkFemaleSkillPercPrev",
+            "trainWorkGenTotalPrev", "trainWorkGenHealthNoPrev", "trainWorkGenHealthPercPrev", "trainWorkGenSkillNoPrev", "trainWorkGenSkillPercPrev",
+            "trainingDetailsNote",
+            "trainEmpOtherTotal", "trainEmpOtherHealthNo", "trainEmpOtherHealthPerc", "trainEmpOtherSkillNo", "trainEmpOtherSkillPerc",
+            "trainEmpOtherTotalPrev", "trainEmpOtherHealthNoPrev", "trainEmpOtherHealthPercPrev", "trainEmpOtherSkillNoPrev", "trainEmpOtherSkillPercPrev",
+            "trainWorkOtherTotal", "trainWorkOtherHealthNo", "trainWorkOtherHealthPerc", "trainWorkOtherSkillNo", "trainWorkOtherSkillPerc",
+            "trainWorkOtherTotalPrev", "trainWorkOtherHealthNoPrev", "trainWorkOtherHealthPercPrev", "trainWorkOtherSkillNoPrev", "trainWorkOtherSkillPercPrev",
 
-                "eprDetails","retirementBenefitNote",
+            // --- Principle 3: Performance Reviews (Q9) ---
+            "reviewDetailsNote",
+            "revEmpMaleTotal", "revEmpMaleCovered", "revEmpMalePerc", "revEmpFemTotal", "revEmpFemCovered", "revEmpFemPerc",
+            "revEmpOthTotal", "revEmpOthCovered", "revEmpOthPerc", "revEmpGenTotal", "revEmpGenCovered", "revEmpGenPerc",
+            "revEmpMaleTotalPrev", "revEmpMaleCoveredPrev", "revEmpMalePercPrev", "revEmpFemTotalPrev", "revEmpFemCoveredPrev", "revEmpFemPercPrev",
+            "revEmpOthTotalPrev", "revEmpOthCoveredPrev", "revEmpOthPercPrev", "revEmpGenTotalPrev", "revEmpGenCoveredPrev", "revEmpGenPercPrev",
+            "revWorkMaleTotal", "revWorkMaleCovered", "revWorkMalePerc", "revWorkFemTotal", "revWorkFemCovered", "revWorkFemPerc",
+            "revWorkOthTotal", "revWorkOthCovered", "revWorkOthPerc", "revWorkGenTotal", "revWorkGenCovered", "revWorkGenPerc",
+            "revWorkMaleTotalPrev", "revWorkMaleCoveredPrev", "revWorkMalePercPrev", "revWorkFemTotalPrev", "revWorkFemCoveredPrev", "revWorkFemPercPrev",
+            "revWorkOthTotalPrev", "revWorkOthCoveredPrev", "revWorkOthPercPrev", "revWorkGenTotalPrev", "revWorkGenCoveredPrev", "revWorkGenPercPrev",
 
-                "accessibilityDetails",
+            // --- Principle 3: Safety & Health (Q10 - Q15) ---
+            "healthSafetySystem", "hazardIdentification", "hazardReporting", "medicalAccess",
+            "safetyLtifrEmpCurr", "safetyLtifrEmpPrev", "safetyLtifrWorkCurr", "safetyLtifrWorkPrev",
+            "safetyTotalInjEmpCurr", "safetyTotalInjEmpPrev", "safetyTotalInjWorkCurr", "safetyTotalInjWorkPrev",
+            "safetyFatalEmpCurr", "safetyFatalEmpPrev", "safetyFatalWorkCurr", "safetyFatalWorkPrev",
+            "safetyHighConEmpCurr", "safetyHighConEmpPrev", "safetyHighConWorkCurr", "safetyHighConWorkPrev",
+            "safetyPermDisEmpCurr", "safetyPermDisEmpPrev", "safetyPermDisWorkCurr", "safetyPermDisWorkPrev",
+            "safetyIncidentsNote",
+            "wcFiledCurr", "wcPendingCurr", "wcRemarksCurr", "wcFiledPrev", "wcPendingPrev", "wcRemarksPrev",
+            "hsFiledCurr", "hsPendingCurr", "hsRemarksCurr", "hsFiledPrev", "hsPendingPrev", "hsRemarksPrev",
+            "workerComplaintsNote",
+            "assessmentHealthPerc", "assessmentWorkingPerc", "assessmentNote",
+            "safetyCorrectiveActions",
+            "lifeInsuranceEmployees", "lifeInsuranceWorkers", "lifeInsuranceDetails",
+            "statutoryDuesMeasures",
+            "rehabEmpAffCurr", "rehabEmpAffPrev", "rehabEmpPlacedCurr", "rehabEmpPlacedPrev",
+            "rehabWorkAffCurr", "rehabWorkAffPrev", "rehabWorkPlacedCurr", "rehabWorkPlacedPrev",
+            "rehabilitationNote", "transitionAssistanceDetails",
+            "valueChainAssessmentNote", "vcHealthSafetyPerc", "vcWorkingCondPerc",
+            "vcCorrectiveActionIntro", // Note: Array is handled separately below
+                "transitionAssistanceYN", "transitionAssistanceDetails", "valueChainAssessmentNote",
 
-                "equalOppPolicy", "equalOppLink", "equalOppDetails",
-                "accessibilityDetails",
+            // --- Principle 4 Fields ---
+            "principle4Q1Intro", "principle4Q1Conclusion", "stakeholderNote",
+            "consultationProcessDetails", "stakeholderConsultationUsed", "stakeholderConsultationDetails",
+            "vulnerableGroupIntro", "vulnerableGroupConclusion",
 
-                "plEmpMaleReturn", "plEmpMaleRetain", "plWorkMaleReturn", "plWorkMaleRetain",
-                "plEmpFemaleReturn", "plEmpFemaleRetain", "plWorkFemaleReturn", "plWorkFemaleRetain",
-                "plEmpTotalReturn", "plEmpTotalRetain", "plWorkTotalReturn", "plWorkTotalRetain",
-                "parentalLeaveNote",
+            // --- Principle 5 Fields ---
+            "hrEmpPermTotalCurr", "hrEmpPermCovCurr", "hrEmpPermPercCurr",
+            "hrEmpTempTotalCurr", "hrEmpTempCovCurr", "hrEmpTempPercCurr",
+            "hrEmpGrandTotalCurr", "hrEmpGrandCovCurr", "hrEmpGrandPercCurr",
+            "hrEmpPermTotalPrev", "hrEmpPermCovPrev", "hrEmpPermPercPrev",
+            "hrEmpTempTotalPrev", "hrEmpTempCovPrev", "hrEmpTempPercPrev",
+            "hrEmpGrandTotalPrev", "hrEmpGrandCovPrev", "hrEmpGrandPercPrev",
+            "hrWorkPermTotalCurr", "hrWorkPermCovCurr", "hrWorkPermPercCurr",
+            "hrWorkTempTotalCurr", "hrWorkTempCovCurr", "hrWorkTempPercCurr",
+            "hrWorkGrandTotalCurr", "hrWorkGrandCovCurr", "hrWorkGrandPercCurr",
+            "hrWorkPermTotalPrev", "hrWorkPermCovPrev", "hrWorkPermPercPrev",
+            "hrWorkTempTotalPrev", "hrWorkTempCovPrev", "hrWorkTempPercPrev",
+            "hrWorkGrandTotalPrev", "hrWorkGrandCovPrev", "hrWorkGrandPercPrev",
+            "hrTrainingNote", "minWageNote","hrComplaintsNote",
 
-                "grievancePermWorkers", "grievanceTempWorkers",
-                "grievancePermEmployees", "grievanceTempEmployees",
-                "parentalLeaveNote",
+            // P5: Min Wages (Massive block, simplified mapping)
+            "mwEmpPermMaleTotalCurr", "mwEmpPermMaleEqNoCurr", "mwEmpPermMaleEqPercCurr", "mwEmpPermMaleMoreNoCurr", "mwEmpPermMaleMorePercCurr",
+            "mwEmpPermMaleTotalPrev", "mwEmpPermMaleEqNoPrev", "mwEmpPermMaleEqPercPrev", "mwEmpPermMaleMoreNoPrev", "mwEmpPermMaleMorePercPrev",
+            "mwEmpPermFemTotalCurr", "mwEmpPermFemEqNoCurr", "mwEmpPermFemEqPercCurr", "mwEmpPermFemMoreNoCurr", "mwEmpPermFemMorePercCurr",
+            "mwEmpPermFemTotalPrev", "mwEmpPermFemEqNoPrev", "mwEmpPermFemEqPercPrev", "mwEmpPermFemMoreNoPrev", "mwEmpPermFemMorePercPrev",
+            "mwEmpPermOthTotalCurr", "mwEmpPermOthEqNoCurr", "mwEmpPermOthEqPercCurr", "mwEmpPermOthMoreNoCurr", "mwEmpPermOthMorePercCurr",
+            "mwEmpPermOthTotalPrev", "mwEmpPermOthEqNoPrev", "mwEmpPermOthEqPercPrev", "mwEmpPermOthMoreNoPrev", "mwEmpPermOthMorePercPrev",
+            "mwEmpTempMaleTotalCurr", "mwEmpTempMaleEqNoCurr", "mwEmpTempMaleEqPercCurr", "mwEmpTempMaleMoreNoCurr", "mwEmpTempMaleMorePercCurr",
+            "mwEmpTempMaleTotalPrev", "mwEmpTempMaleEqNoPrev", "mwEmpTempMaleEqPercPrev", "mwEmpTempMaleMoreNoPrev", "mwEmpTempMaleMorePercPrev",
+            "mwEmpTempFemTotalCurr", "mwEmpTempFemEqNoCurr", "mwEmpTempFemEqPercCurr", "mwEmpTempFemMoreNoCurr", "mwEmpTempFemMorePercCurr",
+            "mwEmpTempFemTotalPrev", "mwEmpTempFemEqNoPrev", "mwEmpTempFemEqPercPrev", "mwEmpTempFemMoreNoPrev", "mwEmpTempFemMorePercPrev",
+            "mwEmpTempOthTotalCurr", "mwEmpTempOthEqNoCurr", "mwEmpTempOthEqPercCurr", "mwEmpTempOthMoreNoCurr", "mwEmpTempOthMorePercCurr",
+            "mwEmpTempOthTotalPrev", "mwEmpTempOthEqNoPrev", "mwEmpTempOthEqPercPrev", "mwEmpTempOthMoreNoPrev", "mwEmpTempOthMorePercPrev",
+            "mwWorkPermMaleTotalCurr", "mwWorkPermMaleEqNoCurr", "mwWorkPermMaleEqPercCurr", "mwWorkPermMaleMoreNoCurr", "mwWorkPermMaleMorePercCurr",
+            "mwWorkPermMaleTotalPrev", "mwWorkPermMaleEqNoPrev", "mwWorkPermMaleEqPercPrev", "mwWorkPermMaleMoreNoPrev", "mwWorkPermMaleMorePercPrev",
+            "mwWorkPermFemTotalCurr", "mwWorkPermFemEqNoCurr", "mwWorkPermFemEqPercCurr", "mwWorkPermFemMoreNoCurr", "mwWorkPermFemMorePercCurr",
+            "mwWorkPermFemTotalPrev", "mwWorkPermFemEqNoPrev", "mwWorkPermFemEqPercPrev", "mwWorkPermFemMoreNoPrev", "mwWorkPermFemMorePercPrev",
+            "mwWorkPermOthTotalCurr", "mwWorkPermOthEqNoCurr", "mwWorkPermOthEqPercCurr", "mwWorkPermOthMoreNoCurr", "mwWorkPermOthMorePercCurr",
+            "mwWorkPermOthTotalPrev", "mwWorkPermOthEqNoPrev", "mwWorkPermOthEqPercPrev", "mwWorkPermOthMoreNoPrev", "mwWorkPermOthMorePercPrev",
+            "mwWorkTempMaleTotalCurr", "mwWorkTempMaleEqNoCurr", "mwWorkTempMaleEqPercCurr", "mwWorkTempMaleMoreNoCurr", "mwWorkTempMaleMorePercCurr",
+            "mwWorkTempMaleTotalPrev", "mwWorkTempMaleEqNoPrev", "mwWorkTempMaleEqPercPrev", "mwWorkTempMaleMoreNoPrev", "mwWorkTempMaleMorePercPrev",
+            "mwWorkTempFemTotalCurr", "mwWorkTempFemEqNoCurr", "mwWorkTempFemEqPercCurr", "mwWorkTempFemMoreNoCurr", "mwWorkTempFemMorePercCurr",
+            "mwWorkTempFemTotalPrev", "mwWorkTempFemEqNoPrev", "mwWorkTempFemEqPercPrev", "mwWorkTempFemMoreNoPrev", "mwWorkTempFemMorePercPrev",
+            "mwWorkTempOthTotalCurr", "mwWorkTempOthEqNoCurr", "mwWorkTempOthEqPercCurr", "mwWorkTempOthMoreNoCurr", "mwWorkTempOthMorePercCurr",
+            "mwWorkTempOthTotalPrev", "mwWorkTempOthEqNoPrev", "mwWorkTempOthEqPercPrev", "mwWorkTempOthMoreNoPrev", "mwWorkTempOthMorePercPrev",
 
-                // --- Q7 UNION MEMBERSHIP FIELDS ---
-                "unionCurrEmpTotalA", "unionCurrEmpUnionB", "unionCurrEmpPerc",
-                "unionCurrEmpMaleTotal", "unionCurrEmpMaleUnion", "unionCurrEmpMalePerc",
-                "unionCurrEmpFemaleTotal", "unionCurrEmpFemaleUnion", "unionCurrEmpFemalePerc",
+            // P5: Remuneration & Disclosures
+            "remBodMaleNum", "remBodMaleMedian", "remBodFemNum", "remBodFemMedian",
+            "remKmpMaleNum", "remKmpMaleMedian", "remKmpFemNum", "remKmpFemMedian",
+            "remEmpMaleNum", "remEmpMaleMedian", "remEmpFemNum", "remEmpFemMedian",
+            "remWorkMaleNum", "remWorkMaleMedian", "remWorkFemNum", "remWorkFemMedian",
+            "remunerationNote", "grossWagesFemalePercCurr", "grossWagesFemalePercPrev", "grossWagesNote",
+            "humanRightsFocalPoint", "humanRightsFocalDetails", "humanRightsGrievanceMechanism",
 
-                // Permanent Workers
-                "unionCurrWorkTotalA", "unionCurrWorkUnionB", "unionCurrWorkPerc",
-                "unionCurrWorkMaleTotal", "unionCurrWorkMaleUnion", "unionCurrWorkMalePerc",
-                "unionCurrWorkFemaleTotal", "unionCurrWorkFemaleUnion", "unionCurrWorkFemalePerc",
+            // P5: Complaints
+            "compShFiledCurr", "compShPendingCurr", "compShRemarksCurr", "compShFiledPrev", "compShPendingPrev", "compShRemarksPrev",
+            "compDiscrimFiledCurr", "compDiscrimPendingCurr", "compDiscrimRemarksCurr", "compDiscrimFiledPrev", "compDiscrimPendingPrev", "compDiscrimRemarksPrev",
+            "compChildFiledCurr", "compChildPendingCurr", "compChildRemarksCurr", "compChildFiledPrev", "compChildPendingPrev", "compChildRemarksPrev",
+            "compForcedFiledCurr", "compForcedPendingCurr", "compForcedRemarksCurr", "compForcedFiledPrev", "compForcedPendingPrev", "compForcedRemarksPrev",
+            "compWagesFiledCurr", "compWagesPendingCurr", "compWagesRemarksCurr", "compWagesFiledPrev", "compWagesPendingPrev", "compWagesRemarksPrev",
+            "compOtherHrFiledCurr", "compOtherHrPendingCurr", "compOtherHrRemarksCurr", "compOtherHrFiledPrev", "compOtherHrPendingPrev", "compOtherHrRemarksPrev",
 
-                // Previous Year Fields (Employees)
-                "unionPrevEmpTotalC", "unionPrevEmpUnionD", "unionPrevEmpPerc",
-                "unionPrevEmpMaleTotal", "unionPrevEmpMaleUnion", "unionPrevEmpMalePerc",
-                "unionPrevEmpFemaleTotal", "unionPrevEmpFemaleUnion", "unionPrevEmpFemalePerc",
+            // P5: POSH & Contracts
+            "poshTotalCurr", "poshTotalPrev", "poshPercCurr", "poshPercPrev", "poshUpheldCurr", "poshUpheldPrev", "poshNote",
+            "protectionMechanismsIntro", "humanRightsContracts", "humanRightsContractsDetails",
+            "assessChildLabourPerc", "assessForcedLabourPerc", "assessSexualHarassmentPerc",
+            "assessDiscriminationPerc", "assessWagesPerc", "assessOthersPerc", "assessmentsP5Note",
+            "assessCorrectiveIntro",
 
-                // Previous Year Fields (Workers)
-                "unionPrevWorkTotalC", "unionPrevWorkUnionD", "unionPrevWorkPerc",
-                "unionPrevWorkMaleTotal", "unionPrevWorkMaleUnion", "unionPrevWorkMalePerc",
-                "unionPrevWorkFemaleTotal", "unionPrevWorkFemaleUnion", "unionPrevWorkFemalePerc",
+            // P5: Leadership
+            "p5LeadProcessModIntro", "p5LeadDueDiligenceScope", "p5LeadPremisesAccess",
+            , "p5LeadValueChainCorrectiveActions","p5LeadVcAssessShPerc","p5LeadVcAssessDiscrimPerc",
+                                                      "p5LeadVcAssessChildPerc",
+                                                      "p5LeadVcAssessForcedPerc",
+                                                      "p5LeadVcAssessWagesPerc",
+                                                      "p5LeadVcAssessOthersPerc",
+        ];
 
-                // Note
-                "unionMembershipNote",
+        // Apply all standard text/number fields to HTML
+        fields.forEach(id => {
+            if(document.getElementById(id)) {
+                document.getElementById(id).value = data[id] || "";
+            }
+        });
 
-                // Q8 EMPLOYEES
-                "trainEmpMaleTotal", "trainEmpMaleHealthNo", "trainEmpMaleHealthPerc", "trainEmpMaleSkillNo", "trainEmpMaleSkillPerc",
-                "trainEmpFemaleTotal", "trainEmpFemaleHealthNo", "trainEmpFemaleHealthPerc", "trainEmpFemaleSkillNo", "trainEmpFemaleSkillPerc",
-                "trainEmpGenTotal", "trainEmpGenHealthNo", "trainEmpGenHealthPerc", "trainEmpGenSkillNo", "trainEmpGenSkillPerc",
-
-                "trainEmpMaleTotalPrev", "trainEmpMaleHealthNoPrev", "trainEmpMaleHealthPercPrev", "trainEmpMaleSkillNoPrev", "trainEmpMaleSkillPercPrev",
-                "trainEmpFemaleTotalPrev", "trainEmpFemaleHealthNoPrev", "trainEmpFemaleHealthPercPrev", "trainEmpFemaleSkillNoPrev", "trainEmpFemaleSkillPercPrev",
-                "trainEmpGenTotalPrev", "trainEmpGenHealthNoPrev", "trainEmpGenHealthPercPrev", "trainEmpGenSkillNoPrev", "trainEmpGenSkillPercPrev",
-
-                // Q8 WORKERS
-                "trainWorkMaleTotal", "trainWorkMaleHealthNo", "trainWorkMaleHealthPerc", "trainWorkMaleSkillNo", "trainWorkMaleSkillPerc",
-                "trainWorkFemaleTotal", "trainWorkFemaleHealthNo", "trainWorkFemaleHealthPerc", "trainWorkFemaleSkillNo", "trainWorkFemaleSkillPerc",
-                "trainWorkGenTotal", "trainWorkGenHealthNo", "trainWorkGenHealthPerc", "trainWorkGenSkillNo", "trainWorkGenSkillPerc",
-
-                "trainWorkMaleTotalPrev", "trainWorkMaleHealthNoPrev", "trainWorkMaleHealthPercPrev", "trainWorkMaleSkillNoPrev", "trainWorkMaleSkillPercPrev",
-                "trainWorkFemaleTotalPrev", "trainWorkFemaleHealthNoPrev", "trainWorkFemaleHealthPercPrev", "trainWorkFemaleSkillNoPrev", "trainWorkFemaleSkillPercPrev",
-                "trainWorkGenTotalPrev", "trainWorkGenHealthNoPrev", "trainWorkGenHealthPercPrev", "trainWorkGenSkillNoPrev", "trainWorkGenSkillPercPrev",
-
-                "trainingDetailsNote",
-
-                "trainEmpOtherTotal", "trainEmpOtherHealthNo", "trainEmpOtherHealthPerc", "trainEmpOtherSkillNo", "trainEmpOtherSkillPerc",
-                "trainEmpOtherTotalPrev", "trainEmpOtherHealthNoPrev", "trainEmpOtherHealthPercPrev", "trainEmpOtherSkillNoPrev", "trainEmpOtherSkillPercPrev",
-
-                "trainWorkOtherTotal", "trainWorkOtherHealthNo", "trainWorkOtherHealthPerc", "trainWorkOtherSkillNo", "trainWorkOtherSkillPerc",
-                "trainWorkOtherTotalPrev", "trainWorkOtherHealthNoPrev", "trainWorkOtherHealthPercPrev", "trainWorkOtherSkillNoPrev", "trainWorkOtherSkillPercPrev",
-
-                // Q9 PERFORMANCE REVIEWS
-                "reviewDetailsNote",
-
-                // Employees
-                "revEmpMaleTotal", "revEmpMaleCovered", "revEmpMalePerc",
-                "revEmpFemTotal", "revEmpFemCovered", "revEmpFemPerc",
-                "revEmpOthTotal", "revEmpOthCovered", "revEmpOthPerc",
-                "revEmpGenTotal", "revEmpGenCovered", "revEmpGenPerc",
-
-                "revEmpMaleTotalPrev", "revEmpMaleCoveredPrev", "revEmpMalePercPrev",
-                "revEmpFemTotalPrev", "revEmpFemCoveredPrev", "revEmpFemPercPrev",
-                "revEmpOthTotalPrev", "revEmpOthCoveredPrev", "revEmpOthPercPrev",
-                "revEmpGenTotalPrev", "revEmpGenCoveredPrev", "revEmpGenPercPrev",
-
-                // Workers
-                "revWorkMaleTotal", "revWorkMaleCovered", "revWorkMalePerc",
-                "revWorkFemTotal", "revWorkFemCovered", "revWorkFemPerc",
-                "revWorkOthTotal", "revWorkOthCovered", "revWorkOthPerc",
-                "revWorkGenTotal", "revWorkGenCovered", "revWorkGenPerc",
-
-                "revWorkMaleTotalPrev", "revWorkMaleCoveredPrev", "revWorkMalePercPrev",
-                "revWorkFemTotalPrev", "revWorkFemCoveredPrev", "revWorkFemPercPrev",
-                "revWorkOthTotalPrev", "revWorkOthCoveredPrev", "revWorkOthPercPrev",
-                "revWorkGenTotalPrev", "revWorkGenCoveredPrev", "revWorkGenPercPrev",
-
-                "healthSafetySystem", "hazardIdentification",
-                "hazardReporting", "medicalAccess",
-
-                // Q11 Safety
-                "safetyLtifrEmpCurr", "safetyLtifrEmpPrev", "safetyLtifrWorkCurr", "safetyLtifrWorkPrev",
-                "safetyTotalInjEmpCurr", "safetyTotalInjEmpPrev", "safetyTotalInjWorkCurr", "safetyTotalInjWorkPrev",
-                "safetyFatalEmpCurr", "safetyFatalEmpPrev", "safetyFatalWorkCurr", "safetyFatalWorkPrev",
-                "safetyHighConEmpCurr", "safetyHighConEmpPrev", "safetyHighConWorkCurr", "safetyHighConWorkPrev",
-                "safetyPermDisEmpCurr", "safetyPermDisEmpPrev", "safetyPermDisWorkCurr", "safetyPermDisWorkPrev",
-                "safetyIncidentsNote",
-
-                "wcFiledCurr", "wcPendingCurr", "wcRemarksCurr",
-                "wcFiledPrev", "wcPendingPrev", "wcRemarksPrev",
-                "hsFiledCurr", "hsPendingCurr", "hsRemarksCurr",
-                "hsFiledPrev", "hsPendingPrev", "hsRemarksPrev",
-                "workerComplaintsNote",
-
-                "assessmentHealthPerc", "assessmentWorkingPerc", "assessmentNote",
-                "workerComplaintsNote",
-
-                "safetyCorrectiveActions",
-                "assessmentNote",
-
-                "lifeInsuranceEmployees", "lifeInsuranceWorkers", "lifeInsuranceDetails", // <--- ADD THESE
-                "safetyCorrectiveActions",
-
-                "statutoryDuesMeasures",
-                "lifeInsuranceDetails",
-
-                "rehabEmpAffCurr", "rehabEmpAffPrev", "rehabEmpPlacedCurr", "rehabEmpPlacedPrev",
-                "rehabWorkAffCurr", "rehabWorkAffPrev", "rehabWorkPlacedCurr", "rehabWorkPlacedPrev",
-                "rehabilitationNote",
-                "statutoryDuesMeasures",
-
-                "transitionAssistanceDetails",
-                "rehabilitationNote",
-
-                "valueChainAssessmentNote", "vcHealthSafetyPerc", "vcWorkingCondPerc",
-                "transitionAssistanceDetails",
-
-                "consultationProcessDetails",
-                "principle4Q1Intro", "principle4Q1Conclusion",
-
-                "stakeholderConsultationUsed", "stakeholderConsultationDetails",
-                "consultationProcessDetails",
-
-                // 1. Employees (Current)
-                "hrEmpPermTotalCurr", "hrEmpPermCovCurr", "hrEmpPermPercCurr",
-                "hrEmpTempTotalCurr", "hrEmpTempCovCurr", "hrEmpTempPercCurr",
-                "hrEmpGrandTotalCurr", "hrEmpGrandCovCurr", "hrEmpGrandPercCurr",
-
-                // 2. Employees (Previous)
-                "hrEmpPermTotalPrev", "hrEmpPermCovPrev", "hrEmpPermPercPrev",
-                "hrEmpTempTotalPrev", "hrEmpTempCovPrev", "hrEmpTempPercPrev",
-                "hrEmpGrandTotalPrev", "hrEmpGrandCovPrev", "hrEmpGrandPercPrev",
-
-                // 3. Workers (Current)
-                "hrWorkPermTotalCurr", "hrWorkPermCovCurr", "hrWorkPermPercCurr",
-                "hrWorkTempTotalCurr", "hrWorkTempCovCurr", "hrWorkTempPercCurr",
-                "hrWorkGrandTotalCurr", "hrWorkGrandCovCurr", "hrWorkGrandPercCurr",
-
-                // 4. Workers (Previous)
-                "hrWorkPermTotalPrev", "hrWorkPermCovPrev", "hrWorkPermPercPrev",
-                "hrWorkTempTotalPrev", "hrWorkTempCovPrev", "hrWorkTempPercPrev",
-                "hrWorkGrandTotalPrev", "hrWorkGrandCovPrev", "hrWorkGrandPercPrev",
-
-                // Note
-                "hrTrainingNote",
-
-                "minWageNote",
-
-                // --- 1. EMPLOYEES: PERMANENT ---
-                // Male (Current)
-                "mwEmpPermMaleTotalCurr", "mwEmpPermMaleEqNoCurr", "mwEmpPermMaleEqPercCurr", "mwEmpPermMaleMoreNoCurr", "mwEmpPermMaleMorePercCurr",
-                // Male (Previous)
-                "mwEmpPermMaleTotalPrev", "mwEmpPermMaleEqNoPrev", "mwEmpPermMaleEqPercPrev", "mwEmpPermMaleMoreNoPrev", "mwEmpPermMaleMorePercPrev",
-                // Female (Current)
-                "mwEmpPermFemTotalCurr", "mwEmpPermFemEqNoCurr", "mwEmpPermFemEqPercCurr", "mwEmpPermFemMoreNoCurr", "mwEmpPermFemMorePercCurr",
-                // Female (Previous)
-                "mwEmpPermFemTotalPrev", "mwEmpPermFemEqNoPrev", "mwEmpPermFemEqPercPrev", "mwEmpPermFemMoreNoPrev", "mwEmpPermFemMorePercPrev",
-                // Others (Current)
-                "mwEmpPermOthTotalCurr", "mwEmpPermOthEqNoCurr", "mwEmpPermOthEqPercCurr", "mwEmpPermOthMoreNoCurr", "mwEmpPermOthMorePercCurr",
-                // Others (Previous)
-                "mwEmpPermOthTotalPrev", "mwEmpPermOthEqNoPrev", "mwEmpPermOthEqPercPrev", "mwEmpPermOthMoreNoPrev", "mwEmpPermOthMorePercPrev",
-
-                // --- 2. EMPLOYEES: TEMPORARY ---
-                // Male
-                "mwEmpTempMaleTotalCurr", "mwEmpTempMaleEqNoCurr", "mwEmpTempMaleEqPercCurr", "mwEmpTempMaleMoreNoCurr", "mwEmpTempMaleMorePercCurr",
-                "mwEmpTempMaleTotalPrev", "mwEmpTempMaleEqNoPrev", "mwEmpTempMaleEqPercPrev", "mwEmpTempMaleMoreNoPrev", "mwEmpTempMaleMorePercPrev",
-                // Female
-                "mwEmpTempFemTotalCurr", "mwEmpTempFemEqNoCurr", "mwEmpTempFemEqPercCurr", "mwEmpTempFemMoreNoCurr", "mwEmpTempFemMorePercCurr",
-                "mwEmpTempFemTotalPrev", "mwEmpTempFemEqNoPrev", "mwEmpTempFemEqPercPrev", "mwEmpTempFemMoreNoPrev", "mwEmpTempFemMorePercPrev",
-                // Others
-                "mwEmpTempOthTotalCurr", "mwEmpTempOthEqNoCurr", "mwEmpTempOthEqPercCurr", "mwEmpTempOthMoreNoCurr", "mwEmpTempOthMorePercCurr",
-                "mwEmpTempOthTotalPrev", "mwEmpTempOthEqNoPrev", "mwEmpTempOthEqPercPrev", "mwEmpTempOthMoreNoPrev", "mwEmpTempOthMorePercPrev",
-
-                // --- 3. WORKERS: PERMANENT ---
-                // Male
-                "mwWorkPermMaleTotalCurr", "mwWorkPermMaleEqNoCurr", "mwWorkPermMaleEqPercCurr", "mwWorkPermMaleMoreNoCurr", "mwWorkPermMaleMorePercCurr",
-                "mwWorkPermMaleTotalPrev", "mwWorkPermMaleEqNoPrev", "mwWorkPermMaleEqPercPrev", "mwWorkPermMaleMoreNoPrev", "mwWorkPermMaleMorePercPrev",
-                // Female
-                "mwWorkPermFemTotalCurr", "mwWorkPermFemEqNoCurr", "mwWorkPermFemEqPercCurr", "mwWorkPermFemMoreNoCurr", "mwWorkPermFemMorePercCurr",
-                "mwWorkPermFemTotalPrev", "mwWorkPermFemEqNoPrev", "mwWorkPermFemEqPercPrev", "mwWorkPermFemMoreNoPrev", "mwWorkPermFemMorePercPrev",
-                // Others
-                "mwWorkPermOthTotalCurr", "mwWorkPermOthEqNoCurr", "mwWorkPermOthEqPercCurr", "mwWorkPermOthMoreNoCurr", "mwWorkPermOthMorePercCurr",
-                "mwWorkPermOthTotalPrev", "mwWorkPermOthEqNoPrev", "mwWorkPermOthEqPercPrev", "mwWorkPermOthMoreNoPrev", "mwWorkPermOthMorePercPrev",
-
-                // --- 4. WORKERS: TEMPORARY ---
-                // Male
-                "mwWorkTempMaleTotalCurr", "mwWorkTempMaleEqNoCurr", "mwWorkTempMaleEqPercCurr", "mwWorkTempMaleMoreNoCurr", "mwWorkTempMaleMorePercCurr",
-                "mwWorkTempMaleTotalPrev", "mwWorkTempMaleEqNoPrev", "mwWorkTempMaleEqPercPrev", "mwWorkTempMaleMoreNoPrev", "mwWorkTempMaleMorePercPrev",
-                // Female
-                "mwWorkTempFemTotalCurr", "mwWorkTempFemEqNoCurr", "mwWorkTempFemEqPercCurr", "mwWorkTempFemMoreNoCurr", "mwWorkTempFemMorePercCurr",
-                "mwWorkTempFemTotalPrev", "mwWorkTempFemEqNoPrev", "mwWorkTempFemEqPercPrev", "mwWorkTempFemMoreNoPrev", "mwWorkTempFemMorePercPrev",
-                // Others
-                "mwWorkTempOthTotalCurr", "mwWorkTempOthEqNoCurr", "mwWorkTempOthEqPercCurr", "mwWorkTempOthMoreNoCurr", "mwWorkTempOthMorePercCurr",
-                "mwWorkTempOthTotalPrev", "mwWorkTempOthEqNoPrev", "mwWorkTempOthEqPercPrev", "mwWorkTempOthMoreNoPrev", "mwWorkTempOthMorePercPrev",
-
-                // Q3 Remuneration
-                "remBodMaleNum", "remBodMaleMedian", "remBodFemNum", "remBodFemMedian",
-                "remKmpMaleNum", "remKmpMaleMedian", "remKmpFemNum", "remKmpFemMedian",
-                "remEmpMaleNum", "remEmpMaleMedian", "remEmpFemNum", "remEmpFemMedian",
-                "remWorkMaleNum", "remWorkMaleMedian", "remWorkFemNum", "remWorkFemMedian",
-                "remunerationNote",
-                //Q3 B
-                "grossWagesFemalePercCurr", "grossWagesFemalePercPrev", "grossWagesNote", // <--- ADD THESE
-                "remBodMaleNum",
-                //Q4
-                "humanRightsFocalPoint", "humanRightsFocalDetails","remunerationNote",
-                //Q5
-                "humanRightsGrievanceMechanism","humanRightsFocalDetails",
-                // Q6 Complaints
-                "compShFiledCurr", "compShPendingCurr", "compShRemarksCurr", "compShFiledPrev", "compShPendingPrev", "compShRemarksPrev",
-                "compDiscrimFiledCurr", "compDiscrimPendingCurr", "compDiscrimRemarksCurr", "compDiscrimFiledPrev", "compDiscrimPendingPrev", "compDiscrimRemarksPrev",
-                "compChildFiledCurr", "compChildPendingCurr", "compChildRemarksCurr", "compChildFiledPrev", "compChildPendingPrev", "compChildRemarksPrev",
-                "compForcedFiledCurr", "compForcedPendingCurr", "compForcedRemarksCurr", "compForcedFiledPrev", "compForcedPendingPrev", "compForcedRemarksPrev",
-                "compWagesFiledCurr", "compWagesPendingCurr", "compWagesRemarksCurr", "compWagesFiledPrev", "compWagesPendingPrev", "compWagesRemarksPrev",
-                "compOtherHrFiledCurr", "compOtherHrPendingCurr", "compOtherHrRemarksCurr", "compOtherHrFiledPrev", "compOtherHrPendingPrev", "compOtherHrRemarksPrev",
-
-                "humanRightsGrievanceMechanism",
-                // Q7
-                "poshTotalCurr", "poshTotalPrev",
-                "poshPercCurr", "poshPercPrev",
-                "poshUpheldCurr", "poshUpheldPrev",
-                "poshNote",
-                "humanRightsGrievanceMechanism",
-                //Q9
-                 "humanRightsContracts", "humanRightsContractsDetails","protectionMechanismsIntro",
-                //Q10
-                "assessChildLabourPerc", "assessForcedLabourPerc", "assessSexualHarassmentPerc",
-                            "assessDiscriminationPerc", "assessWagesPerc", "assessOthersPerc",
-                            "assessmentsP5Note",
-                            "humanRightsContractsDetails",
-
-            ];
-
-            fields.forEach(id => {
-                if(document.getElementById(id)) {
-                    document.getElementById(id).value = data[id] || "";
+        const p2NaCheckboxes = ["p2Lead1NA", "p2Lead2NA", "p2Lead3NA", "p2Lead4NA", "p2Lead5NA"];
+            p2NaCheckboxes.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.checked = (data[id] === true || data[id] === "true");
+                    toggleNaSection(id.replace('NA', 'Container'), el.checked);
                 }
             });
 
-            // 2. Fill Non-Monetary Checkbox
-            if(document.getElementById("nonMonetaryNA")) {
-                document.getElementById("nonMonetaryNA").checked = data.nonMonetaryNA || false;
-            }
+        // 3B. Fill FY Headers if saved previously
+        if(document.getElementById("p2FyCurrent")) document.getElementById("p2FyCurrent").value = data.fyCurrent || "";
+        if(document.getElementById("p2FyPrevious")) document.getElementById("p2FyPrevious").value = data.fyPrevious || "";
 
-            // 3. Fill Training Table
-            const trainBody = document.querySelector("#trainingTable tbody");
-            if(trainBody) {
-                trainBody.innerHTML = "";
-                if (data.trainingPrograms && data.trainingPrograms.length > 0) {
-                    data.trainingPrograms.forEach(tp => addTrainingRow(tp));
+        // 3C. Handle Standalone Checkboxes
+        if(document.getElementById("nonMonetaryNA")) {
+            document.getElementById("nonMonetaryNA").checked = data.nonMonetaryNA || false;
+        }
+
+
+        // ==========================================================
+        // 4. BATCH LOAD DYNAMIC TABLES (Arrays/Lists)
+        // ==========================================================
+
+        // --- Principle 1: Q1 Training Table ---
+        const trainBody = document.querySelector("#trainingTable tbody");
+        if(trainBody) {
+            trainBody.innerHTML = "";
+            if (data.trainingPrograms && data.trainingPrograms.length > 0) {
+                data.trainingPrograms.forEach(tp => addTrainingRow(tp));
+            } else {
+                // Matches exact SEBI segments if empty
+                addTrainingRow({ segment: "Board of Directors" });
+                addTrainingRow({ segment: "Key Managerial Personnel" });
+                addTrainingRow({ segment: "Employees other than BoD and KMPs" });
+                addTrainingRow({ segment: "Workers" });
+            }
+        }
+
+        // --- Principle 1: Q2 Legal Actions (Monetary & Non-Monetary Split) ---
+        const monBody = document.querySelector("#monetaryTable tbody");
+        const nonMonBody = document.querySelector("#nonMonetaryTable tbody");
+        if(monBody) monBody.innerHTML = "";
+        if(nonMonBody) nonMonBody.innerHTML = "";
+
+        if (data.legalActions && data.legalActions.length > 0) {
+            data.legalActions.forEach(la => {
+                if (la.type === "Imprisonment" || la.type === "Punishment") {
+                    addNonMonetaryRow(la);
                 } else {
-                    addTrainingRow({ segment: "Board of Directors" });
-                    addTrainingRow({ segment: "Key Managerial Personnel" });
-                    addTrainingRow({ segment: "Employees and Workers" });
+                    addMonetaryRow(la);
                 }
+            });
+        } else {
+            if(monBody) addMonetaryRow();
+            if(nonMonBody) addNonMonetaryRow();
+        }
+
+        // --- Principle 1: Q3 Appeals Table ---
+        const appealBody = document.querySelector("#appealTable tbody");
+        if(appealBody) {
+            appealBody.innerHTML = "";
+            if (data.appealDetails && data.appealDetails.length > 0) {
+                data.appealDetails.forEach(ad => addAppealRow(ad));
+            } else {
+                addAppealRow();
             }
+        }
 
-            // 4. Fill Legal Actions Table
-            const legalBody = document.querySelector("#legalTable tbody");
-            if(legalBody) {
-                legalBody.innerHTML = "";
-                if (data.legalActions && data.legalActions.length > 0) {
-                    data.legalActions.forEach(la => addLegalRow(la));
-                } else {
-                    addLegalRow();
-                }
+        // --- Principle 1: Leadership Table ---
+        const leadBody = document.querySelector("#leadershipTable tbody");
+        if(leadBody) {
+            leadBody.innerHTML = "";
+            if (data.leadershipAwarenessPrograms && data.leadershipAwarenessPrograms.length > 0) {
+                data.leadershipAwarenessPrograms.forEach(p => addLeadershipRow(p));
+            } else {
+                // Default Suggestions
+                addLeadershipRow({ topic: "Environment, Health and Safety" });
             }
+        }
 
-            // 5. Fill Appeals Table (Q3)
-            const appealBody = document.querySelector("#appealTable tbody");
-            if(appealBody) {
-                appealBody.innerHTML = "";
-                if (data.appealDetails && data.appealDetails.length > 0) {
-                    data.appealDetails.forEach(ad => addAppealRow(ad));
-                } else {
-                    addAppealRow(); // Default empty row
-                }
+        // --- Principle 2: Leadership LCA Tables ---
+
+
+
+        const lcaBody = document.querySelector("#lcaTable tbody");
+        if(lcaBody) {
+            lcaBody.innerHTML = "";
+            if (data.lcaEntries && data.lcaEntries.length > 0) {
+                data.lcaEntries.forEach(row => addLcaRow(row));
+            } else { addLcaRow(); }
+        }
+
+        const riskBody = document.querySelector("#riskTable tbody");
+        if(riskBody) {
+            riskBody.innerHTML = "";
+            if (data.lcaRisks && data.lcaRisks.length > 0) {
+                document.querySelector('input[name="riskMode"][value="table"]').checked = true;
+                data.lcaRisks.forEach(r => addRiskRow(r));
+            } else {
+                document.querySelector('input[name="riskMode"][value="note"]').checked = true;
+                addRiskRow(); // Hidden row just in case
             }
+            toggleRiskMode();
+        }
 
-            // 6. Fill Leadership Table
-            const leadBody = document.querySelector("#leadershipTable tbody");
-            if(leadBody) {
-                leadBody.innerHTML = "";
-                if (data.leadershipAwarenessPrograms && data.leadershipAwarenessPrograms.length > 0) {
-                    data.leadershipAwarenessPrograms.forEach(p => addLeadershipRow(p));
-                } else {
-                    // Default Suggestions
-                    addLeadershipRow({ topic: "Safety" });
-                    addLeadershipRow({ topic: "Ethics" });
-                    addLeadershipRow({ topic: "Supply Chain" });
-                }
+        const recBody = document.querySelector("#recycledTable tbody");
+        if(recBody) {
+            recBody.innerHTML = "";
+            if (data.recycledInputs && data.recycledInputs.length > 0) {
+                data.recycledInputs.forEach(row => addRecycledRow(row));
+            } else { addRecycledRow(); }
+        }
+
+        const recPercBody = document.querySelector("#reclaimedPercTable tbody");
+        if(recPercBody) {
+            recPercBody.innerHTML = "";
+            if (data.reclaimedPercentages && data.reclaimedPercentages.length > 0) {
+                data.reclaimedPercentages.forEach(row => addReclaimedPercRow(row));
+            } else { addReclaimedPercRow(); }
+        }
+
+        // --- Principle 3: Well-Being & Retirement Tables ---
+        const empWbBody = document.querySelector("#empWellBeingTable tbody");
+        if(empWbBody) {
+            empWbBody.innerHTML = "";
+            if (data.employeeWellBeing && data.employeeWellBeing.length > 0) {
+                data.employeeWellBeing.forEach(row => addWellBeingRow("#empWellBeingTable", row));
+            } else { addDefaultWellBeingRows("#empWellBeingTable"); }
+        }
+
+        const workWbBody = document.querySelector("#workWellBeingTable tbody");
+        if(workWbBody) {
+            workWbBody.innerHTML = "";
+            if (data.workerWellBeing && data.workerWellBeing.length > 0) {
+                data.workerWellBeing.forEach(row => addWellBeingRow("#workWellBeingTable", row));
+            } else { addDefaultWellBeingRows("#workWellBeingTable"); }
+        }
+
+        const retBody = document.querySelector("#retirementTable tbody");
+        if(retBody) {
+            retBody.innerHTML = "";
+            if (data.retirementBenefits && data.retirementBenefits.length > 0) {
+                data.retirementBenefits.forEach(row => addRetirementRow(row));
+            } else {
+                addRetirementRow({ benefits: "PF" });
+                addRetirementRow({ benefits: "Gratuity" });
+                addRetirementRow({ benefits: "ESI" });
             }
+        }
 
-            // LOAD FY HEADERS (If saved previously)
-            if(document.getElementById("p2FyCurrent")) document.getElementById("p2FyCurrent").value = data.fyCurrent || "";
-            if(document.getElementById("p2FyPrevious")) document.getElementById("p2FyPrevious").value = data.fyPrevious || "";
+        // --- Principle 3: Safety Measures & Corrective Actions ---
+        const smContainer = document.getElementById("safetyMeasuresContainer");
+        if(smContainer) {
+            smContainer.innerHTML = "";
+            if (data.safetyMeasures && data.safetyMeasures.length > 0) {
+                data.safetyMeasures.forEach(m => addSafetyMeasureRow(m));
+            } else { addSafetyMeasureRow({ heading: "Build safety leadership capability" }); }
+        }
 
-            //LOAD SECTION C PRINCIPLE 2 LEADERSHIP q1
-            const lcaBody = document.querySelector("#lcaTable tbody");
-            if(lcaBody) {
-                lcaBody.innerHTML = "";
-                if (data.lcaEntries && data.lcaEntries.length > 0) {
-                    data.lcaEntries.forEach(row => addLcaRow(row));
-                } else {
-                    addLcaRow(); // Default empty
-                }
+        const vcContainer = document.getElementById("vcActionsContainer");
+        if(vcContainer) {
+            vcContainer.innerHTML = "";
+            if (data.vcCorrectiveActions && data.vcCorrectiveActions.length > 0) {
+                data.vcCorrectiveActions.forEach(a => addVcActionRow(a));
+            } else {
+                addVcActionRow({ actionText: "Incorporating safety requirements in contracts..." });
             }
-            if(document.getElementById("lcaNote"))
-                document.getElementById("lcaNote").value = data.lcaNote || "";
+        }
 
-            //LOAD SECTION C PRINCIPLE 2 LEADERSHIP q2
-            // Fill Risk Section
-            const riskBody = document.querySelector("#riskTable tbody");
-            if(riskBody) {
-                riskBody.innerHTML = "";
-
-                if (data.lcaRisks && data.lcaRisks.length > 0) {
-                    // Table Mode
-                    document.querySelector('input[name="riskMode"][value="table"]').checked = true;
-                    data.lcaRisks.forEach(r => addRiskRow(r));
-                } else {
-                    // Note Mode (Default)
-                    document.querySelector('input[name="riskMode"][value="note"]').checked = true;
-                    addRiskRow(); // Add empty row just in case user switches
-                }
-                toggleRiskMode();
+        // --- Principle 4: Stakeholders & Actions Lists ---
+        const p4Body = document.getElementById("p4PointsContainer");
+        if(p4Body) {
+            p4Body.innerHTML = "";
+            if (data.principle4Q1Points && data.principle4Q1Points.length > 0) {
+                data.principle4Q1Points.forEach(pt => addP4PointRow(pt));
+            } else {
+                addP4PointRow("Global Reporting Initiative");
             }
-            if(document.getElementById("lcaRiskNote"))
-                document.getElementById("lcaRiskNote").value = data.lcaRiskNote || "";
+        }
 
-            //LOAD SECTION C PRINCIPLE 2 LEADERSHIP q3
-            // Fill Recycled Input Table
-            const recBody = document.querySelector("#recycledTable tbody");
-            if(recBody) {
-                recBody.innerHTML = "";
-                if (data.recycledInputs && data.recycledInputs.length > 0) {
-                    data.recycledInputs.forEach(row => addRecycledRow(row));
-                } else {
-                    addRecycledRow(); // Default empty
-                }
+        const stakeBody = document.querySelector("#stakeholderTable tbody");
+        if(stakeBody) {
+            stakeBody.innerHTML = "";
+            if (data.stakeholderEngagements && data.stakeholderEngagements.length > 0) {
+                data.stakeholderEngagements.forEach(row => addStakeholderRow(row));
+            } else {
+                addStakeholderRow({ groupName: "Investors" });
+                addStakeholderRow({ groupName: "Community Representatives" });
             }
-            if(document.getElementById("recycledInputNote"))
-                document.getElementById("recycledInputNote").value = data.recycledInputNote || "";
+        }
 
-            // Fill Q4 Inputs (Mapping handled by fields array below)
-
-            // Fill Q5 Table
-            const recPercBody = document.querySelector("#reclaimedPercTable tbody");
-            if(recPercBody) {
-                recPercBody.innerHTML = "";
-                if (data.reclaimedPercentages && data.reclaimedPercentages.length > 0) {
-                    data.reclaimedPercentages.forEach(row => addReclaimedPercRow(row));
-                } else {
-                    addReclaimedPercRow();
-                }
+        const vgBody = document.getElementById("vulnerableActionsContainer");
+        if(vgBody) {
+            vgBody.innerHTML = "";
+            if (data.vulnerableGroupActions && data.vulnerableGroupActions.length > 0) {
+                data.vulnerableGroupActions.forEach(action => addVulnerableActionRow(action));
+            } else {
+                addVulnerableActionRow("Ensuring safety in operating sites...");
             }
+        }
 
-            // Fill Well-Being Tables (P3)
-            const empWbBody = document.querySelector("#empWellBeingTable tbody");
-            if(empWbBody) {
-                empWbBody.innerHTML = "";
-                if (data.employeeWellBeing && data.employeeWellBeing.length > 0) {
-                    data.employeeWellBeing.forEach(row => addWellBeingRow("#empWellBeingTable", row));
-                } else {
-                    addDefaultWellBeingRows("#empWellBeingTable");
-                }
+        // --- Principle 5: Protection, Assessments & Process Lists ---
+        const protBody = document.getElementById("protectionMechanismsContainer");
+        if(protBody) {
+            protBody.innerHTML = "";
+            if (data.protectionMechanismsList && data.protectionMechanismsList.length > 0) {
+                data.protectionMechanismsList.forEach(m => addProtectionMechanismRow(m));
+            } else {
+                addProtectionMechanismRow("As part of POSH Policy, identity is protected...");
             }
+        }
 
-            const workWbBody = document.querySelector("#workWellBeingTable tbody");
-            if(workWbBody) {
-                workWbBody.innerHTML = "";
-                if (data.workerWellBeing && data.workerWellBeing.length > 0) {
-                    data.workerWellBeing.forEach(row => addWellBeingRow("#workWellBeingTable", row));
-                } else {
-                    addDefaultWellBeingRows("#workWellBeingTable");
-                }
+        const acBody = document.getElementById("assessCorrectiveContainer");
+        if(acBody) {
+            acBody.innerHTML = "";
+            if (data.assessCorrectiveActions && data.assessCorrectiveActions.length > 0) {
+                data.assessCorrectiveActions.forEach(a => addAssessCorrectiveRow(a));
+            } else {
+                addAssessCorrectiveRow("Extending training and capability building...");
             }
+        }
 
-            if(document.getElementById("wellBeingNote"))
-                document.getElementById("wellBeingNote").value = data.wellBeingNote || "";
-
-            // Fill Retirement Table(p3)
-            const retBody = document.querySelector("#retirementTable tbody");
-            if(retBody) {
-                retBody.innerHTML = "";
-                if (data.retirementBenefits && data.retirementBenefits.length > 0) {
-                    data.retirementBenefits.forEach(row => addRetirementRow(row));
-                } else {
-                    // Default Rows
-                    addRetirementRow({ benefits: "PF" });
-                    addRetirementRow({ benefits: "Gratuity" });
-                    addRetirementRow({ benefits: "ESI" });
-                }
+        const modBody = document.getElementById("p5LeadModContainer");
+        if(modBody) {
+            modBody.innerHTML = "";
+            if (data.p5LeadProcessModList && data.p5LeadProcessModList.length > 0) {
+                data.p5LeadProcessModList.forEach(t => addP5LeadModRow(t));
+            } else {
+                addP5LeadModRow("Statutory rights of contract employees are addressed...");
             }
-            if(document.getElementById("retirementBenefitNote"))
-                document.getElementById("retirementBenefitNote").value = data.retirementBenefitNote || "";
+        }
 
-            // Fill Safety Measures (Q12)
-            const smContainer = document.getElementById("safetyMeasuresContainer");
-            if(smContainer) {
-                smContainer.innerHTML = "";
-                if (data.safetyMeasures && data.safetyMeasures.length > 0) {
-                    data.safetyMeasures.forEach(m => addSafetyMeasureRow(m));
-                } else {
-                    // Default: Add 1 empty row
-                    addSafetyMeasureRow({ heading: "Build safety leadership capability", description: "" });
-                }
+        const issueBody = document.getElementById("p5LeadIssuesContainer");
+        if(issueBody) {
+            issueBody.innerHTML = "";
+            if (data.p5LeadDueDiligenceIssues && data.p5LeadDueDiligenceIssues.length > 0) {
+                data.p5LeadDueDiligenceIssues.forEach(t => addP5LeadIssueRow(t));
+            } else {
+                addP5LeadIssueRow("Child Labour");
+                addP5LeadIssueRow("Forced/Involuntary Labour");
             }
+        }
 
-            //principle 3 leadership 6
-            // Fill Leadership 6
-            if(document.getElementById("vcCorrectiveActionIntro"))
-                document.getElementById("vcCorrectiveActionIntro").value = data.vcCorrectiveActionIntro || "";
-
-            const vcContainer = document.getElementById("vcActionsContainer");
-            if(vcContainer) {
-                vcContainer.innerHTML = "";
-                if (data.vcCorrectiveActions && data.vcCorrectiveActions.length > 0) {
-                    data.vcCorrectiveActions.forEach(a => addVcActionRow(a));
-                } else {
-                    // Default Suggestions
-                    addVcActionRow({ actionText: "Incorporating safety requirements in contracts..." });
-                    addVcActionRow({ actionText: "Creating safety recognition frameworks..." });
-                }
+        const holderBody = document.getElementById("p5LeadHoldersContainer");
+        if(holderBody) {
+            holderBody.innerHTML = "";
+            if (data.p5LeadDueDiligenceHolders && data.p5LeadDueDiligenceHolders.length > 0) {
+                data.p5LeadDueDiligenceHolders.forEach(t => addP5LeadHolderRow(t));
+            } else {
+                addP5LeadHolderRow("Employees");
+                addP5LeadHolderRow("Contract Workforce");
             }
-
-            // Fill P4 Inputs essential 1
-            if(document.getElementById("principle4Q1Intro"))
-                document.getElementById("principle4Q1Intro").value = data.principle4Q1Intro || "";
-            if(document.getElementById("principle4Q1Conclusion"))
-                document.getElementById("principle4Q1Conclusion").value = data.principle4Q1Conclusion || "";
-
-            // Fill P4 List essential 1
-            const p4Body = document.getElementById("p4PointsContainer");
-            if(p4Body) {
-                p4Body.innerHTML = "";
-                if (data.principle4Q1Points && data.principle4Q1Points.length > 0) {
-                    data.principle4Q1Points.forEach(pt => addP4PointRow(pt));
-                } else {
-                    // Default Sample Rows
-                    addP4PointRow("Global Reporting Initiative");
-                    addP4PointRow("Sustainability Accounting Standards Board");
-                    addP4PointRow("EU Sustainability Reporting");
-                }
-            }
-
-            // Fill Stakeholder Table p4 essential 2
-            const stakeBody = document.querySelector("#stakeholderTable tbody");
-            if(stakeBody) {
-                stakeBody.innerHTML = "";
-                if (data.stakeholderEngagements && data.stakeholderEngagements.length > 0) {
-                    data.stakeholderEngagements.forEach(row => addStakeholderRow(row));
-                } else {
-                    // Default Rows
-                    addStakeholderRow({ groupName: "Investors" });
-                    addStakeholderRow({ groupName: "Community Representatives" });
-                    addStakeholderRow({ groupName: "Suppliers" });
-                }
-            }
-            if(document.getElementById("stakeholderNote"))
-                document.getElementById("stakeholderNote").value = data.stakeholderNote || "";
-
-            // Fill Leadership 3 p4
-            if(document.getElementById("vulnerableGroupIntro"))
-                document.getElementById("vulnerableGroupIntro").value = data.vulnerableGroupIntro || "";
-            if(document.getElementById("vulnerableGroupConclusion"))
-                document.getElementById("vulnerableGroupConclusion").value = data.vulnerableGroupConclusion || "";
-
-            const vgBody = document.getElementById("vulnerableActionsContainer");
-            if(vgBody) {
-                vgBody.innerHTML = "";
-                if (data.vulnerableGroupActions && data.vulnerableGroupActions.length > 0) {
-                    data.vulnerableGroupActions.forEach(action => addVulnerableActionRow(action));
-                } else {
-                    addVulnerableActionRow("Ensuring safety in operating sites...");
-                    addVulnerableActionRow("Sustaining community outreach activities...");
-                    addVulnerableActionRow("Actively supporting communities through initiatives...");
-                }
-            }
-
-            // Fill Q8
-            if(document.getElementById("protectionMechanismsIntro"))
-            document.getElementById("protectionMechanismsIntro").value = data.protectionMechanismsIntro || "";
-
-            const protBody = document.getElementById("protectionMechanismsContainer");
-            if(protBody) {
-                        protBody.innerHTML = "";
-                        if (data.protectionMechanismsList && data.protectionMechanismsList.length > 0) {
-                            data.protectionMechanismsList.forEach(m => addProtectionMechanismRow(m));
-                        } else {
-                            // Default Suggestions
-                            addProtectionMechanismRow("As part of POSH Policy, identity is protected...");
-                            addProtectionMechanismRow("Complaints are dealt with strict confidence...");
-                        }
-                    }
-            // Fill Q11 Corrective Actions
-                    if(document.getElementById("assessCorrectiveIntro"))
-                         document.getElementById("assessCorrectiveIntro").value = data.assessCorrectiveIntro || "";
-
-                    const acBody = document.getElementById("assessCorrectiveContainer");
-                    if(acBody) {
-                        acBody.innerHTML = "";
-                        if (data.assessCorrectiveActions && data.assessCorrectiveActions.length > 0) {
-                            data.assessCorrectiveActions.forEach(a => addAssessCorrectiveRow(a));
-                        } else {
-                            // Default Suggestions
-                            addAssessCorrectiveRow("Extending training and capability building...");
-                            addAssessCorrectiveRow("Terminating vendor contracts in case of non-adherence...");
-                        }
-                    }
-
-                    // Load P5 Leadership Q1
-                                if(document.getElementById("p5LeadProcessModIntro"))
-                                    document.getElementById("p5LeadProcessModIntro").value = data.p5LeadProcessModIntro || "";
-
-                                const modBody = document.getElementById("p5LeadModContainer");
-                                if(modBody) {
-                                    modBody.innerHTML = "";
-                                    if (data.p5LeadProcessModList && data.p5LeadProcessModList.length > 0) {
-                                        data.p5LeadProcessModList.forEach(t => addP5LeadModRow(t));
-                                    } else {
-                                        // Defaults based on sample
-                                        addP5LeadModRow("Statutory rights of contract employees are addressed through grievance redressal...");
-                                        addP5LeadModRow("Contractor Cells set up at several locations...");
-                                    }
-                                }
-
-                                // Load P5 Leadership Q2
-                                if(document.getElementById("p5LeadDueDiligenceScope"))
-                                    document.getElementById("p5LeadDueDiligenceScope").value = data.p5LeadDueDiligenceScope || "";
-
-                                const issueBody = document.getElementById("p5LeadIssuesContainer");
-                                if(issueBody) {
-                                    issueBody.innerHTML = "";
-                                    if (data.p5LeadDueDiligenceIssues && data.p5LeadDueDiligenceIssues.length > 0) {
-                                        data.p5LeadDueDiligenceIssues.forEach(t => addP5LeadIssueRow(t));
-                                    } else {
-                                        // Defaults
-                                        addP5LeadIssueRow("Child Labour");
-                                        addP5LeadIssueRow("Forced/Involuntary Labour");
-                                        addP5LeadIssueRow("Fair Wages");
-                                    }
-                                }
-
-                                const holderBody = document.getElementById("p5LeadHoldersContainer");
-                                if(holderBody) {
-                                    holderBody.innerHTML = "";
-                                    if (data.p5LeadDueDiligenceHolders && data.p5LeadDueDiligenceHolders.length > 0) {
-                                        data.p5LeadDueDiligenceHolders.forEach(t => addP5LeadHolderRow(t));
-                                    } else {
-                                        // Defaults
-                                        addP5LeadHolderRow("Employees");
-                                        addP5LeadHolderRow("Contract Workforce");
-                                        addP5LeadHolderRow("Communities");
-                                    }
-                                }
-                                // Load P5 Leadership Q3
-                                            if(document.getElementById("p5LeadPremisesAccess"))
-                                                document.getElementById("p5LeadPremisesAccess").value = data.p5LeadPremisesAccess || "";
-                                // Load P5 Leadership Q4
-                                            if(document.getElementById("p5LeadValueChainAssessment"))
-                                                document.getElementById("p5LeadValueChainAssessment").value = data.p5LeadValueChainAssessment || "";
-                                // Load P5 Leadership Q5
-                                            if(document.getElementById("p5LeadValueChainCorrectiveActions"))
-                                                document.getElementById("p5LeadValueChainCorrectiveActions").value = data.p5LeadValueChainCorrectiveActions || "";
-
-        })
-        .catch(err => console.error("Error loading Part 3 data", err));
+        }
+    })
+    .catch(err => console.error("Error loading Part 3 data", err));
 });
 
 // --- ROW HELPERS ---
@@ -639,29 +486,69 @@ function addTrainingRow(data = null) {
     const d = data || {};
     const row = `
         <tr>
-            <td><input type="text" class="tp-seg" value="${d.segment || ''}"></td>
-            <td><input type="text" class="tp-num" value="${d.totalPrograms || ''}"></td>
-            <td><textarea class="tp-top" rows="3">${d.topicsCovered || ''}</textarea></td>
-            <td><input type="text" class="tp-perc" value="${d.percentageCovered || ''}"></td>
+            <td><input type="text" class="tp-seg" value="${d.segment || ''}" placeholder="e.g. Board of Directors"></td>
+            <td><input type="text" class="tp-num" value="${d.totalPrograms || ''}" placeholder="0"></td>
+            <td>
+                <div style="display:flex; justify-content:flex-end; margin-bottom:2px;">
+                    <button type="button" class="btn-ai-mini" onclick="generateTrainingTopicsAI(this)" style="background:none; border:none; color:#2563eb; font-size:11px; cursor:pointer; font-weight:bold;">✨ AI Expand</button>
+                </div>
+                <textarea class="tp-top" rows="3" style="width:100%; font-size:12px;" placeholder="Keywords (e.g. 'Safety, POSH, Ethics')...">${d.topicsCovered || ''}</textarea>
+            </td>
+            <td><input type="text" class="tp-perc" value="${d.percentageCovered || ''}" placeholder="%"></td>
             <td class="btn-remove" onclick="this.parentElement.remove()">X</td>
         </tr>`;
     tbody.insertAdjacentHTML('beforeend', row);
 }
 
-function addLegalRow(data = null) {
-    const tbody = document.querySelector("#legalTable tbody");
+// --- ADD MONETARY ROW ---
+function addMonetaryRow(data = null) {
+    const tbody = document.querySelector("#monetaryTable tbody");
     const d = data || {};
-
-    const types = ["Penalty/Fine", "Settlement", "Compounding fee", "Imprisonment", "Punishment"];
+    const types = ["Penalty/Fine", "Settlement", "Compounding fee"];
     let typeOptions = types.map(t => `<option value="${t}" ${d.type === t ? 'selected' : ''}>${t}</option>`).join('');
 
     const row = `
         <tr>
             <td><select class="la-type">${typeOptions}</select></td>
-            <td><input type="text" class="la-prin" value="${d.principle || ''}"></td>
-            <td><input type="text" class="la-agency" value="${d.agency || ''}"></td>
-            <td><input type="text" class="la-amt" value="${d.amount || ''}"></td>
-            <td><textarea class="la-brief" rows="2">${d.brief || ''}</textarea></td>
+            <td><input type="text" class="la-prin" value="${d.principle || ''}" placeholder="e.g. P1"></td>
+            <td><input type="text" class="la-agency" value="${d.agency || ''}" placeholder="Agency"></td>
+            <td><input type="text" class="la-amt" value="${d.amount || ''}" placeholder="Amount"></td>
+            <td>
+                <div style="display:flex; justify-content:flex-end; margin-bottom:2px;">
+                    <button type="button" class="btn-ai-mini" onclick="generateLegalBriefAI(this)" style="background:none; border:none; color:#2563eb; font-size:11px; cursor:pointer; font-weight:bold;">✨ AI Expand</button>
+                </div>
+                <textarea class="la-brief" rows="3" style="width:100%; font-size:12px;" placeholder="Keywords (e.g. 'Late filing')...">${d.brief || ''}</textarea>
+            </td>
+            <td>
+                <select class="la-app">
+                    <option value="No" ${d.appeal === 'No' ? 'selected' : ''}>No</option>
+                    <option value="Yes" ${d.appeal === 'Yes' ? 'selected' : ''}>Yes</option>
+                    <option value="N/A" ${d.appeal === 'N/A' ? 'selected' : ''}>N/A</option>
+                </select>
+            </td>
+            <td class="btn-remove" onclick="this.parentElement.remove()">X</td>
+        </tr>`;
+    tbody.insertAdjacentHTML('beforeend', row);
+}
+
+// --- ADD NON-MONETARY ROW ---
+function addNonMonetaryRow(data = null) {
+    const tbody = document.querySelector("#nonMonetaryTable tbody");
+    const d = data || {};
+    const types = ["Imprisonment", "Punishment"];
+    let typeOptions = types.map(t => `<option value="${t}" ${d.type === t ? 'selected' : ''}>${t}</option>`).join('');
+
+    const row = `
+        <tr>
+            <td><select class="la-type">${typeOptions}</select></td>
+            <td><input type="text" class="la-prin" value="${d.principle || ''}" placeholder="e.g. P1"></td>
+            <td><input type="text" class="la-agency" value="${d.agency || ''}" placeholder="Agency"></td>
+            <td>
+                <div style="display:flex; justify-content:flex-end; margin-bottom:2px;">
+                    <button type="button" class="btn-ai-mini" onclick="generateLegalBriefAI(this)" style="background:none; border:none; color:#2563eb; font-size:11px; cursor:pointer; font-weight:bold;">✨ AI Expand</button>
+                </div>
+                <textarea class="la-brief" rows="3" style="width:100%; font-size:12px;" placeholder="Keywords (e.g. 'Warning letter')...">${d.brief || ''}</textarea>
+            </td>
             <td>
                 <select class="la-app">
                     <option value="No" ${d.appeal === 'No' ? 'selected' : ''}>No</option>
@@ -811,29 +698,62 @@ function addDefaultWellBeingRows(tableId) {
     addWellBeingRow(tableId, { category: "Temporary - Total" });
 }
 
+// --- ROW MANAGEMENT (Updated with auto-calc triggers and styling) ---
 function addWellBeingRow(tableId, d = {}) {
     const tbody = document.querySelector(tableId + " tbody");
+
+    // Bold the 'Total' rows for better UI readability
+    const isTotalRow = d.category && d.category.includes("Total");
+    const rowStyle = isTotalRow ? "font-weight: bold; background-color: #f8fafc;" : "";
+
     const row = `
-        <tr>
-            <td><input type="text" class="wb-cat" value="${d.category || ''}" style="width:120px;"></td>
-            <td><input type="text" class="wb-tot" value="${d.totalA || ''}" style="width:60px;"></td>
-            
-            <td><input type="text" class="wb-h-no" value="${d.healthNo || ''}" style="width:50px;"></td>
-            <td><input type="text" class="wb-h-pc" value="${d.healthPerc || ''}" style="width:40px;"></td>
-            
-            <td><input type="text" class="wb-a-no" value="${d.accidentNo || ''}" style="width:50px;"></td>
-            <td><input type="text" class="wb-a-pc" value="${d.accidentPerc || ''}" style="width:40px;"></td>
-            
-            <td><input type="text" class="wb-m-no" value="${d.maternityNo || ''}" style="width:50px;"></td>
-            <td><input type="text" class="wb-m-pc" value="${d.maternityPerc || ''}" style="width:40px;"></td>
-            
-            <td><input type="text" class="wb-p-no" value="${d.paternityNo || ''}" style="width:50px;"></td>
-            <td><input type="text" class="wb-p-pc" value="${d.paternityPerc || ''}" style="width:40px;"></td>
-            
-            <td><input type="text" class="wb-d-no" value="${d.daycareNo || ''}" style="width:50px;"></td>
-            <td><input type="text" class="wb-d-pc" value="${d.daycarePerc || ''}" style="width:40px;"></td>
+        <tr style="${rowStyle}">
+            <td><input type="text" class="wb-cat" value="${d.category || ''}" style="width:120px; border:none; background:transparent; font-weight:inherit;" readonly></td>
+
+            <td><input type="number" class="wb-tot" value="${d.totalA || ''}" oninput="calcWellBeingRow(this)" style="width:60px;" placeholder="0"></td>
+
+            <td><input type="number" class="wb-h-no" value="${d.healthNo || ''}" oninput="calcWellBeingRow(this)" style="width:50px;" placeholder="0"></td>
+            <td><input type="text" class="wb-h-pc" value="${d.healthPerc || ''}" readonly style="width:45px; background:#f1f5f9; border:none; text-align:center;" placeholder="%"></td>
+
+            <td><input type="number" class="wb-a-no" value="${d.accidentNo || ''}" oninput="calcWellBeingRow(this)" style="width:50px;" placeholder="0"></td>
+            <td><input type="text" class="wb-a-pc" value="${d.accidentPerc || ''}" readonly style="width:45px; background:#f1f5f9; border:none; text-align:center;" placeholder="%"></td>
+
+            <td><input type="number" class="wb-m-no" value="${d.maternityNo || ''}" oninput="calcWellBeingRow(this)" style="width:50px;" placeholder="0"></td>
+            <td><input type="text" class="wb-m-pc" value="${d.maternityPerc || ''}" readonly style="width:45px; background:#f1f5f9; border:none; text-align:center;" placeholder="%"></td>
+
+            <td><input type="number" class="wb-p-no" value="${d.paternityNo || ''}" oninput="calcWellBeingRow(this)" style="width:50px;" placeholder="0"></td>
+            <td><input type="text" class="wb-p-pc" value="${d.paternityPerc || ''}" readonly style="width:45px; background:#f1f5f9; border:none; text-align:center;" placeholder="%"></td>
+
+            <td><input type="number" class="wb-d-no" value="${d.daycareNo || ''}" oninput="calcWellBeingRow(this)" style="width:50px;" placeholder="0"></td>
+            <td><input type="text" class="wb-d-pc" value="${d.daycarePerc || ''}" readonly style="width:45px; background:#f1f5f9; border:none; text-align:center;" placeholder="%"></td>
         </tr>`;
     tbody.insertAdjacentHTML('beforeend', row);
+}
+
+// --- HELPER: Auto-Calculate Well-being Percentages ---
+function calcWellBeingRow(inputElement) {
+    const row = inputElement.closest("tr");
+
+    // Get the Total (A) value for this specific row
+    const totalA = parseFloat(row.querySelector(".wb-tot").value) || 0;
+
+    // Helper to calculate and format percentage safely
+    const calcPerc = (numClass, percClass) => {
+        const num = parseFloat(row.querySelector(numClass).value) || 0;
+        const percInput = row.querySelector(percClass);
+        if (totalA > 0 && num > 0) {
+            percInput.value = ((num / totalA) * 100).toFixed(1) + "%";
+        } else {
+            percInput.value = "0%";
+        }
+    };
+
+    // Calculate all 5 categories for this row
+    calcPerc(".wb-h-no", ".wb-h-pc"); // Health
+    calcPerc(".wb-a-no", ".wb-a-pc"); // Accident
+    calcPerc(".wb-m-no", ".wb-m-pc"); // Maternity
+    calcPerc(".wb-p-no", ".wb-p-pc"); // Paternity
+    calcPerc(".wb-d-no", ".wb-d-pc"); // Daycare
 }
 
 // --- ROW MANAGEMENT ---
@@ -844,15 +764,42 @@ function addRetirementRow(data = null) {
     const row = `
         <tr>
             <td><input type="text" class="rb-name" value="${d.benefits || ''}" placeholder="Name"></td>
-            
+
             <td><input type="text" class="rb-ce" value="${d.currEmpCovered || ''}" style="width:50px;"></td>
             <td><input type="text" class="rb-cw" value="${d.currWorkCovered || ''}" style="width:50px;"></td>
             <td><input type="text" class="rb-cd" value="${d.currDeducted || ''}" style="width:60px;"></td>
-            
+
             <td><input type="text" class="rb-pe" value="${d.prevEmpCovered || ''}" style="width:50px;"></td>
             <td><input type="text" class="rb-pw" value="${d.prevWorkCovered || ''}" style="width:50px;"></td>
             <td><input type="text" class="rb-pd" value="${d.prevDeducted || ''}" style="width:60px;"></td>
-            
+
+            <td class="btn-remove" onclick="this.parentElement.remove()">X</td>
+        </tr>
+    `;
+    tbody.insertAdjacentHTML('beforeend', row);
+}
+
+// --- ROW MANAGEMENT: Q2 RETIREMENT BENEFITS ---
+function addRetirementRow(data = null) {
+    const tbody = document.querySelector("#retirementTable tbody");
+    const d = data || {};
+
+    const selectOptions = ["Y", "N", "N.A."];
+    const currSelect = selectOptions.map(o => `<option value="${o}" ${d.currDeducted === o ? 'selected' : ''}>${o}</option>`).join('');
+    const prevSelect = selectOptions.map(o => `<option value="${o}" ${d.prevDeducted === o ? 'selected' : ''}>${o}</option>`).join('');
+
+    const row = `
+        <tr>
+            <td><input type="text" class="rb-name" value="${d.benefits || ''}" placeholder="e.g. PF, Gratuity, ESI"></td>
+
+            <td><input type="text" class="rb-ce" value="${d.currEmpCovered || ''}" placeholder="%"></td>
+            <td><input type="text" class="rb-cw" value="${d.currWorkCovered || ''}" placeholder="%"></td>
+            <td><select class="rb-cd">${currSelect}</select></td>
+
+            <td><input type="text" class="rb-pe" value="${d.prevEmpCovered || ''}" placeholder="%"></td>
+            <td><input type="text" class="rb-pw" value="${d.prevWorkCovered || ''}" placeholder="%"></td>
+            <td><select class="rb-pd">${prevSelect}</select></td>
+
             <td class="btn-remove" onclick="this.parentElement.remove()">X</td>
         </tr>
     `;
@@ -980,7 +927,7 @@ function addSafetyMeasureRow(data = null) {
             <span style="color:red; cursor:pointer; font-weight:bold;" onclick="this.parentElement.parentElement.remove()">Remove</span>
         </div>
         <input type="text" class="sm-head" value="${d.heading || ''}" placeholder="e.g. Improve competency..." style="width:100%; margin-bottom:10px;">
-        
+
         <label style="font-size:12px;">Description / Details</label>
         <textarea class="sm-desc" rows="3" style="width:100%" placeholder="Details...">${d.description || ''}</textarea>
     `;
@@ -1005,7 +952,77 @@ function addVcActionRow(data = null) {
     `;
     container.appendChild(div);
 }
+// ==========================================
+// Q7: AUTO-CALCULATE UNION MEMBERSHIP
+// ==========================================
+function calcUnionRow(inputElem) {
+    const row = inputElem.closest('tr');
+    // Get all 6 inputs in this specific row
+    const inputs = row.querySelectorAll('input');
+    if (inputs.length < 6) return;
 
+    // --- Current FY ---
+    const totalA = parseFloat(inputs[0].value) || 0;
+    const unionB = parseFloat(inputs[1].value) || 0;
+    const percCurr = inputs[2]; // The readonly % field
+
+    if (totalA > 0) {
+        percCurr.value = ((unionB / totalA) * 100).toFixed(1) + "%";
+    } else {
+        percCurr.value = "";
+    }
+
+    // --- Previous FY ---
+    const totalC = parseFloat(inputs[3].value) || 0;
+    const unionD = parseFloat(inputs[4].value) || 0;
+    const percPrev = inputs[5]; // The readonly % field
+
+    if (totalC > 0) {
+        percPrev.value = ((unionD / totalC) * 100).toFixed(1) + "%";
+    } else {
+        percPrev.value = "";
+    }
+}
+
+// ==========================================
+// Q8: AUTO-CALCULATE TRAINING DETAILS
+// ==========================================
+function calcTrainRow(inputElem) {
+    const row = inputElem.closest('tr');
+    // Get all 10 inputs in this specific row
+    const inputs = row.querySelectorAll('input');
+    if (inputs.length < 10) return;
+
+    // --- Current FY ---
+    const totalA = parseFloat(inputs[0].value) || 0;
+    const healthB = parseFloat(inputs[1].value) || 0;
+    const healthPerc = inputs[2]; // Readonly
+    const skillC = parseFloat(inputs[3].value) || 0;
+    const skillPerc = inputs[4]; // Readonly
+
+    if (totalA > 0) {
+        healthPerc.value = ((healthB / totalA) * 100).toFixed(1) + "%";
+        skillPerc.value = ((skillC / totalA) * 100).toFixed(1) + "%";
+    } else {
+        healthPerc.value = "";
+        skillPerc.value = "";
+    }
+
+    // --- Previous FY ---
+    const totalD = parseFloat(inputs[5].value) || 0;
+    const healthE = parseFloat(inputs[6].value) || 0;
+    const healthPercPrev = inputs[7]; // Readonly
+    const skillF = parseFloat(inputs[8].value) || 0;
+    const skillPercPrev = inputs[9]; // Readonly
+
+    if (totalD > 0) {
+        healthPercPrev.value = ((healthE / totalD) * 100).toFixed(1) + "%";
+        skillPercPrev.value = ((skillF / totalD) * 100).toFixed(1) + "%";
+    } else {
+        healthPercPrev.value = "";
+        skillPercPrev.value = "";
+    }
+}
 // --- ROW MANAGEMENT --- p4 essential 1
 function addP4PointRow(val = "") {
     const container = document.getElementById("p4PointsContainer");
@@ -1280,14 +1297,25 @@ function generateFinalReport() {
         // Safe check for checkbox
         nonMonetaryNA: document.getElementById("nonMonetaryNA") ? document.getElementById("nonMonetaryNA").checked : false,
 
-        legalActions: Array.from(document.querySelectorAll("#legalTable tbody tr")).map(row => ({
-            type: row.querySelector(".la-type") ? row.querySelector(".la-type").value : "",
-            principle: row.querySelector(".la-prin") ? row.querySelector(".la-prin").value : "",
-            agency: row.querySelector(".la-agency") ? row.querySelector(".la-agency").value : "",
-            amount: row.querySelector(".la-amt") ? row.querySelector(".la-amt").value : "",
-            brief: row.querySelector(".la-brief") ? row.querySelector(".la-brief").value : "",
-            appeal: row.querySelector(".la-app") ? row.querySelector(".la-app").value : ""
-        })),
+        // Combine both tables back into a single array for the backend
+                legalActions: [
+                    ...Array.from(document.querySelectorAll("#monetaryTable tbody tr")).map(row => ({
+                        type: row.querySelector(".la-type").value,
+                        principle: row.querySelector(".la-prin").value,
+                        agency: row.querySelector(".la-agency").value,
+                        amount: row.querySelector(".la-amt").value,
+                        brief: row.querySelector(".la-brief").value,
+                        appeal: row.querySelector(".la-app").value
+                    })),
+                    ...Array.from(document.querySelectorAll("#nonMonetaryTable tbody tr")).map(row => ({
+                        type: row.querySelector(".la-type").value,
+                        principle: row.querySelector(".la-prin").value,
+                        agency: row.querySelector(".la-agency").value,
+                        amount: "N/A", // Force N/A for amount since it's non-monetary
+                        brief: row.querySelector(".la-brief").value,
+                        appeal: row.querySelector(".la-app").value
+                    }))
+                ],
 
         // --- SECTION C Q3 ---
         appealDetails: Array.from(document.querySelectorAll("#appealTable tbody tr")).map(row => ({
@@ -1366,6 +1394,14 @@ function generateFinalReport() {
         eprDetails: getVal("eprDetails"),
 
         // --- Leadership LCA PRINCIPLE 2---
+
+        // --- Principle 2 Leadership NA Flags ---
+                p2Lead1NA: document.getElementById("p2Lead1NA") ? document.getElementById("p2Lead1NA").checked : false,
+                p2Lead2NA: document.getElementById("p2Lead2NA") ? document.getElementById("p2Lead2NA").checked : false,
+                p2Lead3NA: document.getElementById("p2Lead3NA") ? document.getElementById("p2Lead3NA").checked : false,
+                p2Lead4NA: document.getElementById("p2Lead4NA") ? document.getElementById("p2Lead4NA").checked : false,
+                p2Lead5NA: document.getElementById("p2Lead5NA") ? document.getElementById("p2Lead5NA").checked : false,
+
         lcaNote: getVal("lcaNote"),
         lcaEntries: Array.from(document.querySelectorAll("#lcaTable tbody tr")).map(row => ({
             nicCode: row.querySelector(".lca-nic").value,
@@ -1411,9 +1447,15 @@ function generateFinalReport() {
         })),
 
         // --- Principle 3 ---
-        wellBeingNote: getVal("wellBeingNote"),
-        employeeWellBeing: scrapeWellBeingTable("#empWellBeingTable"),
-        workerWellBeing: scrapeWellBeingTable("#workWellBeingTable"),
+                employeeWellBeing: scrapeWellBeingTable("#empWellBeingTable"),
+                empWellBeingNote: getVal("empWellBeingNote"), // Updated Note
+
+                workerWellBeing: scrapeWellBeingTable("#workWellBeingTable"),
+                workWellBeingNote: getVal("workWellBeingNote"), // Updated Note
+
+                wbCostCurr: getVal("wbCostCurr"), // New Q1.c
+                wbCostPrev: getVal("wbCostPrev"), // New Q1.c
+                wbCostNote: getVal("wbCostNote"), // New Q1.c Note
 
         // --- Principle 3 Q2 ---
         retirementBenefitNote: getVal("retirementBenefitNote"),
@@ -1632,6 +1674,11 @@ function generateFinalReport() {
             actionText: item.querySelector(".vc-act-text").value
         })),
 
+                transitionAssistanceYN: getVal("transitionAssistanceYN"),
+                transitionAssistanceDetails: getVal("transitionAssistanceDetails"),
+
+                valueChainAssessmentNote: getVal("valueChainAssessmentNote"),
+
         // --- Principle 4 Q1 ---
         principle4Q1Intro: getVal("principle4Q1Intro"),
         principle4Q1Conclusion: getVal("principle4Q1Conclusion"),
@@ -1801,6 +1848,8 @@ function generateFinalReport() {
                  compOtherHrFiledCurr: getVal("compOtherHrFiledCurr"), compOtherHrPendingCurr: getVal("compOtherHrPendingCurr"), compOtherHrRemarksCurr: getVal("compOtherHrRemarksCurr"),
                  compOtherHrFiledPrev: getVal("compOtherHrFiledPrev"), compOtherHrPendingPrev: getVal("compOtherHrPendingPrev"), compOtherHrRemarksPrev: getVal("compOtherHrRemarksPrev"),
 
+                 hrComplaintsNote: getVal("hrComplaintsNote"),
+
          // --- Principle 5 Q7 ---
                  poshTotalCurr: getVal("poshTotalCurr"), poshTotalPrev: getVal("poshTotalPrev"),
                  poshPercCurr: getVal("poshPercCurr"), poshPercPrev: getVal("poshPercPrev"),
@@ -1838,6 +1887,12 @@ function generateFinalReport() {
           p5LeadValueChainAssessment: getVal("p5LeadValueChainAssessment"),
          //q5
          p5LeadValueChainCorrectiveActions: getVal("p5LeadValueChainCorrectiveActions"),
+         p5LeadVcAssessShPerc: getVal("p5LeadVcAssessShPerc"),
+             p5LeadVcAssessDiscrimPerc: getVal("p5LeadVcAssessDiscrimPerc"),
+             p5LeadVcAssessChildPerc: getVal("p5LeadVcAssessChildPerc"),
+             p5LeadVcAssessForcedPerc: getVal("p5LeadVcAssessForcedPerc"),
+             p5LeadVcAssessWagesPerc: getVal("p5LeadVcAssessWagesPerc"),
+             p5LeadVcAssessOthersPerc: getVal("p5LeadVcAssessOthersPerc"),
     };
 
     // CALL BACKEND
@@ -1981,6 +2036,25 @@ function saveAndNext() {
             // --- Question 7 ---
             correctiveActionDetails: getVal("correctiveActionDetails"),
 
+            // --- Q8 Accounts Payable ---
+                    accountsPayableCurr: getVal("accountsPayableCurr"),
+                    accountsPayablePrev: getVal("accountsPayablePrev"),
+
+                    // --- Q9 Openness of Business ---
+                    purTradingPercCurr: getVal("purTradingPercCurr"), purTradingPercPrev: getVal("purTradingPercPrev"),
+                    purTradingNumCurr: getVal("purTradingNumCurr"), purTradingNumPrev: getVal("purTradingNumPrev"),
+                    purTop10PercCurr: getVal("purTop10PercCurr"), purTop10PercPrev: getVal("purTop10PercPrev"),
+
+                    salesDealerPercCurr: getVal("salesDealerPercCurr"), salesDealerPercPrev: getVal("salesDealerPercPrev"),
+                    salesDealerNumCurr: getVal("salesDealerNumCurr"), salesDealerNumPrev: getVal("salesDealerNumPrev"),
+                    salesTop10PercCurr: getVal("salesTop10PercCurr"), salesTop10PercPrev: getVal("salesTop10PercPrev"),
+
+                    rptPurCurr: getVal("rptPurCurr"), rptPurPrev: getVal("rptPurPrev"),
+                    rptSalesCurr: getVal("rptSalesCurr"), rptSalesPrev: getVal("rptSalesPrev"),
+                    rptLoansCurr: getVal("rptLoansCurr"), rptLoansPrev: getVal("rptLoansPrev"),
+                    rptInvestCurr: getVal("rptInvestCurr"), rptInvestPrev: getVal("rptInvestPrev"),
+                    opennessNote: getVal("opennessNote"),
+
             // --- Leadership Indicators ---
             leadershipIndicatorNote: getVal("leadershipIndicatorNote"),
 
@@ -2019,6 +2093,14 @@ function saveAndNext() {
             eprDetails: getVal("eprDetails"),
 
             // --- Leadership LCA PRINCIPLE 2---
+
+            // --- Principle 2 Leadership NA Flags ---
+                    p2Lead1NA: document.getElementById("p2Lead1NA") ? document.getElementById("p2Lead1NA").checked : false,
+                    p2Lead2NA: document.getElementById("p2Lead2NA") ? document.getElementById("p2Lead2NA").checked : false,
+                    p2Lead3NA: document.getElementById("p2Lead3NA") ? document.getElementById("p2Lead3NA").checked : false,
+                    p2Lead4NA: document.getElementById("p2Lead4NA") ? document.getElementById("p2Lead4NA").checked : false,
+                    p2Lead5NA: document.getElementById("p2Lead5NA") ? document.getElementById("p2Lead5NA").checked : false,
+
             lcaNote: getVal("lcaNote"),
             lcaEntries: Array.from(document.querySelectorAll("#lcaTable tbody tr")).map(row => ({
                 nicCode: row.querySelector(".lca-nic").value,
@@ -2507,4 +2589,343 @@ function saveAndNext() {
         }
     })
     .catch(err => console.error("Error:", err));
+}
+
+// --- GENERATE AI NOTE FROM USER INPUT ---
+async function generateNoteFromInput(fieldId, sectionContext) {
+    const textarea = document.getElementById(fieldId);
+    if (!textarea) {
+        console.error("Could not find textarea with ID:", fieldId);
+        return;
+    }
+
+    const userInput = textarea.value.trim();
+
+    // Check if the user actually typed something
+    if (!userInput || userInput.length < 3) {
+        alert("Please type a few keywords first (e.g., 'Safety, POSH, software training').");
+        return;
+    }
+
+    // UI Feedback
+    textarea.disabled = true;
+    const originalPlaceholder = textarea.placeholder;
+    textarea.placeholder = "Gemini is writing...";
+    textarea.value = ""; // Clear the box while loading
+
+    // Build the prompt for Gemini
+    const promptText = `You are an expert ESG consultant writing a BRSR report.
+    Expand the following rough notes into a professional, concise paragraph (1-2 sentences) for the '${sectionContext}' section.
+    Notes: ${userInput}`;
+
+    try {
+        const response = await fetch("http://localhost:8080/api/ai/generate-esg", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            },
+            body: JSON.stringify({ prompt: promptText })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Populate the text area and remove any asterisks (**) Gemini sometimes adds
+        if (data.text) {
+            textarea.value = data.text.replace(/\*\*/g, '');
+        } else {
+            textarea.value = "Error: AI returned an empty response.";
+        }
+
+    } catch (err) {
+        console.error("AI Error:", err);
+        textarea.value = "Error: Could not connect to AI service. Please check if your Spring Boot backend is running and connected to the internet.";
+    } finally {
+        // Restore UI
+        textarea.disabled = false;
+        textarea.placeholder = originalPlaceholder;
+    }
+}
+
+// --- SMART CELL-LEVEL AI FOR TRAINING TOPICS ---
+// --- SMART CELL-LEVEL AI FOR TRAINING TOPICS ---
+async function generateTrainingTopicsAI(buttonElement) {
+    const container = buttonElement.parentElement;
+    const textarea = container.nextElementSibling;
+    const row = buttonElement.closest('tr');
+
+    // Safety check: Make sure this button is actually inside a table row!
+    if (!row) {
+        alert("Error: This specific AI button must be placed inside the Training table rows.");
+        return;
+    }
+
+    // Grab the segment name to give Gemini context
+    const segmentInput = row.querySelector('.tp-seg');
+    const segment = segmentInput && segmentInput.value ? segmentInput.value : "employees";
+
+    const userInput = textarea.value.trim();
+
+    if (!userInput || userInput.length < 3) {
+        alert("Please type a few keywords first (e.g., 'Safety, Code of conduct, POSH').");
+        return;
+    }
+
+    textarea.disabled = true;
+    const originalPlaceholder = textarea.placeholder;
+    textarea.placeholder = "Gemini is writing...";
+    textarea.value = "";
+
+    const promptText = `You are an expert ESG consultant writing a BRSR report.
+    Expand the following rough notes into a professional, concise description (1 to 2 sentences max) of the training topics and principles covered specifically for the '${segment}' segment.
+    Notes: ${userInput}`;
+
+    try {
+        const response = await fetch("http://localhost:8080/api/ai/generate-esg", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("token") },
+            body: JSON.stringify({ prompt: promptText })
+        });
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        textarea.value = data.text ? data.text.replace(/\*\*/g, '') : "Error: AI returned empty response.";
+    } catch (err) {
+        console.error("AI Error:", err);
+        textarea.value = "Error: Could not connect to AI service.";
+    } finally {
+        textarea.disabled = false;
+        textarea.placeholder = originalPlaceholder;
+    }
+}
+
+// --- SMART CELL-LEVEL AI FOR LEGAL BRIEFS ---
+async function generateLegalBriefAI(buttonElement) {
+    const container = buttonElement.parentElement;
+    const textarea = container.nextElementSibling;
+    const row = buttonElement.closest('tr');
+
+    // Safety check: Make sure this button is actually inside a table row!
+    if (!row) {
+        alert("Error: This specific AI button must be placed inside the Fines & Penalties table rows.");
+        return;
+    }
+
+    const typeInput = row.querySelector('.la-type');
+    const agencyInput = row.querySelector('.la-agency');
+
+    const actionType = typeInput && typeInput.value ? typeInput.value : "Penalty/Action";
+    const agency = agencyInput && agencyInput.value ? agencyInput.value : "Regulatory Authority";
+
+    const userInput = textarea.value.trim();
+
+    if (!userInput || userInput.length < 3) {
+        alert("Please type a few keywords first (e.g., 'Late filing', 'Minor safety violation').");
+        return;
+    }
+
+    textarea.disabled = true;
+    const originalPlaceholder = textarea.placeholder;
+    textarea.placeholder = "Gemini is generating brief...";
+    textarea.value = "";
+
+    const promptText = `You are an expert corporate lawyer and ESG consultant writing a BRSR report.
+    Expand the following rough notes into a professional, formal, and concise description (1 to 2 sentences max) of the legal case/penalty.
+    Context -> Action Type: ${actionType}, Regulatory Agency: ${agency}.
+    Notes to expand: ${userInput}`;
+
+    try {
+        const response = await fetch("http://localhost:8080/api/ai/generate-esg", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("token") },
+            body: JSON.stringify({ prompt: promptText })
+        });
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        textarea.value = data.text ? data.text.replace(/\*\*/g, '') : "Error: AI returned empty response.";
+    } catch (err) {
+        console.error("AI Error:", err);
+        textarea.value = "Error: Could not connect to AI service.";
+    } finally {
+        textarea.disabled = false;
+        textarea.placeholder = originalPlaceholder;
+    }
+}
+
+// --- SMART CELL-LEVEL AI FOR STATIC TABLE REMARKS (Used in Q6) ---
+async function generateRowRemarkAI(buttonElement) {
+    const container = buttonElement.parentElement;
+    const textarea = container.nextElementSibling;
+    const row = buttonElement.closest('tr');
+
+    // Grab the category (Directors or KMPs) from the very first column
+    const category = row.querySelector('td').innerText.trim();
+    const userInput = textarea.value.trim();
+
+    if (!userInput || userInput.length < 2) {
+        alert("Please type a few keywords first (e.g., 'NIL', 'Resolved instantly').");
+        return;
+    }
+
+    textarea.disabled = true;
+    const originalPlaceholder = textarea.placeholder;
+    textarea.placeholder = "Gemini is writing...";
+    textarea.value = "";
+
+    const promptText = `You are an expert ESG consultant writing a BRSR report.
+    Expand the following rough notes into a professional, formal, and concise remark (1 sentence max) regarding Conflict of Interest complaints for ${category}. If the input is just "NIL" or "None", just output "NIL".
+    Notes: ${userInput}`;
+
+    try {
+        const response = await fetch("http://localhost:8080/api/ai/generate-esg", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("token") },
+            body: JSON.stringify({ prompt: promptText })
+        });
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        textarea.value = data.text ? data.text.replace(/\*\*/g, '') : "Error: AI returned empty response.";
+    } catch (err) {
+        console.error("AI Error:", err);
+        textarea.value = "Error: Could not connect to AI service.";
+    } finally {
+        textarea.disabled = false;
+        textarea.placeholder = originalPlaceholder;
+    }
+}
+
+// --- UPDATED P2 LEADERSHIP 2: RISK ROW (WITH AI BUTTONS) ---
+function addRiskRow(data = null) {
+    const tbody = document.querySelector("#riskTable tbody");
+    const d = data || {};
+    const row = `
+        <tr>
+            <td><input type="text" class="rk-name" value="${d.productName || ''}" placeholder="Product Name"></td>
+            <td>
+                <div style="display:flex; justify-content:flex-end; margin-bottom:2px;"><button type="button" class="btn-ai-mini" onclick="generateTableCellAI(this, 'Description of social or environmental risk identified in LCA')">✨ Expand</button></div>
+                <textarea class="rk-desc" rows="3" style="width:100%; border:1px solid #e2e8f0; border-radius:4px; padding:4px;" placeholder="Keywords...">${d.riskDescription || ''}</textarea>
+            </td>
+            <td>
+                <div style="display:flex; justify-content:flex-end; margin-bottom:2px;"><button type="button" class="btn-ai-mini" onclick="generateTableCellAI(this, 'Action taken to mitigate social or environmental risk')">✨ Expand</button></div>
+                <textarea class="rk-act" rows="3" style="width:100%; border:1px solid #e2e8f0; border-radius:4px; padding:4px;" placeholder="Keywords...">${d.actionTaken || ''}</textarea>
+            </td>
+            <td class="btn-remove" onclick="this.parentElement.remove()">X</td>
+        </tr>
+    `;
+    tbody.insertAdjacentHTML('beforeend', row);
+}
+
+// --- GENERIC CELL-LEVEL AI GENERATOR (For R&D, Capex, and Risks) ---
+// This function dynamically generates 1-2 sentences for ANY table cell based on the context passed in.
+async function generateTableCellAI(buttonElement, aiContext) {
+    const textarea = buttonElement.parentElement.nextElementSibling;
+    const userInput = textarea.value.trim();
+
+    if (!userInput || userInput.length < 3) {
+        alert("Please type a few keywords first (e.g., 'Implemented solar', 'Water recycling setup').");
+        return;
+    }
+
+    // UI Feedback
+    textarea.disabled = true;
+    const originalPlaceholder = textarea.placeholder;
+    textarea.placeholder = "Gemini is generating...";
+    textarea.value = "";
+
+    const promptText = `You are an expert ESG consultant writing a BRSR report.
+    Expand the following rough notes into a professional, concise description (1-2 sentences max) specifically regarding: ${aiContext}.
+    Notes: ${userInput}`;
+
+    try {
+        const response = await fetch("http://localhost:8080/api/ai/generate-esg", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + localStorage.getItem("token") },
+            body: JSON.stringify({ prompt: promptText })
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+        const data = await response.json();
+
+        // Remove markdown asterisks
+        textarea.value = data.text ? data.text.replace(/\*\*/g, '') : "Error: AI returned empty response.";
+    } catch (err) {
+        console.error("AI Error:", err);
+        textarea.value = "Error connecting to AI service.";
+    } finally {
+        textarea.disabled = false;
+        textarea.placeholder = originalPlaceholder;
+    }
+}
+
+//--- ROW MANAGEMENT (Q12 SAFETY MEASURES) ---
+function addSafetyMeasureRow(data = null) {
+    const container = document.getElementById("safetyMeasuresContainer");
+    const d = data || {};
+
+    const div = document.createElement("div");
+    div.className = "safety-measure-item form-group";
+    div.style.marginBottom = "15px";
+    div.style.padding = "15px";
+    div.style.background = "#f8fafc";
+    div.style.border = "1px solid #e2e8f0";
+    div.style.borderRadius = "6px";
+
+    div.innerHTML = `
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <label style="font-weight:bold; color:#108a55;">Strategy Heading</label>
+            <span style="color:red; cursor:pointer; font-weight:bold;" onclick="this.parentElement.parentElement.remove()">X Remove</span>
+        </div>
+        <input type="text" class="sm-head" value="${d.heading || ''}" placeholder="e.g. Enhance Leadership Capability" style="width:100%; margin-bottom:10px;">
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+            <label style="font-size:12px; margin:0;">Description / Details</label>
+            <button type="button" class="btn-ai-mini" onclick="generateTableCellAI(this, 'Safety and healthy workplace measure details')">✨ Expand</button>
+        </div>
+        <textarea class="sm-desc" rows="3" style="width:100%; border:1px solid #e2e8f0; border-radius:4px; padding:4px;" placeholder="Keywords (e.g. 'Safety tours conducted monthly')...">${d.description || ''}</textarea>
+    `;
+    container.appendChild(div);
+}
+
+// --- ROW MANAGEMENT (LEADERSHIP 6: VC ACTIONS) ---
+function addVcActionRow(data = null) {
+    const container = document.getElementById("vcActionsContainer");
+    const d = data || {};
+
+    const div = document.createElement("div");
+    div.className = "vc-action-item form-group";
+    div.style.marginBottom = "15px";
+    div.style.padding = "15px";
+    div.style.background = "#f8fafc";
+    div.style.border = "1px solid #e2e8f0";
+    div.style.borderRadius = "6px";
+
+    div.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+            <label style="font-size:13px; margin:0; color:#0284c7; font-weight:bold;">» Action Item</label>
+            <div style="display:flex; gap:15px; align-items:center;">
+                <button type="button" class="btn-ai-mini" onclick="generateTableCellAI(this, 'Corrective action taken to address value chain partner risks')">✨ Expand</button>
+                <span style="color:red; cursor:pointer; font-weight:bold; font-size: 12px;" onclick="this.parentElement.parentElement.parentElement.remove()">X Remove</span>
+            </div>
+        </div>
+        <textarea class="vc-act-text" rows="2" style="width:100%; border:1px solid #e2e8f0; border-radius:4px; padding:4px;" placeholder="Keywords (e.g. 'Terminated contracts with non-compliant vendors')...">${d.actionText || ''}</textarea>
+    `;
+    container.appendChild(div);
+}
+
+// --- TOGGLE N/A SECTIONS ---
+function toggleNaSection(containerId, isChecked) {
+    const container = document.getElementById(containerId);
+    if (container) {
+        if (isChecked) {
+            container.style.opacity = "0.4";
+            container.style.pointerEvents = "none";
+        } else {
+            container.style.opacity = "1";
+            container.style.pointerEvents = "auto";
+        }
+    }
 }

@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.Base64;
+import com.esgo.backend.dto.PublishProfileRequest;
 
 @RestController
 @RequestMapping("/api/investor")
@@ -44,21 +46,11 @@ public class InvestorController {
                 .orElse(ResponseEntity.noContent().build());
     }
 
-    // 3. PUBLISH (With File Upload)
-    @PostMapping(value = "/publish", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    // 3. PUBLISH (With Base64 File Upload)
+    @PostMapping(value = "/publish", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> publishProfile(
             Principal principal,
-            @RequestParam("companyName") String companyName,
-            @RequestParam("sector") String sector,
-            @RequestParam("address") String address,
-            @RequestParam("phone") String phone,
-            @RequestParam("email") String email,
-            @RequestParam(value = "description", required = false, defaultValue = "") String description,
-            @RequestParam(value = "scoreE", defaultValue = "0") String scoreE,
-            @RequestParam(value = "scoreS", defaultValue = "0") String scoreS,
-            @RequestParam(value = "scoreG", defaultValue = "0") String scoreG,
-            @RequestParam(value = "scoreAvg", defaultValue = "0") String scoreAvg,
-            @RequestParam(value = "file", required = false) MultipartFile file
+            @RequestBody PublishProfileRequest request
     ) {
         try {
             User user = userRepo.findByUsername(principal.getName())
@@ -68,24 +60,33 @@ public class InvestorController {
 
             // Set Fields
             profile.setUser(user);
-            profile.setCompanyName(companyName);
-            profile.setSector(sector);
-            profile.setAddress(address);
-            profile.setPhone(phone);
-            profile.setEmail(email);
-            profile.setDescription(description);
+            profile.setCompanyName(request.getCompanyName());
+            profile.setSector(request.getSector());
+            profile.setAddress(request.getAddress());
+            profile.setPhone(request.getPhone());
+            profile.setEmail(request.getEmail());
+            profile.setDescription(request.getDescription());
 
             // Parse Scores
-            profile.setScoreE(safeDouble(scoreE));
-            profile.setScoreS(safeDouble(scoreS));
-            profile.setScoreG(safeDouble(scoreG));
-            profile.setScoreAvg(safeDouble(scoreAvg));
+            profile.setScoreE(safeDouble(request.getScoreE()));
+            profile.setScoreS(safeDouble(request.getScoreS()));
+            profile.setScoreG(safeDouble(request.getScoreG()));
+            profile.setScoreAvg(safeDouble(request.getScoreAvg()));
 
-            // Handle File Upload
-            if (file != null && !file.isEmpty()) {
-                System.out.println("Processing file: " + file.getOriginalFilename());
-                profile.setReportFileName(file.getOriginalFilename());
-                profile.setReportFile(file.getBytes());
+            // Handle Base64 File Upload
+            if (request.getReportFileBase64() != null && !request.getReportFileBase64().isEmpty()) {
+                System.out.println("Processing file: " + request.getReportFileName());
+
+                String base64Data = request.getReportFileBase64();
+                // JS sends data like "data:application/pdf;base64,JVBERi0xLjcKC..."
+                // We must strip the prefix before decoding
+                if (base64Data.contains(",")) {
+                    base64Data = base64Data.split(",")[1];
+                }
+
+                byte[] decodedBytes = Base64.getDecoder().decode(base64Data);
+                profile.setReportFileName(request.getReportFileName());
+                profile.setReportFile(decodedBytes);
             }
 
             profileRepo.save(profile);

@@ -34,6 +34,7 @@ function login() {
                 localStorage.setItem("currentUser",nameToSave);
                 localStorage.setItem("token", data.token); // <--- SAVE THE PASSPORT
                 localStorage.setItem("currentUsername", username);
+                localStorage.setItem("userRole", data.role);
 
                 alert("Login Successful!");
 

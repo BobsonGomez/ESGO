@@ -1,4 +1,2 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-C:/Users/bobso/OneDrive/Desktop/ESGO/ai-engine/models/final_esg_model/model.safetensors filter=lfs diff=lfs merge=lfs -text
-ai-engine/models/final_esg_model/model.safetensors filter=lfs diff=lfs merge=lfs -text
