@@ -2921,323 +2921,732 @@ public class ReportService {
             // =================================================================
             // SECTION C: PRINCIPLE 6 (ENVIRONMENT)
             // =================================================================
+            // ================= SECTION C: PRINCIPLE 6 =================
             XWPFParagraph pP6 = doc.createParagraph();
-            pP6.setPageBreak(true); // Start P6 on new page
-            pP6.setSpacingBefore(300);
+            pP6.setSpacingBefore(400);
             XWPFRun rP6 = pP6.createRun();
-            rP6.setText("PRINCIPLE 6: Businesses should respect and make efforts to protect and restore the environment.");
+            rP6.setText("PRINCIPLE 6: Businesses should respect and make efforts to protect and restore the environment");
             rP6.setBold(true);
             rP6.setFontSize(12);
-            rP6.setColor(COLOR_THEME_GREEN);
-            rP6.setFontFamily("Calibri");
+            rP6.setColor("548235");
 
-            addBoldText(doc, "Essential Indicators");
+            XWPFParagraph p6Ess = doc.createParagraph();
+            p6Ess.setSpacingBefore(100);
+            XWPFRun rP6Ess = p6Ess.createRun();
+            rP6Ess.setText("Essential Indicators");
+            rP6Ess.setBold(true);
+            rP6Ess.setFontSize(11);
+            doc.createParagraph().createRun().addBreak();
 
-            // --- 1. ENERGY ---
-            addBoldText(doc, "1. Details of total energy consumption (in Joules or multiples) and energy intensity:");
+            // --- Q1: ENERGY CONSUMPTION ---
+            addBoldText(doc, "1. Details of total energy consumption (in Joules or multiples) and energy intensity, in the following format:");
 
-            XWPFTable tableEnergy = doc.createTable();
-            tableEnergy.setWidth("100%");
-            setColumnWidths(tableEnergy, 4000, 6000); // 40% label, 60% data (split later)
+            XWPFTable tableP6Q1 = doc.createTable();
+            tableP6Q1.setWidth("100%");
+            setColumnWidths(tableP6Q1, 5000, 2500);
 
             // Header
-            XWPFTableRow hEn = tableEnergy.getRow(0);
-            ensureCells(hEn, 3);
-            styleCell(hEn.getCell(0), "Parameter", true);
-            String fyCurp6 = (data.getFyCurrent() != null) ? data.getFyCurrent() : "Current FY";
-            String fyPrevp6 = (data.getFyPrevious() != null) ? data.getFyPrevious() : "Previous FY";
-            styleCell(hEn.getCell(1), fyCurp6, true);
-            styleCell(hEn.getCell(2), fyPrevp6, true);
+            XWPFTableRow hRowP6Q1 = tableP6Q1.getRow(0);
+            ensureCells(hRowP6Q1, 3);
+            styleCell(hRowP6Q1.getCell(0), "Parameter", true);
+            String fyCurP6 = (data.getFyCurrent() != null && !data.getFyCurrent().isEmpty()) ? data.getFyCurrent() : "Current FY";
+            String fyPrevP6 = (data.getFyPrevious() != null && !data.getFyPrevious().isEmpty()) ? data.getFyPrevious() : "Previous FY";
+            styleCell(hRowP6Q1.getCell(1), "FY " + fyCurP6 + "\n(Current Financial Year)", true);
+            styleCell(hRowP6Q1.getCell(2), "FY " + fyPrevP6 + "\n(Previous Financial Year)", true);
 
-            // Data Rows
-            addRow(tableEnergy, "Total electricity consumption (A)", data.getP6ElecConsumCurr(), data.getP6ElecConsumPrev());
-            addRow(tableEnergy, "Total fuel consumption (B)", data.getP6FuelConsumCurr(), data.getP6FuelConsumPrev());
-            addRow(tableEnergy, "Energy consumption through other sources (C)", data.getP6EnergyOtherCurr(), data.getP6EnergyOtherPrev());
+            // Renewable block
+            XWPFTableRow rP6Q1_1 = tableP6Q1.createRow(); ensureCells(rP6Q1_1, 3);
+            styleCell(rP6Q1_1.getCell(0), "From renewable sources", true);
+            mergeCellsHorizontal(rP6Q1_1, 0, 2);
 
-            // Total Row (Bold)
-            XWPFTableRow rTotalEn = tableEnergy.createRow();
-            ensureCells(rTotalEn, 3);
-            styleCell(rTotalEn.getCell(0), "Total Energy Consumption (A+B+C)", true);
-            styleCell(rTotalEn.getCell(1), checkNull(data.getP6EnergyTotalCurr()), false);
-            styleCell(rTotalEn.getCell(2), checkNull(data.getP6EnergyTotalPrev()), false);
+            addDynamicRow(tableP6Q1, new String[]{"Total electricity consumption (A)", checkNull(data.getP6Q1RenElecCurr()), checkNull(data.getP6Q1RenElecPrev())});
+            addDynamicRow(tableP6Q1, new String[]{"Total fuel consumption (B)", checkNull(data.getP6Q1RenFuelCurr()), checkNull(data.getP6Q1RenFuelPrev())});
+            addDynamicRow(tableP6Q1, new String[]{"Energy consumption through other sources (C)", checkNull(data.getP6Q1RenOtherCurr()), checkNull(data.getP6Q1RenOtherPrev())});
 
-            addRow(tableEnergy, "Energy intensity per rupee of turnover", data.getP6EnergyIntensityCurr(), data.getP6EnergyIntensityPrev());
+            XWPFTableRow rowRenTot = tableP6Q1.createRow(); ensureCells(rowRenTot, 3);
+            styleCell(rowRenTot.getCell(0), "Total energy consumed from renewable sources (A+B+C)", true);
+            rowRenTot.getCell(1).setText(checkNull(data.getP6Q1RenTotalCurr()));
+            rowRenTot.getCell(2).setText(checkNull(data.getP6Q1RenTotalPrev()));
 
-            addNote(doc, data.getP6EnergyNote());
-            doc.createParagraph().createRun().addBreak();
+            // Non-Renewable block
+            XWPFTableRow rP6Q1_nr = tableP6Q1.createRow(); ensureCells(rP6Q1_nr, 3);
+            styleCell(rP6Q1_nr.getCell(0), "From non-renewable sources", true);
+            mergeCellsHorizontal(rP6Q1_nr, 0, 2);
 
-            // --- 2. EMISSIONS ---
-            addBoldText(doc, "2. Details of following Disclosures related to Scope 1 and Scope 2 emissions:");
-            XWPFTable tableEm = doc.createTable();
-            tableEm.setWidth("100%");
+            addDynamicRow(tableP6Q1, new String[]{"Total electricity consumption (D)", checkNull(data.getP6Q1NonRenElecCurr()), checkNull(data.getP6Q1NonRenElecPrev())});
+            addDynamicRow(tableP6Q1, new String[]{"Total fuel consumption (E)", checkNull(data.getP6Q1NonRenFuelCurr()), checkNull(data.getP6Q1NonRenFuelPrev())});
+            addDynamicRow(tableP6Q1, new String[]{"Energy consumption through other sources (F)", checkNull(data.getP6Q1NonRenOtherCurr()), checkNull(data.getP6Q1NonRenOtherPrev())});
 
-            // Header
-            XWPFTableRow hEm = tableEm.getRow(0);
-            ensureCells(hEm, 3);
-            styleCell(hEm.getCell(0), "Parameter", true);
-            styleCell(hEm.getCell(1), fyCur, true);
-            styleCell(hEm.getCell(2), fyPrev, true);
+            XWPFTableRow rowNonRenTot = tableP6Q1.createRow(); ensureCells(rowNonRenTot, 3);
+            styleCell(rowNonRenTot.getCell(0), "Total energy consumed from non-renewable sources (D+E+F)", true);
+            rowNonRenTot.getCell(1).setText(checkNull(data.getP6Q1NonRenTotalCurr()));
+            rowNonRenTot.getCell(2).setText(checkNull(data.getP6Q1NonRenTotalPrev()));
 
-            addRow(tableEm, "Total Scope 1 emissions (Metric tonnes CO2e)", data.getP6Scope1Curr(), data.getP6Scope1Prev());
-            addRow(tableEm, "Total Scope 2 emissions (Metric tonnes CO2e)", data.getP6Scope2Curr(), data.getP6Scope2Prev());
+            // Grand Totals & Intensity
+            XWPFTableRow rowGrandTot = tableP6Q1.createRow(); ensureCells(rowGrandTot, 3);
+            styleCell(rowGrandTot.getCell(0), "Total energy consumed (A+B+C+D+E+F)", true);
+            rowGrandTot.getCell(1).setText(checkNull(data.getP6Q1GrandTotalCurr()));
+            rowGrandTot.getCell(2).setText(checkNull(data.getP6Q1GrandTotalPrev()));
 
-            // Total Row
-            XWPFTableRow rTotalEm = tableEm.createRow();
-            ensureCells(rTotalEm, 3);
-            styleCell(rTotalEm.getCell(0), "Total Scope 1 and Scope 2 emissions", true);
-            styleCell(rTotalEm.getCell(1), checkNull(data.getP6ScopeTotalCurr()), false);
-            styleCell(rTotalEm.getCell(2), checkNull(data.getP6ScopeTotalPrev()), false);
+            addDynamicRow(tableP6Q1, new String[]{"Energy intensity per rupee of turnover\n(Total energy consumed / Revenue from operations)", checkNull(data.getP6Q1IntTurnoverCurr()), checkNull(data.getP6Q1IntTurnoverPrev())});
+            addDynamicRow(tableP6Q1, new String[]{"Energy intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP)\n(Total energy consumed / Revenue from operations adjusted for PPP)", checkNull(data.getP6Q1IntPppCurr()), checkNull(data.getP6Q1IntPppPrev())});
+            addDynamicRow(tableP6Q1, new String[]{"Energy intensity in terms of physical output", checkNull(data.getP6Q1IntPhysicalCurr()), checkNull(data.getP6Q1IntPhysicalPrev())});
+            addDynamicRow(tableP6Q1, new String[]{"Energy intensity (optional) – the relevant metric may be selected by the entity", checkNull(data.getP6Q1IntOptCurr()), checkNull(data.getP6Q1IntOptPrev())});
 
-            addRow(tableEm, "Emission intensity per rupee of turnover", data.getP6EmissionIntensityCurr(), data.getP6EmissionIntensityPrev());
-
-            addNote(doc, data.getP6EmissionNote());
-            doc.createParagraph().createRun().addBreak();
-
-            // --- 3. WATER ---
-            addBoldText(doc, "3. Water Withdrawal and Consumption:");
-            XWPFTable tableWat = doc.createTable();
-            tableWat.setWidth("100%");
-
-            XWPFTableRow hWat = tableWat.getRow(0);
-            ensureCells(hWat, 3);
-            styleCell(hWat.getCell(0), "Parameter", true);
-            styleCell(hWat.getCell(1), fyCur, true);
-            styleCell(hWat.getCell(2), fyPrev, true);
-
-            addRow(tableWat, "Total water withdrawal (in kilolitres)", data.getP6WaterWithdrawalCurr(), data.getP6WaterWithdrawalPrev());
-            addRow(tableWat, "Total water consumption (in kilolitres)", data.getP6WaterConsumCurr(), data.getP6WaterConsumPrev());
-            addRow(tableWat, "Water intensity per rupee of turnover", data.getP6WaterIntensityCurr(), data.getP6WaterIntensityPrev());
-
-            addNote(doc, data.getP6WaterNote());
-            doc.createParagraph().createRun().addBreak();
-
-            // --- 4. WASTE MANAGEMENT ---
-            addBoldText(doc, "4. Details of Waste Management (Metric Tonnes):");
-            XWPFTable tableWaste = doc.createTable();
-            tableWaste.setWidth("100%");
-
-            // Header 1 (Merged)
-            XWPFTableRow hW1 = tableWaste.getRow(0);
-            ensureCells(hW1, 7);
-            styleCell(hW1.getCell(0), "Category", true);
-            styleCell(hW1.getCell(1), fyCur, true);
-            mergeCellsHorizontal(hW1, 1, 3);
-            styleCell(hW1.getCell(4), fyPrev, true);
-            mergeCellsHorizontal(hW1, 4, 6);
-
-            // Header 2
-            XWPFTableRow hW2 = tableWaste.createRow();
-            ensureCells(hW2, 7);
-            styleCell(hW2.getCell(0), "", true);
-            for(int i=0; i<2; i++) {
-                int base = 1 + (i*3);
-                styleCell(hW2.getCell(base), "Generated", true);
-                styleCell(hW2.getCell(base+1), "Recycled", true);
-                styleCell(hW2.getCell(base+2), "Disposed", true);
+            if (data.getP6Q1AssuranceNote() != null && !data.getP6Q1AssuranceNote().trim().isEmpty()) {
+                addNote(doc, "Note: " + data.getP6Q1AssuranceNote());
             }
+            doc.createParagraph().createRun().addBreak();
 
-            // Data Rows
-            List<BrsrReportRequest.WasteManagementRow> wList = data.getP6WasteManagementList();
-            if (wList != null && !wList.isEmpty()) {
-                for (BrsrReportRequest.WasteManagementRow w : wList) {
-                    addDynamicRow(tableWaste, new String[]{
-                            checkNull(w.getCategory()),
-                            checkNull(w.getCurrGenerated()), checkNull(w.getCurrRecycled()), checkNull(w.getCurrDisposed()),
-                            checkNull(w.getPrevGenerated()), checkNull(w.getPrevRecycled()), checkNull(w.getPrevDisposed())
-                    });
+            // --- Q2: PAT SCHEME ---
+            addBoldText(doc, "2. Does the entity have any sites / facilities identified as designated consumers (DCs) under the Performance, Achieve and Trade (PAT) Scheme of the Government of India? (Y/N) If yes, disclose whether targets set under the PAT scheme have been achieved. In case targets have not been achieved, provide the remedial action taken, if any.");
+            XWPFParagraph p6Q2 = doc.createParagraph();
+            setTextWithBreaks(p6Q2.createRun(), checkNull(data.getP6Q2PatDetails()));
+            doc.createParagraph().createRun().addBreak();
+
+            // --- Q3: WATER DISCLOSURES ---
+            addBoldText(doc, "3. Provide details of the following disclosures related to water, in the following format:");
+
+            XWPFTable tableP6Q3 = doc.createTable();
+            tableP6Q3.setWidth("100%");
+            setColumnWidths(tableP6Q3, 5000, 2500);
+
+            // Header
+            XWPFTableRow hRowP6Q3 = tableP6Q3.getRow(0);
+            ensureCells(hRowP6Q3, 3);
+            styleCell(hRowP6Q3.getCell(0), "Parameter", true);
+            styleCell(hRowP6Q3.getCell(1), "FY " + fyCurP6 + "\n(Current Financial Year)", true);
+            styleCell(hRowP6Q3.getCell(2), "FY " + fyPrevP6 + "\n(Previous Financial Year)", true);
+
+            XWPFTableRow rP6Q3_cat = tableP6Q3.createRow(); ensureCells(rP6Q3_cat, 3);
+            styleCell(rP6Q3_cat.getCell(0), "Water withdrawal by source (in kilolitres)", true);
+            mergeCellsHorizontal(rP6Q3_cat, 0, 2);
+
+            addDynamicRow(tableP6Q3, new String[]{"(i) Surface water", checkNull(data.getP6Q3SurfaceCurr()), checkNull(data.getP6Q3SurfacePrev())});
+            addDynamicRow(tableP6Q3, new String[]{"(ii) Groundwater", checkNull(data.getP6Q3GroundCurr()), checkNull(data.getP6Q3GroundPrev())});
+            addDynamicRow(tableP6Q3, new String[]{"(iii) Third party water", checkNull(data.getP6Q3ThirdPartyCurr()), checkNull(data.getP6Q3ThirdPartyPrev())});
+            addDynamicRow(tableP6Q3, new String[]{"(iv) Seawater / desalinated water", checkNull(data.getP6Q3SeaCurr()), checkNull(data.getP6Q3SeaPrev())});
+            addDynamicRow(tableP6Q3, new String[]{"(v) Others", checkNull(data.getP6Q3OthersCurr()), checkNull(data.getP6Q3OthersPrev())});
+
+            XWPFTableRow rowWaterWith = tableP6Q3.createRow(); ensureCells(rowWaterWith, 3);
+            XWPFRun rWaterWith = rowWaterWith.getCell(0).addParagraph().createRun();
+            rWaterWith.setText("Total volume of water withdrawal (in kilolitres) (i + ii + iii + iv + v)");
+            rWaterWith.setBold(true); rWaterWith.setItalic(true);
+            rowWaterWith.getCell(1).setText(checkNull(data.getP6Q3TotalWithCurr()));
+            rowWaterWith.getCell(2).setText(checkNull(data.getP6Q3TotalWithPrev()));
+
+            XWPFTableRow rowWaterCons = tableP6Q3.createRow(); ensureCells(rowWaterCons, 3);
+            styleCell(rowWaterCons.getCell(0), "Total volume of water consumption (in kilolitres)", true);
+            rowWaterCons.getCell(1).setText(checkNull(data.getP6Q3TotalConsCurr()));
+            rowWaterCons.getCell(2).setText(checkNull(data.getP6Q3TotalConsPrev()));
+
+            addDynamicRow(tableP6Q3, new String[]{"Water intensity per rupee of turnover\n(Total water consumption / Revenue from operations)", checkNull(data.getP6Q3IntTurnoverCurr()), checkNull(data.getP6Q3IntTurnoverPrev())});
+            addDynamicRow(tableP6Q3, new String[]{"Water intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP)\n(Total water consumption / Revenue from operations adjusted for PPP)", checkNull(data.getP6Q3IntPppCurr()), checkNull(data.getP6Q3IntPppPrev())});
+            addDynamicRow(tableP6Q3, new String[]{"Water intensity in terms of physical output", checkNull(data.getP6Q3IntPhysicalCurr()), checkNull(data.getP6Q3IntPhysicalPrev())});
+            addDynamicRow(tableP6Q3, new String[]{"Water intensity (optional) – the relevant metric may be selected by the entity", checkNull(data.getP6Q3IntOptCurr()), checkNull(data.getP6Q3IntOptPrev())});
+
+            if (data.getP6Q3AssuranceNote() != null && !data.getP6Q3AssuranceNote().trim().isEmpty()) {
+                addNote(doc, "Note: " + data.getP6Q3AssuranceNote());
+            }
+            doc.createParagraph().createRun().addBreak();
+
+            // --- Q4: WATER DISCHARGE ---
+            addBoldText(doc, "4. Provide the following details related to water discharged:");
+
+            XWPFTable tableP6Q4 = doc.createTable();
+            tableP6Q4.setWidth("100%");
+            setColumnWidths(tableP6Q4, 5000, 2500);
+
+            XWPFTableRow hRowP6Q4 = tableP6Q4.getRow(0);
+            ensureCells(hRowP6Q4, 3);
+            styleCell(hRowP6Q4.getCell(0), "Parameter", true);
+            styleCell(hRowP6Q4.getCell(1), "FY " + fyCur + "\n(Current Financial Year)", true);
+            styleCell(hRowP6Q4.getCell(2), "FY " + fyPrev + "\n(Previous Financial Year)", true);
+
+            XWPFTableRow rP6Q4_cat = tableP6Q4.createRow(); ensureCells(rP6Q4_cat, 3);
+            styleCell(rP6Q4_cat.getCell(0), "Water discharge by destination and level of treatment (in kilolitres)", true);
+            mergeCellsHorizontal(rP6Q4_cat, 0, 2);
+
+            // Helper to render treatment rows cleanly
+            java.util.function.Consumer<String[]> addDischargeRow = (params) -> {
+                XWPFTableRow rHeader = tableP6Q4.createRow(); ensureCells(rHeader, 3);
+                styleCell(rHeader.getCell(0), params[0], false);
+                mergeCellsHorizontal(rHeader, 0, 2);
+
+                addDynamicRow(tableP6Q4, new String[]{"   - No treatment", checkNull(params[1]), checkNull(params[2])});
+
+                String levelStr = checkNull(params[5]);
+                String labelWith = "   - With treatment" + (!levelStr.isEmpty() ? " - " + levelStr : " - please specify level of treatment");
+                addDynamicRow(tableP6Q4, new String[]{labelWith, checkNull(params[3]), checkNull(params[4])});
+            };
+
+            addDischargeRow.accept(new String[]{"(i) To Surface water", data.getP6Q4SurfNoCurr(), data.getP6Q4SurfNoPrev(), data.getP6Q4SurfWithCurr(), data.getP6Q4SurfWithPrev(), data.getP6Q4SurfLevel()});
+            addDischargeRow.accept(new String[]{"(ii) To Groundwater", data.getP6Q4GroundNoCurr(), data.getP6Q4GroundNoPrev(), data.getP6Q4GroundWithCurr(), data.getP6Q4GroundWithPrev(), data.getP6Q4GroundLevel()});
+            addDischargeRow.accept(new String[]{"(iii) To Seawater", data.getP6Q4SeaNoCurr(), data.getP6Q4SeaNoPrev(), data.getP6Q4SeaWithCurr(), data.getP6Q4SeaWithPrev(), data.getP6Q4SeaLevel()});
+            addDischargeRow.accept(new String[]{"(iv) Sent to third-parties", data.getP6Q4ThirdNoCurr(), data.getP6Q4ThirdNoPrev(), data.getP6Q4ThirdWithCurr(), data.getP6Q4ThirdWithPrev(), data.getP6Q4ThirdLevel()});
+            addDischargeRow.accept(new String[]{"(v) Others", data.getP6Q4OtherNoCurr(), data.getP6Q4OtherNoPrev(), data.getP6Q4OtherWithCurr(), data.getP6Q4OtherWithPrev(), data.getP6Q4OtherLevel()});
+
+            XWPFTableRow rowDisTotal = tableP6Q4.createRow(); ensureCells(rowDisTotal, 3);
+            styleCell(rowDisTotal.getCell(0), "Total water discharged (in kilolitres)", true);
+            rowDisTotal.getCell(1).setText(checkNull(data.getP6Q4TotalCurr()));
+            rowDisTotal.getCell(2).setText(checkNull(data.getP6Q4TotalPrev()));
+
+            if (data.getP6Q4AssuranceNote() != null && !data.getP6Q4AssuranceNote().trim().isEmpty()) {
+                addNote(doc, "Note: " + data.getP6Q4AssuranceNote());
+            }
+            doc.createParagraph().createRun().addBreak();
+
+            // --- Q5: ZERO LIQUID DISCHARGE ---
+            addBoldText(doc, "5. Has the entity implemented a mechanism for Zero Liquid Discharge? If yes, provide details of its coverage and implementation.");
+            XWPFParagraph p6Q5 = doc.createParagraph();
+            setTextWithBreaks(p6Q5.createRun(), checkNull(data.getP6Q5ZldDetails()));
+            doc.createParagraph().createRun().addBreak();
+
+            // --- Q6: AIR EMISSIONS ---
+            addBoldText(doc, "6. Please provide details of air emissions (other than GHG emissions) by the entity, in the following format:");
+
+            XWPFTable tableP6Q6 = doc.createTable();
+            tableP6Q6.setWidth("100%");
+            setColumnWidths(tableP6Q6, 3000, 2000, 2500, 2500); // 4 columns!
+
+            XWPFTableRow hRowP6Q6 = tableP6Q6.getRow(0);
+            ensureCells(hRowP6Q6, 4);
+            styleCell(hRowP6Q6.getCell(0), "Parameter", true);
+            styleCell(hRowP6Q6.getCell(1), "Please specify unit", true);
+            styleCell(hRowP6Q6.getCell(2), "FY " + fyCur + "\n(Current Financial Year)", true);
+            styleCell(hRowP6Q6.getCell(3), "FY " + fyPrev + "\n(Previous Financial Year)", true);
+
+            // Using helper to handle 4 columns
+            java.util.function.Consumer<String[]> addAirRow = (vals) -> {
+                XWPFTableRow r = tableP6Q6.createRow(); ensureCells(r, 4);
+                r.getCell(0).setText(vals[0]); r.getCell(1).setText(vals[1]); r.getCell(2).setText(vals[2]); r.getCell(3).setText(vals[3]);
+            };
+
+            addAirRow.accept(new String[]{"NOx", checkNull(data.getP6Q6NoxUnit()), checkNull(data.getP6Q6NoxCurr()), checkNull(data.getP6Q6NoxPrev())});
+            addAirRow.accept(new String[]{"SOx", checkNull(data.getP6Q6SoxUnit()), checkNull(data.getP6Q6SoxCurr()), checkNull(data.getP6Q6SoxPrev())});
+            addAirRow.accept(new String[]{"Particulate matter (PM)", checkNull(data.getP6Q6PmUnit()), checkNull(data.getP6Q6PmCurr()), checkNull(data.getP6Q6PmPrev())});
+            addAirRow.accept(new String[]{"Persistent organic pollutants (POP)", checkNull(data.getP6Q6PopUnit()), checkNull(data.getP6Q6PopCurr()), checkNull(data.getP6Q6PopPrev())});
+            addAirRow.accept(new String[]{"Volatile organic compounds (VOC)", checkNull(data.getP6Q6VocUnit()), checkNull(data.getP6Q6VocCurr()), checkNull(data.getP6Q6VocPrev())});
+            addAirRow.accept(new String[]{"Hazardous air pollutants (HAP)", checkNull(data.getP6Q6HapUnit()), checkNull(data.getP6Q6HapCurr()), checkNull(data.getP6Q6HapPrev())});
+
+            String otherLabel = "Others" + (!checkNull(data.getP6Q6OtherName()).isEmpty() ? " - " + data.getP6Q6OtherName() : " – please specify");
+            addAirRow.accept(new String[]{otherLabel, checkNull(data.getP6Q6OtherUnit()), checkNull(data.getP6Q6OtherCurr()), checkNull(data.getP6Q6OtherPrev())});
+
+            if (data.getP6Q6AssuranceNote() != null && !data.getP6Q6AssuranceNote().trim().isEmpty()) {
+                addNote(doc, "Note: " + data.getP6Q6AssuranceNote());
+            }
+            doc.createParagraph().createRun().addBreak();
+
+            // --- Q7: GHG EMISSIONS ---
+            addBoldText(doc, "7. Provide details of greenhouse gas emissions (Scope 1 and Scope 2 emissions) & its intensity, in the following format:");
+
+            XWPFTable tableP6Q7 = doc.createTable();
+            tableP6Q7.setWidth("100%");
+            setColumnWidths(tableP6Q7, 3000, 2000, 2500, 2500); // Re-using our 4-column helper!
+
+            XWPFTableRow hRowP6Q7 = tableP6Q7.getRow(0);
+            ensureCells(hRowP6Q7, 4);
+            styleCell(hRowP6Q7.getCell(0), "Parameter", true);
+            styleCell(hRowP6Q7.getCell(1), "Unit", true);
+            styleCell(hRowP6Q7.getCell(2), "FY " + fyCurP6 + "\n(Current Financial Year)", true);
+            styleCell(hRowP6Q7.getCell(3), "FY " + fyPrevP6 + "\n(Previous Financial Year)", true);
+
+            // Using helper to handle 4 columns (like we did in Q6)
+            java.util.function.Consumer<String[]> addGhgRow = (vals) -> {
+                XWPFTableRow r = tableP6Q7.createRow(); ensureCells(r, 4);
+                styleCell(r.getCell(0), vals[0], true); // First column is bolded per screenshot
+                r.getCell(1).setText(vals[1]); r.getCell(2).setText(vals[2]); r.getCell(3).setText(vals[3]);
+            };
+
+            addGhgRow.accept(new String[]{"Total Scope 1 emissions\n(Break-up of the GHG into CO2, CH4, N2O, HFCs, PFCs, SF6, NF3, if available)", checkNull(data.getP6Q7Scope1Unit()), checkNull(data.getP6Q7Scope1Curr()), checkNull(data.getP6Q7Scope1Prev())});
+            addGhgRow.accept(new String[]{"Total Scope 2 emissions\n(Break-up of the GHG into CO2, CH4, N2O, HFCs, PFCs, SF6, NF3, if available)", checkNull(data.getP6Q7Scope2Unit()), checkNull(data.getP6Q7Scope2Curr()), checkNull(data.getP6Q7Scope2Prev())});
+            addGhgRow.accept(new String[]{"Total Scope 1 and Scope 2 emission intensity per rupee of turnover\n(Total Scope 1 and Scope 2 GHG emissions / Revenue from operations)", "", checkNull(data.getP6Q7IntTurnoverCurr()), checkNull(data.getP6Q7IntTurnoverPrev())});
+            addGhgRow.accept(new String[]{"Total Scope 1 and Scope 2 emission intensity per rupee of turnover adjusted for Purchasing Power Parity (PPP)\n(Total Scope 1 and Scope 2 GHG emissions / Revenue from operations adjusted for PPP)", "", checkNull(data.getP6Q7IntPppCurr()), checkNull(data.getP6Q7IntPppPrev())});
+            addGhgRow.accept(new String[]{"Total Scope 1 and Scope 2 emission intensity in terms of physical output", "", checkNull(data.getP6Q7IntPhysCurr()), checkNull(data.getP6Q7IntPhysPrev())});
+            addGhgRow.accept(new String[]{"Total Scope 1 and Scope 2 emission intensity (optional)\n– the relevant metric may be selected by the entity", "", checkNull(data.getP6Q7IntOptCurr()), checkNull(data.getP6Q7IntOptPrev())});
+
+            if (data.getP6Q7AssuranceNote() != null && !data.getP6Q7AssuranceNote().trim().isEmpty()) {
+                addNote(doc, "Note: " + data.getP6Q7AssuranceNote());
+            }
+            doc.createParagraph().createRun().addBreak();
+
+            // --- Q8: GHG PROJECTS ---
+            addBoldText(doc, "8. Does the entity have any project related to reducing Green House Gas emission? If Yes, then provide details.");
+            XWPFParagraph p6Q8 = doc.createParagraph();
+            setTextWithBreaks(p6Q8.createRun(), checkNull(data.getP6Q8GhgProjectDetails()));
+            doc.createParagraph().createRun().addBreak();
+
+            // --- Q9: WASTE MANAGEMENT ---
+            addBoldText(doc, "9. Provide details related to waste management by the entity, in the following format:");
+
+            XWPFTable tableP6Q9 = doc.createTable();
+            tableP6Q9.setWidth("100%");
+            setColumnWidths(tableP6Q9, 5000, 2500); // Back to the standard 3-column split
+
+            XWPFTableRow hRowP6Q9 = tableP6Q9.getRow(0);
+            ensureCells(hRowP6Q9, 3);
+            styleCell(hRowP6Q9.getCell(0), "Parameter", true);
+            styleCell(hRowP6Q9.getCell(1), "FY " + fyCurP6 + "\n(Current Financial Year)", true);
+            styleCell(hRowP6Q9.getCell(2), "FY " + fyPrevP6 + "\n(Previous Financial Year)", true);
+
+            // Generated Waste
+            XWPFTableRow rP6Q9_gen = tableP6Q9.createRow(); ensureCells(rP6Q9_gen, 3);
+            styleCell(rP6Q9_gen.getCell(0), "Total Waste generated (in metric tonnes)", true);
+            rP6Q9_gen.getCell(0).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+            mergeCellsHorizontal(rP6Q9_gen, 0, 2);
+
+            addDynamicRow(tableP6Q9, new String[]{"Plastic waste (A)", checkNull(data.getP6Q9GenPlastCurr()), checkNull(data.getP6Q9GenPlastPrev())});
+            addDynamicRow(tableP6Q9, new String[]{"E-waste (B)", checkNull(data.getP6Q9GenEwasteCurr()), checkNull(data.getP6Q9GenEwastePrev())});
+            addDynamicRow(tableP6Q9, new String[]{"Bio-medical waste (C)", checkNull(data.getP6Q9GenBioCurr()), checkNull(data.getP6Q9GenBioPrev())});
+            addDynamicRow(tableP6Q9, new String[]{"Construction and demolition waste (D)", checkNull(data.getP6Q9GenConstCurr()), checkNull(data.getP6Q9GenConstPrev())});
+            addDynamicRow(tableP6Q9, new String[]{"Battery waste (E)", checkNull(data.getP6Q9GenBattCurr()), checkNull(data.getP6Q9GenBattPrev())});
+            addDynamicRow(tableP6Q9, new String[]{"Radioactive waste (F)", checkNull(data.getP6Q9GenRadioCurr()), checkNull(data.getP6Q9GenRadioPrev())});
+            addDynamicRow(tableP6Q9, new String[]{"Other Hazardous waste. Please specify, if any. (G)", checkNull(data.getP6Q9GenHazCurr()), checkNull(data.getP6Q9GenHazPrev())});
+            addDynamicRow(tableP6Q9, new String[]{"Other Non-hazardous waste generated (H). Please specify, if any.", checkNull(data.getP6Q9GenNonHazCurr()), checkNull(data.getP6Q9GenNonHazPrev())});
+
+            XWPFTableRow rowGenTot = tableP6Q9.createRow(); ensureCells(rowGenTot, 3);
+            XWPFRun rGenTot = rowGenTot.getCell(0).addParagraph().createRun();
+            rGenTot.setText("Total (A+B + C + D + E + F + G + H)"); rGenTot.setBold(true); rGenTot.setItalic(true);
+            rowGenTot.getCell(1).setText(checkNull(data.getP6Q9GenTotalCurr()));
+            rowGenTot.getCell(2).setText(checkNull(data.getP6Q9GenTotalPrev()));
+
+            // Intensities
+            addDynamicRow(tableP6Q9, new String[]{"Waste intensity per rupee of turnover", checkNull(data.getP6Q9IntTurnCurr()), checkNull(data.getP6Q9IntTurnPrev())});
+            addDynamicRow(tableP6Q9, new String[]{"Waste intensity per rupee of turnover adjusted for PPP", checkNull(data.getP6Q9IntPppCurr()), checkNull(data.getP6Q9IntPppPrev())});
+            addDynamicRow(tableP6Q9, new String[]{"Waste intensity in terms of physical output", checkNull(data.getP6Q9IntPhysCurr()), checkNull(data.getP6Q9IntPhysPrev())});
+            addDynamicRow(tableP6Q9, new String[]{"Waste intensity (optional)", checkNull(data.getP6Q9IntOptCurr()), checkNull(data.getP6Q9IntOptPrev())});
+
+            // Recovered Waste
+            XWPFTableRow rP6Q9_rec = tableP6Q9.createRow(); ensureCells(rP6Q9_rec, 3);
+            styleCell(rP6Q9_rec.getCell(0), "For each category of waste generated, total waste recovered through recycling, re-using or other recovery operations (in metric tonnes)", true);
+            rP6Q9_rec.getCell(0).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+            mergeCellsHorizontal(rP6Q9_rec, 0, 2);
+
+            XWPFTableRow rP6Q9_recCat = tableP6Q9.createRow(); ensureCells(rP6Q9_recCat, 3);
+            styleCell(rP6Q9_recCat.getCell(0), "Category of waste", true);
+            mergeCellsHorizontal(rP6Q9_recCat, 0, 2);
+
+            addDynamicRow(tableP6Q9, new String[]{"(i) Recycled", checkNull(data.getP6Q9RecRecyCurr()), checkNull(data.getP6Q9RecRecyPrev())});
+            addDynamicRow(tableP6Q9, new String[]{"(ii) Re-used", checkNull(data.getP6Q9RecReuseCurr()), checkNull(data.getP6Q9RecReusePrev())});
+            addDynamicRow(tableP6Q9, new String[]{"(iii) Other recovery operations", checkNull(data.getP6Q9RecOthCurr()), checkNull(data.getP6Q9RecOthPrev())});
+
+            XWPFTableRow rowRecTot = tableP6Q9.createRow(); ensureCells(rowRecTot, 3);
+            XWPFRun rRecTot = rowRecTot.getCell(0).addParagraph().createRun();
+            rRecTot.setText("Total"); rRecTot.setBold(true); rRecTot.setItalic(true);
+            rowRecTot.getCell(1).setText(checkNull(data.getP6Q9RecTotalCurr()));
+            rowRecTot.getCell(2).setText(checkNull(data.getP6Q9RecTotalPrev()));
+
+            // Disposed Waste
+            XWPFTableRow rP6Q9_disp = tableP6Q9.createRow(); ensureCells(rP6Q9_disp, 3);
+            styleCell(rP6Q9_disp.getCell(0), "For each category of waste generated, total waste disposed by nature of disposal method (in metric tonnes)", true);
+            rP6Q9_disp.getCell(0).getParagraphs().get(0).setAlignment(ParagraphAlignment.CENTER);
+            mergeCellsHorizontal(rP6Q9_disp, 0, 2);
+
+            XWPFTableRow rP6Q9_dispCat = tableP6Q9.createRow(); ensureCells(rP6Q9_dispCat, 3);
+            styleCell(rP6Q9_dispCat.getCell(0), "Category of waste", true);
+            mergeCellsHorizontal(rP6Q9_dispCat, 0, 2);
+
+            addDynamicRow(tableP6Q9, new String[]{"(i) Incineration", checkNull(data.getP6Q9DispIncCurr()), checkNull(data.getP6Q9DispIncPrev())});
+            addDynamicRow(tableP6Q9, new String[]{"(ii) Landfilling", checkNull(data.getP6Q9DispLandCurr()), checkNull(data.getP6Q9DispLandPrev())});
+            addDynamicRow(tableP6Q9, new String[]{"(iii) Other disposal operations", checkNull(data.getP6Q9DispOthCurr()), checkNull(data.getP6Q9DispOthPrev())});
+
+            XWPFTableRow rowDispTot = tableP6Q9.createRow(); ensureCells(rowDispTot, 3);
+            XWPFRun rDispTot = rowDispTot.getCell(0).addParagraph().createRun();
+            rDispTot.setText("Total"); rDispTot.setBold(true); rDispTot.setItalic(true);
+            rowDispTot.getCell(1).setText(checkNull(data.getP6Q9DispTotalCurr()));
+            rowDispTot.getCell(2).setText(checkNull(data.getP6Q9DispTotalPrev()));
+
+            if (data.getP6Q9AssuranceNote() != null && !data.getP6Q9AssuranceNote().trim().isEmpty()) {
+                addNote(doc, "Note: " + data.getP6Q9AssuranceNote());
+            }
+            doc.createParagraph().createRun().addBreak();
+
+            // --- Q10: WASTE PRACTICES ---
+            addBoldText(doc, "10. Briefly describe the waste management practices adopted in your establishments. Describe the strategy adopted by your company to reduce usage of hazardous and toxic chemicals in your products and processes and the practices adopted to manage such wastes.");
+            XWPFParagraph p6Q10 = doc.createParagraph();
+            setTextWithBreaks(p6Q10.createRun(), checkNull(data.getP6Q10WastePractices()));
+            doc.createParagraph().createRun().addBreak();
+
+            // --- Q11: ECOLOGICALLY SENSITIVE AREAS ---
+            addBoldText(doc, "11. If the entity has operations/offices in/around ecologically sensitive areas... please specify details in the following format:");
+            XWPFTable tableP6Q11 = doc.createTable();
+            tableP6Q11.setWidth("100%");
+
+            XWPFTableRow hRowP6Q11 = tableP6Q11.getRow(0);
+            ensureCells(hRowP6Q11, 4);
+            setColumnWidths(tableP6Q11, 1000, 2500, 2500, 4000); // 4 columns
+            styleCell(hRowP6Q11.getCell(0), "S. No.", true);
+            styleCell(hRowP6Q11.getCell(1), "Location of operations/offices", true);
+            styleCell(hRowP6Q11.getCell(2), "Type of operations", true);
+            styleCell(hRowP6Q11.getCell(3), "Whether the conditions of environmental approval / clearance are being complied with? (Y/N) If no, the reasons thereof and corrective action taken, if any.", true);
+
+            if (data.getP6Q11EcoList() != null && !data.getP6Q11EcoList().isEmpty()) {
+                for (BrsrReportRequest.P6Q11Eco item : data.getP6Q11EcoList()) {
+                    addDynamicRow(tableP6Q11, new String[]{checkNull(item.getSNo()), checkNull(item.getLocation()), checkNull(item.getType()), checkNull(item.getCompliance())});
                 }
             } else {
-                addDynamicRow(tableWaste, new String[]{"-", "-", "-", "-", "-", "-", "-"});
+                addDynamicRow(tableP6Q11, new String[]{"-", "-", "-", "-"});
             }
+            doc.createParagraph().createRun().addBreak();
 
-            addNote(doc, data.getP6WasteNote());
+            // --- Q12: EIA ---
+            addBoldText(doc, "12. Details of environmental impact assessments of projects undertaken by the entity based on applicable laws, in the current financial year:");
+            XWPFTable tableP6Q12 = doc.createTable();
+            tableP6Q12.setWidth("100%");
+
+            XWPFTableRow hRowP6Q12 = tableP6Q12.getRow(0);
+            ensureCells(hRowP6Q12, 6);
+            setColumnWidths(tableP6Q12, 2000, 1500, 1500, 1500, 1500, 2000); // 6 columns
+            styleCell(hRowP6Q12.getCell(0), "Name and brief details of project", true);
+            styleCell(hRowP6Q12.getCell(1), "EIA Notification No.", true);
+            styleCell(hRowP6Q12.getCell(2), "Date", true);
+            styleCell(hRowP6Q12.getCell(3), "Whether conducted by independent external agency (Yes / No)", true);
+            styleCell(hRowP6Q12.getCell(4), "Results communicated in public domain (Yes / No)", true);
+            styleCell(hRowP6Q12.getCell(5), "Relevant Web link", true);
+
+            if (data.getP6Q12EiaList() != null && !data.getP6Q12EiaList().isEmpty()) {
+                for (BrsrReportRequest.P6Q12Eia item : data.getP6Q12EiaList()) {
+                    addDynamicRow(tableP6Q12, new String[]{checkNull(item.getName()), checkNull(item.getNotifNo()), checkNull(item.getDate()), checkNull(item.getIndependent()), checkNull(item.getPublicDomain()), checkNull(item.getLink())});
+                }
+            } else {
+                addDynamicRow(tableP6Q12, new String[]{"-", "-", "-", "-", "-", "-"});
+            }
+            doc.createParagraph().createRun().addBreak();
+
+            // --- Q13: NON-COMPLIANCE ---
+            addBoldText(doc, "13. Is the entity compliant with the applicable environmental law/ regulations/ guidelines in India... (Y/N). If not, provide details of all such non-compliances, in the following format:");
+            XWPFTable tableP6Q13 = doc.createTable();
+            tableP6Q13.setWidth("100%");
+
+            XWPFTableRow hRowP6Q13 = tableP6Q13.getRow(0);
+            ensureCells(hRowP6Q13, 5);
+            setColumnWidths(tableP6Q13, 1000, 2500, 2500, 2000, 2000); // 5 columns
+            styleCell(hRowP6Q13.getCell(0), "S. No.", true);
+            styleCell(hRowP6Q13.getCell(1), "Specify the law / regulation / guidelines which was not complied with", true);
+            styleCell(hRowP6Q13.getCell(2), "Provide details of the non-compliance", true);
+            styleCell(hRowP6Q13.getCell(3), "Any fines / penalties / action taken by regulatory agencies such as pollution control boards or by courts", true);
+            styleCell(hRowP6Q13.getCell(4), "Corrective action taken, if any", true);
+
+            if (data.getP6Q13NonCompList() != null && !data.getP6Q13NonCompList().isEmpty()) {
+                for (BrsrReportRequest.P6Q13NonComp item : data.getP6Q13NonCompList()) {
+                    addDynamicRow(tableP6Q13, new String[]{checkNull(item.getSNo()), checkNull(item.getLaw()), checkNull(item.getDetails()), checkNull(item.getFines()), checkNull(item.getAction())});
+                }
+            } else {
+                addDynamicRow(tableP6Q13, new String[]{"-", "-", "-", "-", "-"});
+            }
+            doc.createParagraph().createRun().addBreak();
+
+            // =================================================================
+            // SECTION C: PRINCIPLE 6 LEADERSHIP
+            // =================================================================
+
+            // ================= P6 LEADERSHIP INDICATORS =================
+            XWPFParagraph p6LeadHead = doc.createParagraph();
+            p6LeadHead.setAlignment(ParagraphAlignment.LEFT);
+            XWPFRun rP6LeadHead = p6LeadHead.createRun();
+            rP6LeadHead.setText("Leadership Indicators");
+            rP6LeadHead.setBold(true);
+            rP6LeadHead.setFontSize(12);
+            rP6LeadHead.setColor("548235");
+            doc.createParagraph().createRun().addBreak();
+
+            // --- Lead Q1: Water Stress ---
+            addBoldText(doc, "1. Water withdrawal, consumption and discharge in areas of water stress (in kilolitres):");
+            addBoldText(doc, "For each facility / plant located in areas of water stress, provide the following information:");
+            setTextWithBreaks(doc.createParagraph().createRun(), checkNull(data.getP6LeadQ1Facilities()));
+
+            XWPFTable tableLeadQ1 = doc.createTable();
+            tableLeadQ1.setWidth("100%");
+            setColumnWidths(tableLeadQ1, 5000, 2500);
+
+            XWPFTableRow hRowLeadQ1 = tableLeadQ1.getRow(0); ensureCells(hRowLeadQ1, 3);
+            styleCell(hRowLeadQ1.getCell(0), "Parameter", true);
+            styleCell(hRowLeadQ1.getCell(1), "FY " + fyCurP6 + "\n(Current Financial Year)", true);
+            styleCell(hRowLeadQ1.getCell(2), "FY " + fyPrevP6 + "\n(Previous Financial Year)", true);
+
+            // Withdrawal
+            XWPFTableRow rL1W = tableLeadQ1.createRow(); ensureCells(rL1W, 3);
+            styleCell(rL1W.getCell(0), "Water withdrawal by source (in kilolitres)", true); mergeCellsHorizontal(rL1W, 0, 2);
+            addDynamicRow(tableLeadQ1, new String[]{"(i) Surface water", checkNull(data.getP6LeadQ1WithSurfCurr()), checkNull(data.getP6LeadQ1WithSurfPrev())});
+            addDynamicRow(tableLeadQ1, new String[]{"(ii) Groundwater", checkNull(data.getP6LeadQ1WithGroundCurr()), checkNull(data.getP6LeadQ1WithGroundPrev())});
+            addDynamicRow(tableLeadQ1, new String[]{"(iii) Third party water", checkNull(data.getP6LeadQ1WithThirdCurr()), checkNull(data.getP6LeadQ1WithThirdPrev())});
+            addDynamicRow(tableLeadQ1, new String[]{"(iv) Seawater / desalinated water", checkNull(data.getP6LeadQ1WithSeaCurr()), checkNull(data.getP6LeadQ1WithSeaPrev())});
+            addDynamicRow(tableLeadQ1, new String[]{"(v) Others", checkNull(data.getP6LeadQ1WithOtherCurr()), checkNull(data.getP6LeadQ1WithOtherPrev())});
+
+            XWPFTableRow rL1WTot = tableLeadQ1.createRow(); ensureCells(rL1WTot, 3);
+            rL1WTot.getCell(0).setText("Total volume of water withdrawal");
+            rL1WTot.getCell(1).setText(checkNull(data.getP6LeadQ1WithTotalCurr()));
+            rL1WTot.getCell(2).setText(checkNull(data.getP6LeadQ1WithTotalPrev()));
+
+            // Consumption & Intensity
+            XWPFTableRow rL1CTot = tableLeadQ1.createRow(); ensureCells(rL1CTot, 3);
+            styleCell(rL1CTot.getCell(0), "Total volume of water consumption (in kilolitres)", true);
+            rL1CTot.getCell(1).setText(checkNull(data.getP6LeadQ1ConsTotalCurr()));
+            rL1CTot.getCell(2).setText(checkNull(data.getP6LeadQ1ConsTotalPrev()));
+            addDynamicRow(tableLeadQ1, new String[]{"Water intensity per rupee of turnover", checkNull(data.getP6LeadQ1IntTurnCurr()), checkNull(data.getP6LeadQ1IntTurnPrev())});
+            addDynamicRow(tableLeadQ1, new String[]{"Water intensity (optional)", checkNull(data.getP6LeadQ1IntOptCurr()), checkNull(data.getP6LeadQ1IntOptPrev())});
+
+            // Discharge
+            XWPFTableRow rL1D = tableLeadQ1.createRow(); ensureCells(rL1D, 3);
+            styleCell(rL1D.getCell(0), "Water discharge by destination and level of treatment (in kilolitres)", true); mergeCellsHorizontal(rL1D, 0, 2);
+
+            java.util.function.Consumer<String[]> addLeadDisRow = (params) -> {
+                XWPFTableRow rHeader = tableLeadQ1.createRow(); ensureCells(rHeader, 3);
+                styleCell(rHeader.getCell(0), params[0], false); mergeCellsHorizontal(rHeader, 0, 2);
+                addDynamicRow(tableLeadQ1, new String[]{"   - No treatment", checkNull(params[1]), checkNull(params[2])});
+                String levelStr = checkNull(params[5]);
+                String labelWith = "   - With treatment" + (!levelStr.isEmpty() ? " - " + levelStr : "");
+                addDynamicRow(tableLeadQ1, new String[]{labelWith, checkNull(params[3]), checkNull(params[4])});
+            };
+
+            addLeadDisRow.accept(new String[]{"(i) Into Surface water", data.getP6LeadQ1DisSurfNoCurr(), data.getP6LeadQ1DisSurfNoPrev(), data.getP6LeadQ1DisSurfWithCurr(), data.getP6LeadQ1DisSurfWithPrev(), data.getP6LeadQ1DisSurfLevel()});
+            addLeadDisRow.accept(new String[]{"(ii) Into Groundwater", data.getP6LeadQ1DisGroundNoCurr(), data.getP6LeadQ1DisGroundNoPrev(), data.getP6LeadQ1DisGroundWithCurr(), data.getP6LeadQ1DisGroundWithPrev(), data.getP6LeadQ1DisGroundLevel()});
+            addLeadDisRow.accept(new String[]{"(iii) Into Seawater", data.getP6LeadQ1DisSeaNoCurr(), data.getP6LeadQ1DisSeaNoPrev(), data.getP6LeadQ1DisSeaWithCurr(), data.getP6LeadQ1DisSeaWithPrev(), data.getP6LeadQ1DisSeaLevel()});
+            addLeadDisRow.accept(new String[]{"(iv) Sent to third-parties", data.getP6LeadQ1DisThirdNoCurr(), data.getP6LeadQ1DisThirdNoPrev(), data.getP6LeadQ1DisThirdWithCurr(), data.getP6LeadQ1DisThirdWithPrev(), data.getP6LeadQ1DisThirdLevel()});
+            addLeadDisRow.accept(new String[]{"(v) Others", data.getP6LeadQ1DisOtherNoCurr(), data.getP6LeadQ1DisOtherNoPrev(), data.getP6LeadQ1DisOtherWithCurr(), data.getP6LeadQ1DisOtherWithPrev(), data.getP6LeadQ1DisOtherLevel()});
+
+            XWPFTableRow rL1DTot = tableLeadQ1.createRow(); ensureCells(rL1DTot, 3);
+            styleCell(rL1DTot.getCell(0), "Total water discharged (in kilolitres)", true);
+            rL1DTot.getCell(1).setText(checkNull(data.getP6LeadQ1DisTotalCurr()));
+            rL1DTot.getCell(2).setText(checkNull(data.getP6LeadQ1DisTotalPrev()));
+
+            if (data.getP6LeadQ1AssuranceNote() != null && !data.getP6LeadQ1AssuranceNote().trim().isEmpty()) {
+                addNote(doc, "Note: " + data.getP6LeadQ1AssuranceNote());
+            }
+            doc.createParagraph().createRun().addBreak();
+
+            // --- Lead Q2: Scope 3 ---
+            addBoldText(doc, "2. Please provide details of total Scope 3 emissions & its intensity, in the following format:");
+            XWPFTable tableLeadQ2 = doc.createTable();
+            tableLeadQ2.setWidth("100%");
+            setColumnWidths(tableLeadQ2, 3000, 2000, 2500, 2500);
+
+            XWPFTableRow hRowLeadQ2 = tableLeadQ2.getRow(0); ensureCells(hRowLeadQ2, 4);
+            styleCell(hRowLeadQ2.getCell(0), "Parameter", true); styleCell(hRowLeadQ2.getCell(1), "Unit", true);
+            styleCell(hRowLeadQ2.getCell(2), "FY " + fyCurP6, true); styleCell(hRowLeadQ2.getCell(3), "FY " + fyPrevP6, true);
+
+            XWPFTableRow rL2_1 = tableLeadQ2.createRow(); ensureCells(rL2_1, 4);
+            styleCell(rL2_1.getCell(0), "Total Scope 3 emissions", true); rL2_1.getCell(1).setText("Metric tonnes of CO2 equivalent");
+            rL2_1.getCell(2).setText(checkNull(data.getP6LeadQ2Scope3Curr())); rL2_1.getCell(3).setText(checkNull(data.getP6LeadQ2Scope3Prev()));
+
+            XWPFTableRow rL2_2 = tableLeadQ2.createRow(); ensureCells(rL2_2, 4);
+            styleCell(rL2_2.getCell(0), "Total Scope 3 emissions per rupee of turnover", true);
+            rL2_2.getCell(2).setText(checkNull(data.getP6LeadQ2IntTurnCurr())); rL2_2.getCell(3).setText(checkNull(data.getP6LeadQ2IntTurnPrev()));
+
+            XWPFTableRow rL2_3 = tableLeadQ2.createRow(); ensureCells(rL2_3, 4);
+            styleCell(rL2_3.getCell(0), "Total Scope 3 emission intensity (optional)", true);
+            rL2_3.getCell(2).setText(checkNull(data.getP6LeadQ2IntOptCurr())); rL2_3.getCell(3).setText(checkNull(data.getP6LeadQ2IntOptPrev()));
+
+            if (data.getP6LeadQ2AssuranceNote() != null && !data.getP6LeadQ2AssuranceNote().trim().isEmpty()) {
+                addNote(doc, "Note: " + data.getP6LeadQ2AssuranceNote());
+            }
+            doc.createParagraph().createRun().addBreak();
+
+            // --- Lead Q3 to Q7 ---
+            addBoldText(doc, "3. With respect to the ecologically sensitive areas... provide details of impact on biodiversity.");
+            setTextWithBreaks(doc.createParagraph().createRun(), checkNull(data.getP6LeadQ3EcoImpact()));
+            doc.createParagraph().createRun().addBreak();
+
+            addBoldText(doc, "4. Specific initiatives or innovative technology for resource efficiency:");
+            XWPFTable tableLeadQ4 = doc.createTable(); tableLeadQ4.setWidth("100%");
+            XWPFTableRow hRowLeadQ4 = tableLeadQ4.getRow(0); ensureCells(hRowLeadQ4, 4);
+            setColumnWidths(tableLeadQ4, 1000, 3000, 3500, 2500);
+            styleCell(hRowLeadQ4.getCell(0), "Sr. No", true); styleCell(hRowLeadQ4.getCell(1), "Initiative undertaken", true);
+            styleCell(hRowLeadQ4.getCell(2), "Details of the initiative", true); styleCell(hRowLeadQ4.getCell(3), "Outcome", true);
+
+            if (data.getP6LeadQ4InitiativesList() != null && !data.getP6LeadQ4InitiativesList().isEmpty()) {
+                for (BrsrReportRequest.P6LeadQ4Initiative item : data.getP6LeadQ4InitiativesList()) {
+                    addDynamicRow(tableLeadQ4, new String[]{checkNull(item.getSNo()), checkNull(item.getInitiative()), checkNull(item.getDetails()), checkNull(item.getOutcome())});
+                }
+            } else { addDynamicRow(tableLeadQ4, new String[]{"-", "-", "-", "-"}); }
+            doc.createParagraph().createRun().addBreak();
+
+            addBoldText(doc, "5. Does the entity have a business continuity and disaster management plan?");
+            setTextWithBreaks(doc.createParagraph().createRun(), checkNull(data.getP6LeadQ5DisasterPlan()));
+            doc.createParagraph().createRun().addBreak();
+
+            addBoldText(doc, "6. Disclose any significant adverse impact to the environment, arising from the value chain:");
+            setTextWithBreaks(doc.createParagraph().createRun(), checkNull(data.getP6LeadQ6ValueChainImpact()));
+            doc.createParagraph().createRun().addBreak();
+
+            addBoldText(doc, "7. Percentage of value chain partners assessed for environmental impacts.");
+            doc.createParagraph().createRun().setText(checkNull(data.getP6LeadQ7ValueChainAssessed()));
             doc.createParagraph().createRun().addBreak();
 
             // =================================================================
             // SECTION C: PRINCIPLE 7 (PUBLIC POLICY)
             // =================================================================
+            // ================= SECTION C: PRINCIPLE 7 =================
             XWPFParagraph pP7 = doc.createParagraph();
-            pP7.setPageBreak(true);
-            pP7.setSpacingBefore(300);
+            pP7.setSpacingBefore(400);
             XWPFRun rP7 = pP7.createRun();
-            rP7.setText("PRINCIPLE 7: Businesses, when engaging in influencing public and regulatory policy, should do so in a manner that is responsible and transparent.");
+            rP7.setText("PRINCIPLE 7: Businesses, when engaging in influencing public and regulatory policy, should do so in a manner that is responsible and transparent");
             rP7.setBold(true);
             rP7.setFontSize(12);
-            rP7.setColor(COLOR_THEME_GREEN);
-            rP7.setFontFamily("Calibri");
+            rP7.setColor("548235");
 
-            addBoldText(doc, "Essential Indicators");
-            addBoldText(doc, "1. a. Number of affiliations with trade and industry chambers/associations.");
-            XWPFParagraph p7a = doc.createParagraph();
-            p7a.createRun().setText(checkNull(data.getP7AffiliationsCount()));
-
-            addBoldText(doc, "b. List the top 10 trade and industry chambers/associations the entity is a member of/affiliated to.");
-            XWPFTable tableP7 = doc.createTable();
-            tableP7.setWidth("100%");
-            XWPFTableRow hP7 = tableP7.getRow(0);
-            ensureCells(hP7, 3);
-            styleCell(hP7.getCell(0), "S. No.", true);
-            styleCell(hP7.getCell(1), "Name of the Association", true);
-            styleCell(hP7.getCell(2), "Reach (State/National)", true);
-
-            List<BrsrReportRequest.TradeAssociation> assocs = data.getP7TradeAssociations();
-            if (assocs != null && !assocs.isEmpty()) {
-                int count = 1;
-                for (BrsrReportRequest.TradeAssociation ta : assocs) {
-                    addDynamicRow(tableP7, new String[]{ String.valueOf(count++), checkNull(ta.getName()), checkNull(ta.getReach()) });
-                }
-            } else {
-                addDynamicRow(tableP7, new String[]{"-", "-", "-"});
-            }
-
+            // --- Essential Indicators ---
+            XWPFParagraph p7Ess = doc.createParagraph();
+            XWPFRun rP7Ess = p7Ess.createRun();
+            rP7Ess.setText("Essential Indicators");
+            rP7Ess.setBold(true);
             doc.createParagraph().createRun().addBreak();
-            addBoldText(doc, "2. Provide details of corrective action taken or underway on any issues related to anti-competitive conduct.");
-            XWPFParagraph p7b = doc.createParagraph();
-            setTextWithBreaks(p7b.createRun(), checkNull(data.getP7AntiCompetitiveDetails()));
 
-            addSectionHeader(doc, "Leadership Indicators");
-            addBoldText(doc, "1. Details of public policy positions advocated by the entity:");
+            // Q1a
+            addBoldText(doc, "1. a. Number of affiliations with trade and industry chambers/ associations.");
+            doc.createParagraph().createRun().setText(checkNull(data.getP7Q1aAffiliations()));
+            doc.createParagraph().createRun().addBreak();
 
-            XWPFTable tablePol7 = doc.createTable();
-            tablePol7.setWidth("100%");
-            XWPFTableRow hPol7 = tablePol7.getRow(0);
-            ensureCells(hPol7, 3);
-            styleCell(hPol7.getCell(0), "Public Policy Advocated", true);
-            styleCell(hPol7.getCell(1), "Method Resorted", true);
-            styleCell(hPol7.getCell(2), "Web Link / Info", true);
+            // Q1b
+            addBoldText(doc, "b. List the top 10 trade and industry chambers/ associations (determined based on the total members of such body) the entity is a member of/ affiliated to.");
+            XWPFTable tableP7Q1b = doc.createTable();
+            tableP7Q1b.setWidth("100%");
+            setColumnWidths(tableP7Q1b, 1000, 6000, 3000); // 3 cols
 
-            List<BrsrReportRequest.PublicPolicyPosition> pols = data.getP7PublicPolicyPositions();
-            if(pols != null && !pols.isEmpty()){
-                for(BrsrReportRequest.PublicPolicyPosition p : pols){
-                    XWPFTableRow r = tablePol7.createRow();
-                    ensureCells(r, 3);
-                    fillCellWithNewlines(r.getCell(0), p.getPolicyAdvocated());
-                    fillCellWithNewlines(r.getCell(1), p.getMethodResorted());
-                    fillCellWithNewlines(r.getCell(2), p.getWebLink());
+            XWPFTableRow hRowP7Q1b = tableP7Q1b.getRow(0); ensureCells(hRowP7Q1b, 3);
+            styleCell(hRowP7Q1b.getCell(0), "S. No.", true);
+            styleCell(hRowP7Q1b.getCell(1), "Name of the trade and industry chambers/ associations", true);
+            styleCell(hRowP7Q1b.getCell(2), "Reach of trade and industry chambers/ associations (State/National)", true);
+
+            if (data.getP7Q1bList() != null && !data.getP7Q1bList().isEmpty()) {
+                for (BrsrReportRequest.P7Q1bAssociation item : data.getP7Q1bList()) {
+                    addDynamicRow(tableP7Q1b, new String[]{checkNull(item.getSNo()), checkNull(item.getName()), checkNull(item.getReach())});
                 }
             } else {
-                addDynamicRow(tablePol7, new String[]{"-", "-", "-"});
+                addDynamicRow(tableP7Q1b, new String[]{"-", "-", "-"});
             }
+            doc.createParagraph().createRun().addBreak();
 
+            // Q2
+            addBoldText(doc, "2. Provide details of corrective action taken or underway on any issues related to anti-competitive conduct by the entity, based on adverse orders from regulatory authorities.");
+            XWPFTable tableP7Q2 = doc.createTable();
+            tableP7Q2.setWidth("100%");
+            setColumnWidths(tableP7Q2, 3000, 4000, 3000);
+
+            XWPFTableRow hRowP7Q2 = tableP7Q2.getRow(0); ensureCells(hRowP7Q2, 3);
+            styleCell(hRowP7Q2.getCell(0), "Name of authority", true);
+            styleCell(hRowP7Q2.getCell(1), "Brief of the case", true);
+            styleCell(hRowP7Q2.getCell(2), "Corrective action taken", true);
+
+            if (data.getP7Q2List() != null && !data.getP7Q2List().isEmpty()) {
+                for (BrsrReportRequest.P7Q2CorrectiveAction item : data.getP7Q2List()) {
+                    addDynamicRow(tableP7Q2, new String[]{checkNull(item.getAuthority()), checkNull(item.getBrief()), checkNull(item.getCorrectiveAction())});
+                }
+            } else {
+                addDynamicRow(tableP7Q2, new String[]{"-", "-", "-"});
+            }
+            doc.createParagraph().createRun().addBreak();
+
+            // --- Leadership Indicators ---
+            XWPFParagraph p7Lead = doc.createParagraph();
+            XWPFRun rP7Lead = p7Lead.createRun();
+            rP7Lead.setText("Leadership Indicators");
+            rP7Lead.setBold(true);
+            doc.createParagraph().createRun().addBreak();
+
+            // Lead Q1
+            addBoldText(doc, "1. Details of public policy positions advocated by the entity:");
+            XWPFTable tableP7Lead = doc.createTable();
+            tableP7Lead.setWidth("100%");
+            setColumnWidths(tableP7Lead, 800, 2000, 2000, 1500, 1700, 2000); // 6 cols
+
+            XWPFTableRow hRowP7Lead = tableP7Lead.getRow(0); ensureCells(hRowP7Lead, 6);
+            styleCell(hRowP7Lead.getCell(0), "S. No.", true);
+            styleCell(hRowP7Lead.getCell(1), "Public policy advocated", true);
+            styleCell(hRowP7Lead.getCell(2), "Method resorted for such advocacy", true);
+            styleCell(hRowP7Lead.getCell(3), "Whether information available in public domain? (Yes/No)", true);
+            styleCell(hRowP7Lead.getCell(4), "Frequency of Review by Board", true);
+            styleCell(hRowP7Lead.getCell(5), "Web Link, if available", true);
+
+            if (data.getP7LeadQ1List() != null && !data.getP7LeadQ1List().isEmpty()) {
+                for (BrsrReportRequest.P7LeadQ1Policy item : data.getP7LeadQ1List()) {
+                    addDynamicRow(tableP7Lead, new String[]{checkNull(item.getSNo()), checkNull(item.getPolicy()), checkNull(item.getMethod()), checkNull(item.getPublicDomain()), checkNull(item.getFrequency()), checkNull(item.getLink())});
+                }
+            } else {
+                addDynamicRow(tableP7Lead, new String[]{"-", "-", "-", "-", "-", "-"});
+            }
             doc.createParagraph().createRun().addBreak();
 
             // =================================================================
             // SECTION C: PRINCIPLE 8 (INCLUSIVE GROWTH)
             // =================================================================
+            // ================= SECTION C: PRINCIPLE 8 =================
             XWPFParagraph pP8 = doc.createParagraph();
-            pP8.setPageBreak(true);
-            pP8.setSpacingBefore(300);
+            pP8.setSpacingBefore(400);
             XWPFRun rP8 = pP8.createRun();
-            rP8.setText("PRINCIPLE 8: Businesses should promote inclusive growth and equitable development.");
+            rP8.setText("PRINCIPLE 8: Businesses should promote inclusive growth and equitable development");
             rP8.setBold(true);
             rP8.setFontSize(12);
-            rP8.setColor(COLOR_THEME_GREEN);
-            rP8.setFontFamily("Calibri");
+            rP8.setColor("548235");
 
-            addBoldText(doc, "Essential Indicators");
-            addBoldText(doc, "1. Details of Social Impact Assessments (SIA) of projects undertaken by the entity.");
-            XWPFParagraph p8_1 = doc.createParagraph();
-            setTextWithBreaks(p8_1.createRun(), checkNull(data.getP8SiaDetails()));
-
-            addBoldText(doc, "2. Provide information on project(s) for which ongoing Rehabilitation and Resettlement (R&R) is being undertaken:");
-            XWPFTable tableRr = doc.createTable();
-            tableRr.setWidth("100%");
-            XWPFTableRow hRr = tableRr.getRow(0);
-            ensureCells(hRr, 6);
-            styleCell(hRr.getCell(0), "S. No.", true);
-            styleCell(hRr.getCell(1), "Project Name", true);
-            styleCell(hRr.getCell(2), "State", true);
-            styleCell(hRr.getCell(3), "District", true);
-            styleCell(hRr.getCell(4), "No. of PAFs", true);
-            styleCell(hRr.getCell(5), "% Covered", true);
-
-            List<BrsrReportRequest.RandRProject> rnrList = data.getP8RandRProjects();
-            if(rnrList != null && !rnrList.isEmpty()){
-                int count = 1;
-                for(BrsrReportRequest.RandRProject rr : rnrList){
-                    addDynamicRow(tableRr, new String[]{
-                            String.valueOf(count++), checkNull(rr.getProjectName()), checkNull(rr.getState()),
-                            checkNull(rr.getDistrict()), checkNull(rr.getNoOfPafs()), checkNull(rr.getPercCovered())
-                    });
-                }
-            } else {
-                addDynamicRow(tableRr, new String[]{"-", "NA", "-", "-", "-", "-"});
-            }
-
+            XWPFParagraph p8Ess = doc.createParagraph();
+            XWPFRun rP8Ess = p8Ess.createRun();
+            rP8Ess.setText("Essential Indicators");
+            rP8Ess.setBold(true);
             doc.createParagraph().createRun().addBreak();
+
+            // Q1: SIA
+            addBoldText(doc, "1. Details of Social Impact Assessments (SIA) of projects undertaken by the entity based on applicable laws, in the current financial year.");
+            XWPFTable tableP8Q1 = doc.createTable(); tableP8Q1.setWidth("100%");
+            setColumnWidths(tableP8Q1, 2000, 1500, 1500, 1500, 1500, 2000); // 6 cols
+
+            XWPFTableRow hRowP8Q1 = tableP8Q1.getRow(0); ensureCells(hRowP8Q1, 6);
+            styleCell(hRowP8Q1.getCell(0), "Name and brief details of project", true); styleCell(hRowP8Q1.getCell(1), "SIA Notification No.", true);
+            styleCell(hRowP8Q1.getCell(2), "Date of notification", true); styleCell(hRowP8Q1.getCell(3), "Whether conducted by independent external agency (Yes / No)", true);
+            styleCell(hRowP8Q1.getCell(4), "Results communicated in public domain (Yes / No)", true); styleCell(hRowP8Q1.getCell(5), "Relevant Web link", true);
+
+            if (data.getP8Q1SiaList() != null && !data.getP8Q1SiaList().isEmpty()) {
+                for (BrsrReportRequest.P8Q1Sia item : data.getP8Q1SiaList()) {
+                    addDynamicRow(tableP8Q1, new String[]{checkNull(item.getName()), checkNull(item.getNotifNo()), checkNull(item.getDate()), checkNull(item.getIndependent()), checkNull(item.getPublicDomain()), checkNull(item.getLink())});
+                }
+            } else { addDynamicRow(tableP8Q1, new String[]{"-", "-", "-", "-", "-", "-"}); }
+            doc.createParagraph().createRun().addBreak();
+
+            // Q2: R&R
+            addBoldText(doc, "2. Provide information on project(s) for which ongoing Rehabilitation and Resettlement (R&R) is being undertaken by your entity, in the following format:");
+            XWPFTable tableP8Q2 = doc.createTable(); tableP8Q2.setWidth("100%");
+            setColumnWidths(tableP8Q2, 800, 2500, 1500, 1500, 1200, 1200, 1500); // 7 cols
+
+            XWPFTableRow hRowP8Q2 = tableP8Q2.getRow(0); ensureCells(hRowP8Q2, 7);
+            styleCell(hRowP8Q2.getCell(0), "S. No.", true); styleCell(hRowP8Q2.getCell(1), "Name of Project for which R&R is ongoing", true);
+            styleCell(hRowP8Q2.getCell(2), "State", true); styleCell(hRowP8Q2.getCell(3), "District", true);
+            styleCell(hRowP8Q2.getCell(4), "No. of Project Affected Families (PAFs)", true); styleCell(hRowP8Q2.getCell(5), "% of PAFs covered by R&R", true);
+            styleCell(hRowP8Q2.getCell(6), "Amounts paid to PAFs in the FY (In INR)", true);
+
+            if (data.getP8Q2RrList() != null && !data.getP8Q2RrList().isEmpty()) {
+                for (BrsrReportRequest.P8Q2Rr item : data.getP8Q2RrList()) {
+                    addDynamicRow(tableP8Q2, new String[]{checkNull(item.getSNo()), checkNull(item.getName()), checkNull(item.getState()), checkNull(item.getDistrict()), checkNull(item.getPafs()), checkNull(item.getPerc()), checkNull(item.getAmount())});
+                }
+            } else { addDynamicRow(tableP8Q2, new String[]{"-", "-", "-", "-", "-", "-", "-"}); }
+            doc.createParagraph().createRun().addBreak();
+
+            // Q3: Grievance
             addBoldText(doc, "3. Describe the mechanisms to receive and redress grievances of the community.");
-            XWPFParagraph p8_3 = doc.createParagraph();
-            setTextWithBreaks(p8_3.createRun(), checkNull(data.getP8GrievanceMechanism()));
-
+            setTextWithBreaks(doc.createParagraph().createRun(), checkNull(data.getP8Q3GrievanceMech()));
             doc.createParagraph().createRun().addBreak();
+
+            // Q4: Material Sourcing
             addBoldText(doc, "4. Percentage of input material (inputs to total inputs by value) sourced from suppliers:");
-            XWPFTable tableInp = doc.createTable();
-            tableInp.setWidth("100%");
-            XWPFTableRow hInp = tableInp.getRow(0);
-            ensureCells(hInp, 3);
-            styleCell(hInp.getCell(0), "Category", true);
-            styleCell(hInp.getCell(1), fyCur, true);
-            styleCell(hInp.getCell(2), fyPrev, true);
+            XWPFTable tableP8Q4 = doc.createTable(); tableP8Q4.setWidth("100%");
+            setColumnWidths(tableP8Q4, 5000, 2500, 2500);
 
-            addRow(tableInp, "Directly sourced from MSMEs/small producers", data.getP8InputMsmeCurr(), data.getP8InputMsmePrev());
-            addRow(tableInp, "Directly sourced from within India", data.getP8InputIndiaCurr(), data.getP8InputIndiaPrev());
-
-            addSectionHeader(doc, "Leadership Indicators");
-            addBoldText(doc, "1. CSR projects in designated aspirational districts:");
-            XWPFTable tableAsp = doc.createTable();
-            tableAsp.setWidth("100%");
-            XWPFTableRow hAsp = tableAsp.getRow(0);
-            ensureCells(hAsp, 3);
-            styleCell(hAsp.getCell(0), "State", true);
-            styleCell(hAsp.getCell(1), "District", true);
-            styleCell(hAsp.getCell(2), "Amount Spent", true);
-
-            List<BrsrReportRequest.CsrAspirationalDistrict> aspList = data.getP8AspirationalDistricts();
-            if(aspList != null && !aspList.isEmpty()){
-                for(BrsrReportRequest.CsrAspirationalDistrict ad : aspList){
-                    addDynamicRow(tableAsp, new String[]{ checkNull(ad.getState()), checkNull(ad.getDistrict()), checkNull(ad.getAmountSpent()) });
-                }
-            } else {
-                addDynamicRow(tableAsp, new String[]{"-", "-", "-"});
-            }
-
+            XWPFTableRow hRowP8Q4 = tableP8Q4.getRow(0); ensureCells(hRowP8Q4, 3);
+            styleCell(hRowP8Q4.getCell(0), "Parameter", true); styleCell(hRowP8Q4.getCell(1), "FY " + fyCurP6, true); styleCell(hRowP8Q4.getCell(2), "FY " + fyPrevP6, true);
+            addDynamicRow(tableP8Q4, new String[]{"Directly sourced from MSMEs/ small producers", checkNull(data.getP8Q4MsmeCurr()), checkNull(data.getP8Q4MsmePrev())});
+            addDynamicRow(tableP8Q4, new String[]{"Directly from within India", checkNull(data.getP8Q4IndiaCurr()), checkNull(data.getP8Q4IndiaPrev())});
             doc.createParagraph().createRun().addBreak();
-            addBoldText(doc, "2. (a) Preferential procurement policy for marginalized groups (Yes/No).");
-            XWPFParagraph p8L2 = doc.createParagraph();
-            p8L2.createRun().setText(checkNull(data.getP8PreferentialProcurement()));
 
-            addBoldText(doc, "(b) From which marginalized groups do you procure?");
-            XWPFParagraph p8L2b = doc.createParagraph();
-            setTextWithBreaks(p8L2b.createRun(), checkNull(data.getP8MarginalizedGroups()));
+            // Q5: Job Creation
+            addBoldText(doc, "5. Job creation in smaller towns – Disclose wages paid to persons employed... as % of total wage cost");
+            XWPFTable tableP8Q5 = doc.createTable(); tableP8Q5.setWidth("100%");
+            setColumnWidths(tableP8Q5, 5000, 2500, 2500);
 
-            addBoldText(doc, "(c) % of total procurement?");
-            XWPFParagraph p8L2c = doc.createParagraph();
-            p8L2c.createRun().setText(checkNull(data.getP8ProcurementPercentage()));
-
-            doc.createParagraph().createRun().addBreak();
-            addBoldText(doc, "3. Benefits derived from intellectual properties based on traditional knowledge:");
-            XWPFParagraph p8L3 = doc.createParagraph();
-            p8L3.createRun().setText(checkNull(data.getP8IpBenefits()));
-
-            doc.createParagraph().createRun().addBreak();
-            addBoldText(doc, "4. Details of beneficiaries of CSR Projects:");
-            XWPFTable tableBen = doc.createTable();
-            tableBen.setWidth("100%");
-            XWPFTableRow hBen = tableBen.getRow(0);
-            ensureCells(hBen, 3);
-            styleCell(hBen.getCell(0), "CSR Project", true);
-            styleCell(hBen.getCell(1), "No. Benefitted", true);
-            styleCell(hBen.getCell(2), "% Vulnerable", true);
-
-            List<BrsrReportRequest.CsrBeneficiary> benList = data.getP8CsrBeneficiaries();
-            if(benList != null && !benList.isEmpty()){
-                for(BrsrReportRequest.CsrBeneficiary b : benList){
-                    addDynamicRow(tableBen, new String[]{ checkNull(b.getCsrProject()), checkNull(b.getNoBenefitted()), checkNull(b.getPercVulnerable()) });
-                }
-            } else {
-                addDynamicRow(tableBen, new String[]{"-", "-", "-"});
-            }
-
+            XWPFTableRow hRowP8Q5 = tableP8Q5.getRow(0); ensureCells(hRowP8Q5, 3);
+            styleCell(hRowP8Q5.getCell(0), "Location", true); styleCell(hRowP8Q5.getCell(1), "FY " + fyCurP6, true); styleCell(hRowP8Q5.getCell(2), "FY " + fyPrevP6, true);
+            addDynamicRow(tableP8Q5, new String[]{"Rural", checkNull(data.getP8Q5RuralCurr()), checkNull(data.getP8Q5RuralPrev())});
+            addDynamicRow(tableP8Q5, new String[]{"Semi-urban", checkNull(data.getP8Q5SemiCurr()), checkNull(data.getP8Q5SemiPrev())});
+            addDynamicRow(tableP8Q5, new String[]{"Urban", checkNull(data.getP8Q5UrbanCurr()), checkNull(data.getP8Q5UrbanPrev())});
+            addDynamicRow(tableP8Q5, new String[]{"Metropolitan", checkNull(data.getP8Q5MetroCurr()), checkNull(data.getP8Q5MetroPrev())});
             doc.createParagraph().createRun().addBreak();
 
             // =================================================================
@@ -3799,6 +4208,52 @@ public class ReportService {
                     }
                 }
             }
+
+    // Overloaded helper for 4-column tables
+    private void setColumnWidths(XWPFTable table, int w1, int w2, int w3, int w4) {
+        if (table.getRow(0) != null && table.getRow(0).getTableCells().size() >= 4) {
+            table.getRow(0).getCell(0).setWidth(String.valueOf(w1));
+            table.getRow(0).getCell(1).setWidth(String.valueOf(w2));
+            table.getRow(0).getCell(2).setWidth(String.valueOf(w3));
+            table.getRow(0).getCell(3).setWidth(String.valueOf(w4));
+        }
+    }
+
+    private void setColumnWidths(XWPFTable table, int w1, int w2, int w3, int w4, int w5) {
+        if (table.getRow(0) != null && table.getRow(0).getTableCells().size() >= 5) {
+            table.getRow(0).getCell(0).setWidth(String.valueOf(w1)); table.getRow(0).getCell(1).setWidth(String.valueOf(w2));
+            table.getRow(0).getCell(2).setWidth(String.valueOf(w3)); table.getRow(0).getCell(3).setWidth(String.valueOf(w4));
+            table.getRow(0).getCell(4).setWidth(String.valueOf(w5));
+        }
+    }
+    private void setColumnWidths(XWPFTable table, int w1, int w2, int w3, int w4, int w5, int w6) {
+        if (table.getRow(0) != null && table.getRow(0).getTableCells().size() >= 6) {
+            table.getRow(0).getCell(0).setWidth(String.valueOf(w1)); table.getRow(0).getCell(1).setWidth(String.valueOf(w2));
+            table.getRow(0).getCell(2).setWidth(String.valueOf(w3)); table.getRow(0).getCell(3).setWidth(String.valueOf(w4));
+            table.getRow(0).getCell(4).setWidth(String.valueOf(w5)); table.getRow(0).getCell(5).setWidth(String.valueOf(w6));
+        }
+    }
+
+    // Overloaded helper for 3-column tables
+    private void setColumnWidths(XWPFTable table, int w1, int w2, int w3) {
+        if (table.getRow(0) != null && table.getRow(0).getTableCells().size() >= 3) {
+            table.getRow(0).getCell(0).setWidth(String.valueOf(w1));
+            table.getRow(0).getCell(1).setWidth(String.valueOf(w2));
+            table.getRow(0).getCell(2).setWidth(String.valueOf(w3));
+        }
+    }
+
+    // Overloaded helper for 7-column tables
+    private void setColumnWidths(XWPFTable table, int w1, int w2, int w3, int w4, int w5, int w6, int w7) {
+        if (table.getRow(0) != null && table.getRow(0).getTableCells().size() >= 7) {
+            table.getRow(0).getCell(0).setWidth(String.valueOf(w1)); table.getRow(0).getCell(1).setWidth(String.valueOf(w2));
+            table.getRow(0).getCell(2).setWidth(String.valueOf(w3)); table.getRow(0).getCell(3).setWidth(String.valueOf(w4));
+            table.getRow(0).getCell(4).setWidth(String.valueOf(w5)); table.getRow(0).getCell(5).setWidth(String.valueOf(w6));
+            table.getRow(0).getCell(6).setWidth(String.valueOf(w7));
+        }
+    }
+
+
 }
 
 

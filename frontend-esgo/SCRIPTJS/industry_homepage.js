@@ -66,6 +66,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     fetchReportsList();
     checkExistingProfile();
+
+    fetchDashboardData();
 });
 
 // --- MAIN FUNCTIONS ---
@@ -414,7 +416,22 @@ async function deleteProfile() {
 async function fetchDashboardData() {
     const token = localStorage.getItem("token");
     const scoreDisplay = document.getElementById("esgScoreDisplay");
+    if (!scoreDisplay) return;
 
+    // First check: Did they just generate a new AI score that hasn't been published yet?
+    const storedScores = localStorage.getItem("latestGeneratedScores");
+    if (storedScores) {
+        try {
+            const parsedScores = JSON.parse(storedScores);
+            scoreDisplay.innerText = parsedScores.avg || "--";
+            scoreDisplay.style.color = "#27ae60"; // Optional: Make it green to indicate it's new
+            return; // Exit early so we show the new unpublished score
+        } catch (e) {
+            console.error("Error parsing local scores");
+        }
+    }
+
+    // Second check: If no new local score, fetch their officially published profile
     try {
         const response = await fetch('http://localhost:8080/api/investor/my-profile', {
             headers: { 'Authorization': 'Bearer ' + token }
@@ -422,21 +439,14 @@ async function fetchDashboardData() {
 
         if (response.status === 200) {
             const data = await response.json();
-            // Update the score display with the average score from the profile
-            if (scoreDisplay) {
-                scoreDisplay.innerText = data.scoreAvg || "--";
-            }
+            scoreDisplay.innerText = data.scoreAvg || "--";
+            scoreDisplay.style.color = ""; // Reset color
         } else {
-            // If no profile is published, keep the default "--"
-            if (scoreDisplay) {
-                scoreDisplay.innerText = "--";
-            }
+            scoreDisplay.innerText = "--";
         }
     } catch (error) {
         console.log("Error fetching profile for dashboard score:", error);
-        if (scoreDisplay) {
-            scoreDisplay.innerText = "Error";
-        }
+        scoreDisplay.innerText = "--";
     }
 }
 

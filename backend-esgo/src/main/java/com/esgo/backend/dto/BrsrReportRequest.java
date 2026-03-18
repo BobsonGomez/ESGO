@@ -1,4 +1,5 @@
 package com.esgo.backend.dto;
+import lombok.Data;
 
 import java.util.List;
 import java.util.Map;
@@ -4804,6 +4805,2080 @@ public class BrsrReportRequest {
     // --- GETTERS AND SETTERS FOR ALL NEW FIELDS --- princple 6,7,8 and 9
     // (Generate standard getters/setters for all String fields and Lists above)
 
+    // --- Principle 6 : Q1 Energy ---
+    private String p6Q1RenElecCurr; private String p6Q1RenElecPrev;
+    private String p6Q1RenFuelCurr; private String p6Q1RenFuelPrev;
+    private String p6Q1RenOtherCurr; private String p6Q1RenOtherPrev;
+    private String p6Q1RenTotalCurr; private String p6Q1RenTotalPrev;
+    private String p6Q1NonRenElecCurr; private String p6Q1NonRenElecPrev;
+    private String p6Q1NonRenFuelCurr; private String p6Q1NonRenFuelPrev;
+    private String p6Q1NonRenOtherCurr; private String p6Q1NonRenOtherPrev;
+    private String p6Q1NonRenTotalCurr; private String p6Q1NonRenTotalPrev;
+    private String p6Q1GrandTotalCurr; private String p6Q1GrandTotalPrev;
+    private String p6Q1IntTurnoverCurr; private String p6Q1IntTurnoverPrev;
+    private String p6Q1IntPppCurr; private String p6Q1IntPppPrev;
+    private String p6Q1IntPhysicalCurr; private String p6Q1IntPhysicalPrev;
+    private String p6Q1IntOptCurr; private String p6Q1IntOptPrev;
+    private String p6Q1AssuranceNote;
+
+    // --- Principle 6 : Q2 PAT ---
+    private String p6Q2PatDetails;
+
+    // --- Principle 6 : Q3 Water ---
+    private String p6Q3SurfaceCurr; private String p6Q3SurfacePrev;
+    private String p6Q3GroundCurr; private String p6Q3GroundPrev;
+    private String p6Q3ThirdPartyCurr; private String p6Q3ThirdPartyPrev;
+    private String p6Q3SeaCurr; private String p6Q3SeaPrev;
+    private String p6Q3OthersCurr; private String p6Q3OthersPrev;
+    private String p6Q3TotalWithCurr; private String p6Q3TotalWithPrev;
+    private String p6Q3TotalConsCurr; private String p6Q3TotalConsPrev;
+    private String p6Q3IntTurnoverCurr; private String p6Q3IntTurnoverPrev;
+
+    public String getP6Q3IntPppCurr() {
+        return p6Q3IntPppCurr;
+    }
+
+    public void setP6Q3IntPppCurr(String p6Q3IntPppCurr) {
+        this.p6Q3IntPppCurr = p6Q3IntPppCurr;
+    }
+
+    public String getP6Q1RenElecCurr() {
+        return p6Q1RenElecCurr;
+    }
+
+    public void setP6Q1RenElecCurr(String p6Q1RenElecCurr) {
+        this.p6Q1RenElecCurr = p6Q1RenElecCurr;
+    }
+
+    public String getP6Q1RenElecPrev() {
+        return p6Q1RenElecPrev;
+    }
+
+    public void setP6Q1RenElecPrev(String p6Q1RenElecPrev) {
+        this.p6Q1RenElecPrev = p6Q1RenElecPrev;
+    }
+
+    public String getP6Q1RenFuelCurr() {
+        return p6Q1RenFuelCurr;
+    }
+
+    public void setP6Q1RenFuelCurr(String p6Q1RenFuelCurr) {
+        this.p6Q1RenFuelCurr = p6Q1RenFuelCurr;
+    }
+
+    public String getP6Q1RenFuelPrev() {
+        return p6Q1RenFuelPrev;
+    }
+
+    public void setP6Q1RenFuelPrev(String p6Q1RenFuelPrev) {
+        this.p6Q1RenFuelPrev = p6Q1RenFuelPrev;
+    }
+
+    public String getP6Q1RenOtherCurr() {
+        return p6Q1RenOtherCurr;
+    }
+
+    public void setP6Q1RenOtherCurr(String p6Q1RenOtherCurr) {
+        this.p6Q1RenOtherCurr = p6Q1RenOtherCurr;
+    }
+
+    public String getP6Q1RenOtherPrev() {
+        return p6Q1RenOtherPrev;
+    }
+
+    public void setP6Q1RenOtherPrev(String p6Q1RenOtherPrev) {
+        this.p6Q1RenOtherPrev = p6Q1RenOtherPrev;
+    }
+
+    public String getP6Q1RenTotalCurr() {
+        return p6Q1RenTotalCurr;
+    }
+
+    public void setP6Q1RenTotalCurr(String p6Q1RenTotalCurr) {
+        this.p6Q1RenTotalCurr = p6Q1RenTotalCurr;
+    }
+
+    public String getP6Q1RenTotalPrev() {
+        return p6Q1RenTotalPrev;
+    }
+
+    public void setP6Q1RenTotalPrev(String p6Q1RenTotalPrev) {
+        this.p6Q1RenTotalPrev = p6Q1RenTotalPrev;
+    }
+
+    public String getP6Q1NonRenElecCurr() {
+        return p6Q1NonRenElecCurr;
+    }
+
+    public void setP6Q1NonRenElecCurr(String p6Q1NonRenElecCurr) {
+        this.p6Q1NonRenElecCurr = p6Q1NonRenElecCurr;
+    }
+
+    public String getP6Q1NonRenElecPrev() {
+        return p6Q1NonRenElecPrev;
+    }
+
+    public void setP6Q1NonRenElecPrev(String p6Q1NonRenElecPrev) {
+        this.p6Q1NonRenElecPrev = p6Q1NonRenElecPrev;
+    }
+
+    public String getP6Q1NonRenFuelCurr() {
+        return p6Q1NonRenFuelCurr;
+    }
+
+    public void setP6Q1NonRenFuelCurr(String p6Q1NonRenFuelCurr) {
+        this.p6Q1NonRenFuelCurr = p6Q1NonRenFuelCurr;
+    }
+
+    public String getP6Q1NonRenFuelPrev() {
+        return p6Q1NonRenFuelPrev;
+    }
+
+    public void setP6Q1NonRenFuelPrev(String p6Q1NonRenFuelPrev) {
+        this.p6Q1NonRenFuelPrev = p6Q1NonRenFuelPrev;
+    }
+
+    public String getP6Q1NonRenOtherCurr() {
+        return p6Q1NonRenOtherCurr;
+    }
+
+    public void setP6Q1NonRenOtherCurr(String p6Q1NonRenOtherCurr) {
+        this.p6Q1NonRenOtherCurr = p6Q1NonRenOtherCurr;
+    }
+
+    public String getP6Q1NonRenOtherPrev() {
+        return p6Q1NonRenOtherPrev;
+    }
+
+    public void setP6Q1NonRenOtherPrev(String p6Q1NonRenOtherPrev) {
+        this.p6Q1NonRenOtherPrev = p6Q1NonRenOtherPrev;
+    }
+
+    public String getP6Q1NonRenTotalCurr() {
+        return p6Q1NonRenTotalCurr;
+    }
+
+    public void setP6Q1NonRenTotalCurr(String p6Q1NonRenTotalCurr) {
+        this.p6Q1NonRenTotalCurr = p6Q1NonRenTotalCurr;
+    }
+
+    public String getP6Q1NonRenTotalPrev() {
+        return p6Q1NonRenTotalPrev;
+    }
+
+    public void setP6Q1NonRenTotalPrev(String p6Q1NonRenTotalPrev) {
+        this.p6Q1NonRenTotalPrev = p6Q1NonRenTotalPrev;
+    }
+
+    public String getP6Q1GrandTotalCurr() {
+        return p6Q1GrandTotalCurr;
+    }
+
+    public void setP6Q1GrandTotalCurr(String p6Q1GrandTotalCurr) {
+        this.p6Q1GrandTotalCurr = p6Q1GrandTotalCurr;
+    }
+
+    public String getP6Q1GrandTotalPrev() {
+        return p6Q1GrandTotalPrev;
+    }
+
+    public void setP6Q1GrandTotalPrev(String p6Q1GrandTotalPrev) {
+        this.p6Q1GrandTotalPrev = p6Q1GrandTotalPrev;
+    }
+
+    public String getP6Q1IntTurnoverCurr() {
+        return p6Q1IntTurnoverCurr;
+    }
+
+    public void setP6Q1IntTurnoverCurr(String p6Q1IntTurnoverCurr) {
+        this.p6Q1IntTurnoverCurr = p6Q1IntTurnoverCurr;
+    }
+
+    public String getP6Q1IntTurnoverPrev() {
+        return p6Q1IntTurnoverPrev;
+    }
+
+    public void setP6Q1IntTurnoverPrev(String p6Q1IntTurnoverPrev) {
+        this.p6Q1IntTurnoverPrev = p6Q1IntTurnoverPrev;
+    }
+
+    public String getP6Q1IntPppCurr() {
+        return p6Q1IntPppCurr;
+    }
+
+    public void setP6Q1IntPppCurr(String p6Q1IntPppCurr) {
+        this.p6Q1IntPppCurr = p6Q1IntPppCurr;
+    }
+
+    public String getP6Q1IntPppPrev() {
+        return p6Q1IntPppPrev;
+    }
+
+    public void setP6Q1IntPppPrev(String p6Q1IntPppPrev) {
+        this.p6Q1IntPppPrev = p6Q1IntPppPrev;
+    }
+
+    public String getP6Q1IntPhysicalCurr() {
+        return p6Q1IntPhysicalCurr;
+    }
+
+    public void setP6Q1IntPhysicalCurr(String p6Q1IntPhysicalCurr) {
+        this.p6Q1IntPhysicalCurr = p6Q1IntPhysicalCurr;
+    }
+
+    public String getP6Q1IntPhysicalPrev() {
+        return p6Q1IntPhysicalPrev;
+    }
+
+    public void setP6Q1IntPhysicalPrev(String p6Q1IntPhysicalPrev) {
+        this.p6Q1IntPhysicalPrev = p6Q1IntPhysicalPrev;
+    }
+
+    public String getP6Q1IntOptCurr() {
+        return p6Q1IntOptCurr;
+    }
+
+    public void setP6Q1IntOptCurr(String p6Q1IntOptCurr) {
+        this.p6Q1IntOptCurr = p6Q1IntOptCurr;
+    }
+
+    public String getP6Q1IntOptPrev() {
+        return p6Q1IntOptPrev;
+    }
+
+    public void setP6Q1IntOptPrev(String p6Q1IntOptPrev) {
+        this.p6Q1IntOptPrev = p6Q1IntOptPrev;
+    }
+
+    public String getP6Q1AssuranceNote() {
+        return p6Q1AssuranceNote;
+    }
+
+    public void setP6Q1AssuranceNote(String p6Q1AssuranceNote) {
+        this.p6Q1AssuranceNote = p6Q1AssuranceNote;
+    }
+
+    public String getP6Q2PatDetails() {
+        return p6Q2PatDetails;
+    }
+
+    public void setP6Q2PatDetails(String p6Q2PatDetails) {
+        this.p6Q2PatDetails = p6Q2PatDetails;
+    }
+
+    public String getP6Q3SurfaceCurr() {
+        return p6Q3SurfaceCurr;
+    }
+
+    public void setP6Q3SurfaceCurr(String p6Q3SurfaceCurr) {
+        this.p6Q3SurfaceCurr = p6Q3SurfaceCurr;
+    }
+
+    public String getP6Q3SurfacePrev() {
+        return p6Q3SurfacePrev;
+    }
+
+    public void setP6Q3SurfacePrev(String p6Q3SurfacePrev) {
+        this.p6Q3SurfacePrev = p6Q3SurfacePrev;
+    }
+
+    public String getP6Q3GroundCurr() {
+        return p6Q3GroundCurr;
+    }
+
+    public void setP6Q3GroundCurr(String p6Q3GroundCurr) {
+        this.p6Q3GroundCurr = p6Q3GroundCurr;
+    }
+
+    public String getP6Q3GroundPrev() {
+        return p6Q3GroundPrev;
+    }
+
+    public void setP6Q3GroundPrev(String p6Q3GroundPrev) {
+        this.p6Q3GroundPrev = p6Q3GroundPrev;
+    }
+
+    public String getP6Q3ThirdPartyCurr() {
+        return p6Q3ThirdPartyCurr;
+    }
+
+    public void setP6Q3ThirdPartyCurr(String p6Q3ThirdPartyCurr) {
+        this.p6Q3ThirdPartyCurr = p6Q3ThirdPartyCurr;
+    }
+
+    public String getP6Q3ThirdPartyPrev() {
+        return p6Q3ThirdPartyPrev;
+    }
+
+    public void setP6Q3ThirdPartyPrev(String p6Q3ThirdPartyPrev) {
+        this.p6Q3ThirdPartyPrev = p6Q3ThirdPartyPrev;
+    }
+
+    public String getP6Q3SeaCurr() {
+        return p6Q3SeaCurr;
+    }
+
+    public void setP6Q3SeaCurr(String p6Q3SeaCurr) {
+        this.p6Q3SeaCurr = p6Q3SeaCurr;
+    }
+
+    public String getP6Q3SeaPrev() {
+        return p6Q3SeaPrev;
+    }
+
+    public void setP6Q3SeaPrev(String p6Q3SeaPrev) {
+        this.p6Q3SeaPrev = p6Q3SeaPrev;
+    }
+
+    public String getP6Q3OthersCurr() {
+        return p6Q3OthersCurr;
+    }
+
+    public void setP6Q3OthersCurr(String p6Q3OthersCurr) {
+        this.p6Q3OthersCurr = p6Q3OthersCurr;
+    }
+
+    public String getP6Q3OthersPrev() {
+        return p6Q3OthersPrev;
+    }
+
+    public void setP6Q3OthersPrev(String p6Q3OthersPrev) {
+        this.p6Q3OthersPrev = p6Q3OthersPrev;
+    }
+
+    public String getP6Q3TotalWithCurr() {
+        return p6Q3TotalWithCurr;
+    }
+
+    public void setP6Q3TotalWithCurr(String p6Q3TotalWithCurr) {
+        this.p6Q3TotalWithCurr = p6Q3TotalWithCurr;
+    }
+
+    public String getP6Q3TotalWithPrev() {
+        return p6Q3TotalWithPrev;
+    }
+
+    public void setP6Q3TotalWithPrev(String p6Q3TotalWithPrev) {
+        this.p6Q3TotalWithPrev = p6Q3TotalWithPrev;
+    }
+
+    public String getP6Q3TotalConsCurr() {
+        return p6Q3TotalConsCurr;
+    }
+
+    public void setP6Q3TotalConsCurr(String p6Q3TotalConsCurr) {
+        this.p6Q3TotalConsCurr = p6Q3TotalConsCurr;
+    }
+
+    public String getP6Q3TotalConsPrev() {
+        return p6Q3TotalConsPrev;
+    }
+
+    public void setP6Q3TotalConsPrev(String p6Q3TotalConsPrev) {
+        this.p6Q3TotalConsPrev = p6Q3TotalConsPrev;
+    }
+
+    public String getP6Q3IntTurnoverCurr() {
+        return p6Q3IntTurnoverCurr;
+    }
+
+    public void setP6Q3IntTurnoverCurr(String p6Q3IntTurnoverCurr) {
+        this.p6Q3IntTurnoverCurr = p6Q3IntTurnoverCurr;
+    }
+
+    public String getP6Q3IntTurnoverPrev() {
+        return p6Q3IntTurnoverPrev;
+    }
+
+    public void setP6Q3IntTurnoverPrev(String p6Q3IntTurnoverPrev) {
+        this.p6Q3IntTurnoverPrev = p6Q3IntTurnoverPrev;
+    }
+
+    public String getP6Q3IntPppPrev() {
+        return p6Q3IntPppPrev;
+    }
+
+    public void setP6Q3IntPppPrev(String p6Q3IntPppPrev) {
+        this.p6Q3IntPppPrev = p6Q3IntPppPrev;
+    }
+
+    public String getP6Q3IntPhysicalCurr() {
+        return p6Q3IntPhysicalCurr;
+    }
+
+    public void setP6Q3IntPhysicalCurr(String p6Q3IntPhysicalCurr) {
+        this.p6Q3IntPhysicalCurr = p6Q3IntPhysicalCurr;
+    }
+
+    public String getP6Q3IntPhysicalPrev() {
+        return p6Q3IntPhysicalPrev;
+    }
+
+    public void setP6Q3IntPhysicalPrev(String p6Q3IntPhysicalPrev) {
+        this.p6Q3IntPhysicalPrev = p6Q3IntPhysicalPrev;
+    }
+
+    public String getP6Q3IntOptCurr() {
+        return p6Q3IntOptCurr;
+    }
+
+    public void setP6Q3IntOptCurr(String p6Q3IntOptCurr) {
+        this.p6Q3IntOptCurr = p6Q3IntOptCurr;
+    }
+
+    public String getP6Q3IntOptPrev() {
+        return p6Q3IntOptPrev;
+    }
+
+    public void setP6Q3IntOptPrev(String p6Q3IntOptPrev) {
+        this.p6Q3IntOptPrev = p6Q3IntOptPrev;
+    }
+
+    public String getP6Q3AssuranceNote() {
+        return p6Q3AssuranceNote;
+    }
+
+    public void setP6Q3AssuranceNote(String p6Q3AssuranceNote) {
+        this.p6Q3AssuranceNote = p6Q3AssuranceNote;
+    }
+
+    private String p6Q3IntPppCurr; private String p6Q3IntPppPrev;
+    private String p6Q3IntPhysicalCurr; private String p6Q3IntPhysicalPrev;
+    private String p6Q3IntOptCurr; private String p6Q3IntOptPrev;
+    private String p6Q3AssuranceNote;
+
+    // --- Principle 6 : Q4 Water Discharge ---
+    private String p6Q4SurfNoCurr; private String p6Q4SurfNoPrev;
+    private String p6Q4SurfWithCurr; private String p6Q4SurfWithPrev; private String p6Q4SurfLevel;
+    private String p6Q4GroundNoCurr; private String p6Q4GroundNoPrev;
+    private String p6Q4GroundWithCurr; private String p6Q4GroundWithPrev; private String p6Q4GroundLevel;
+    private String p6Q4SeaNoCurr; private String p6Q4SeaNoPrev;
+    private String p6Q4SeaWithCurr; private String p6Q4SeaWithPrev; private String p6Q4SeaLevel;
+    private String p6Q4ThirdNoCurr; private String p6Q4ThirdNoPrev;
+    private String p6Q4ThirdWithCurr; private String p6Q4ThirdWithPrev; private String p6Q4ThirdLevel;
+    private String p6Q4OtherNoCurr; private String p6Q4OtherNoPrev;
+    private String p6Q4OtherWithCurr; private String p6Q4OtherWithPrev; private String p6Q4OtherLevel;
+    private String p6Q4TotalCurr; private String p6Q4TotalPrev;
+    private String p6Q4AssuranceNote;
+
+    // --- Principle 6 : Q5 ZLD ---
+    private String p6Q5ZldDetails;
+
+    // --- Principle 6 : Q6 Air Emissions ---
+    private String p6Q6NoxUnit; private String p6Q6NoxCurr; private String p6Q6NoxPrev;
+    private String p6Q6SoxUnit; private String p6Q6SoxCurr; private String p6Q6SoxPrev;
+    private String p6Q6PmUnit; private String p6Q6PmCurr; private String p6Q6PmPrev;
+
+    public String getP6Q6PopUnit() {
+        return p6Q6PopUnit;
+    }
+
+    public void setP6Q6PopUnit(String p6Q6PopUnit) {
+        this.p6Q6PopUnit = p6Q6PopUnit;
+    }
+
+    public String getP6Q4SurfNoCurr() {
+        return p6Q4SurfNoCurr;
+    }
+
+    public void setP6Q4SurfNoCurr(String p6Q4SurfNoCurr) {
+        this.p6Q4SurfNoCurr = p6Q4SurfNoCurr;
+    }
+
+    public String getP6Q4SurfNoPrev() {
+        return p6Q4SurfNoPrev;
+    }
+
+    public void setP6Q4SurfNoPrev(String p6Q4SurfNoPrev) {
+        this.p6Q4SurfNoPrev = p6Q4SurfNoPrev;
+    }
+
+    public String getP6Q4SurfWithCurr() {
+        return p6Q4SurfWithCurr;
+    }
+
+    public void setP6Q4SurfWithCurr(String p6Q4SurfWithCurr) {
+        this.p6Q4SurfWithCurr = p6Q4SurfWithCurr;
+    }
+
+    public String getP6Q4SurfWithPrev() {
+        return p6Q4SurfWithPrev;
+    }
+
+    public void setP6Q4SurfWithPrev(String p6Q4SurfWithPrev) {
+        this.p6Q4SurfWithPrev = p6Q4SurfWithPrev;
+    }
+
+    public String getP6Q4SurfLevel() {
+        return p6Q4SurfLevel;
+    }
+
+    public void setP6Q4SurfLevel(String p6Q4SurfLevel) {
+        this.p6Q4SurfLevel = p6Q4SurfLevel;
+    }
+
+    public String getP6Q4GroundNoCurr() {
+        return p6Q4GroundNoCurr;
+    }
+
+    public void setP6Q4GroundNoCurr(String p6Q4GroundNoCurr) {
+        this.p6Q4GroundNoCurr = p6Q4GroundNoCurr;
+    }
+
+    public String getP6Q4GroundNoPrev() {
+        return p6Q4GroundNoPrev;
+    }
+
+    public void setP6Q4GroundNoPrev(String p6Q4GroundNoPrev) {
+        this.p6Q4GroundNoPrev = p6Q4GroundNoPrev;
+    }
+
+    public String getP6Q4GroundWithCurr() {
+        return p6Q4GroundWithCurr;
+    }
+
+    public void setP6Q4GroundWithCurr(String p6Q4GroundWithCurr) {
+        this.p6Q4GroundWithCurr = p6Q4GroundWithCurr;
+    }
+
+    public String getP6Q4GroundWithPrev() {
+        return p6Q4GroundWithPrev;
+    }
+
+    public void setP6Q4GroundWithPrev(String p6Q4GroundWithPrev) {
+        this.p6Q4GroundWithPrev = p6Q4GroundWithPrev;
+    }
+
+    public String getP6Q4GroundLevel() {
+        return p6Q4GroundLevel;
+    }
+
+    public void setP6Q4GroundLevel(String p6Q4GroundLevel) {
+        this.p6Q4GroundLevel = p6Q4GroundLevel;
+    }
+
+    public String getP6Q4SeaNoCurr() {
+        return p6Q4SeaNoCurr;
+    }
+
+    public void setP6Q4SeaNoCurr(String p6Q4SeaNoCurr) {
+        this.p6Q4SeaNoCurr = p6Q4SeaNoCurr;
+    }
+
+    public String getP6Q4SeaNoPrev() {
+        return p6Q4SeaNoPrev;
+    }
+
+    public void setP6Q4SeaNoPrev(String p6Q4SeaNoPrev) {
+        this.p6Q4SeaNoPrev = p6Q4SeaNoPrev;
+    }
+
+    public String getP6Q4SeaWithCurr() {
+        return p6Q4SeaWithCurr;
+    }
+
+    public void setP6Q4SeaWithCurr(String p6Q4SeaWithCurr) {
+        this.p6Q4SeaWithCurr = p6Q4SeaWithCurr;
+    }
+
+    public String getP6Q4SeaWithPrev() {
+        return p6Q4SeaWithPrev;
+    }
+
+    public void setP6Q4SeaWithPrev(String p6Q4SeaWithPrev) {
+        this.p6Q4SeaWithPrev = p6Q4SeaWithPrev;
+    }
+
+    public String getP6Q4SeaLevel() {
+        return p6Q4SeaLevel;
+    }
+
+    public void setP6Q4SeaLevel(String p6Q4SeaLevel) {
+        this.p6Q4SeaLevel = p6Q4SeaLevel;
+    }
+
+    public String getP6Q4ThirdNoCurr() {
+        return p6Q4ThirdNoCurr;
+    }
+
+    public void setP6Q4ThirdNoCurr(String p6Q4ThirdNoCurr) {
+        this.p6Q4ThirdNoCurr = p6Q4ThirdNoCurr;
+    }
+
+    public String getP6Q4ThirdNoPrev() {
+        return p6Q4ThirdNoPrev;
+    }
+
+    public void setP6Q4ThirdNoPrev(String p6Q4ThirdNoPrev) {
+        this.p6Q4ThirdNoPrev = p6Q4ThirdNoPrev;
+    }
+
+    public String getP6Q4ThirdWithCurr() {
+        return p6Q4ThirdWithCurr;
+    }
+
+    public void setP6Q4ThirdWithCurr(String p6Q4ThirdWithCurr) {
+        this.p6Q4ThirdWithCurr = p6Q4ThirdWithCurr;
+    }
+
+    public String getP6Q4ThirdWithPrev() {
+        return p6Q4ThirdWithPrev;
+    }
+
+    public void setP6Q4ThirdWithPrev(String p6Q4ThirdWithPrev) {
+        this.p6Q4ThirdWithPrev = p6Q4ThirdWithPrev;
+    }
+
+    public String getP6Q4ThirdLevel() {
+        return p6Q4ThirdLevel;
+    }
+
+    public void setP6Q4ThirdLevel(String p6Q4ThirdLevel) {
+        this.p6Q4ThirdLevel = p6Q4ThirdLevel;
+    }
+
+    public String getP6Q4OtherNoCurr() {
+        return p6Q4OtherNoCurr;
+    }
+
+    public void setP6Q4OtherNoCurr(String p6Q4OtherNoCurr) {
+        this.p6Q4OtherNoCurr = p6Q4OtherNoCurr;
+    }
+
+    public String getP6Q4OtherNoPrev() {
+        return p6Q4OtherNoPrev;
+    }
+
+    public void setP6Q4OtherNoPrev(String p6Q4OtherNoPrev) {
+        this.p6Q4OtherNoPrev = p6Q4OtherNoPrev;
+    }
+
+    public String getP6Q4OtherWithCurr() {
+        return p6Q4OtherWithCurr;
+    }
+
+    public void setP6Q4OtherWithCurr(String p6Q4OtherWithCurr) {
+        this.p6Q4OtherWithCurr = p6Q4OtherWithCurr;
+    }
+
+    public String getP6Q4OtherWithPrev() {
+        return p6Q4OtherWithPrev;
+    }
+
+    public void setP6Q4OtherWithPrev(String p6Q4OtherWithPrev) {
+        this.p6Q4OtherWithPrev = p6Q4OtherWithPrev;
+    }
+
+    public String getP6Q4OtherLevel() {
+        return p6Q4OtherLevel;
+    }
+
+    public void setP6Q4OtherLevel(String p6Q4OtherLevel) {
+        this.p6Q4OtherLevel = p6Q4OtherLevel;
+    }
+
+    public String getP6Q4TotalCurr() {
+        return p6Q4TotalCurr;
+    }
+
+    public void setP6Q4TotalCurr(String p6Q4TotalCurr) {
+        this.p6Q4TotalCurr = p6Q4TotalCurr;
+    }
+
+    public String getP6Q4TotalPrev() {
+        return p6Q4TotalPrev;
+    }
+
+    public void setP6Q4TotalPrev(String p6Q4TotalPrev) {
+        this.p6Q4TotalPrev = p6Q4TotalPrev;
+    }
+
+    public String getP6Q4AssuranceNote() {
+        return p6Q4AssuranceNote;
+    }
+
+    public void setP6Q4AssuranceNote(String p6Q4AssuranceNote) {
+        this.p6Q4AssuranceNote = p6Q4AssuranceNote;
+    }
+
+    public String getP6Q5ZldDetails() {
+        return p6Q5ZldDetails;
+    }
+
+    public void setP6Q5ZldDetails(String p6Q5ZldDetails) {
+        this.p6Q5ZldDetails = p6Q5ZldDetails;
+    }
+
+    public String getP6Q6NoxUnit() {
+        return p6Q6NoxUnit;
+    }
+
+    public void setP6Q6NoxUnit(String p6Q6NoxUnit) {
+        this.p6Q6NoxUnit = p6Q6NoxUnit;
+    }
+
+    public String getP6Q6NoxCurr() {
+        return p6Q6NoxCurr;
+    }
+
+    public void setP6Q6NoxCurr(String p6Q6NoxCurr) {
+        this.p6Q6NoxCurr = p6Q6NoxCurr;
+    }
+
+    public String getP6Q6NoxPrev() {
+        return p6Q6NoxPrev;
+    }
+
+    public void setP6Q6NoxPrev(String p6Q6NoxPrev) {
+        this.p6Q6NoxPrev = p6Q6NoxPrev;
+    }
+
+    public String getP6Q6SoxUnit() {
+        return p6Q6SoxUnit;
+    }
+
+    public void setP6Q6SoxUnit(String p6Q6SoxUnit) {
+        this.p6Q6SoxUnit = p6Q6SoxUnit;
+    }
+
+    public String getP6Q6SoxCurr() {
+        return p6Q6SoxCurr;
+    }
+
+    public void setP6Q6SoxCurr(String p6Q6SoxCurr) {
+        this.p6Q6SoxCurr = p6Q6SoxCurr;
+    }
+
+    public String getP6Q6SoxPrev() {
+        return p6Q6SoxPrev;
+    }
+
+    public void setP6Q6SoxPrev(String p6Q6SoxPrev) {
+        this.p6Q6SoxPrev = p6Q6SoxPrev;
+    }
+
+    public String getP6Q6PmUnit() {
+        return p6Q6PmUnit;
+    }
+
+    public void setP6Q6PmUnit(String p6Q6PmUnit) {
+        this.p6Q6PmUnit = p6Q6PmUnit;
+    }
+
+    public String getP6Q6PmCurr() {
+        return p6Q6PmCurr;
+    }
+
+    public void setP6Q6PmCurr(String p6Q6PmCurr) {
+        this.p6Q6PmCurr = p6Q6PmCurr;
+    }
+
+    public String getP6Q6PmPrev() {
+        return p6Q6PmPrev;
+    }
+
+    public void setP6Q6PmPrev(String p6Q6PmPrev) {
+        this.p6Q6PmPrev = p6Q6PmPrev;
+    }
+
+    public String getP6Q6PopCurr() {
+        return p6Q6PopCurr;
+    }
+
+    public void setP6Q6PopCurr(String p6Q6PopCurr) {
+        this.p6Q6PopCurr = p6Q6PopCurr;
+    }
+
+    public String getP6Q6PopPrev() {
+        return p6Q6PopPrev;
+    }
+
+    public void setP6Q6PopPrev(String p6Q6PopPrev) {
+        this.p6Q6PopPrev = p6Q6PopPrev;
+    }
+
+    public String getP6Q6VocUnit() {
+        return p6Q6VocUnit;
+    }
+
+    public void setP6Q6VocUnit(String p6Q6VocUnit) {
+        this.p6Q6VocUnit = p6Q6VocUnit;
+    }
+
+    public String getP6Q6VocCurr() {
+        return p6Q6VocCurr;
+    }
+
+    public void setP6Q6VocCurr(String p6Q6VocCurr) {
+        this.p6Q6VocCurr = p6Q6VocCurr;
+    }
+
+    public String getP6Q6VocPrev() {
+        return p6Q6VocPrev;
+    }
+
+    public void setP6Q6VocPrev(String p6Q6VocPrev) {
+        this.p6Q6VocPrev = p6Q6VocPrev;
+    }
+
+    public String getP6Q6HapUnit() {
+        return p6Q6HapUnit;
+    }
+
+    public void setP6Q6HapUnit(String p6Q6HapUnit) {
+        this.p6Q6HapUnit = p6Q6HapUnit;
+    }
+
+    public String getP6Q6HapCurr() {
+        return p6Q6HapCurr;
+    }
+
+    public void setP6Q6HapCurr(String p6Q6HapCurr) {
+        this.p6Q6HapCurr = p6Q6HapCurr;
+    }
+
+    public String getP6Q6HapPrev() {
+        return p6Q6HapPrev;
+    }
+
+    public void setP6Q6HapPrev(String p6Q6HapPrev) {
+        this.p6Q6HapPrev = p6Q6HapPrev;
+    }
+
+    public String getP6Q6OtherName() {
+        return p6Q6OtherName;
+    }
+
+    public void setP6Q6OtherName(String p6Q6OtherName) {
+        this.p6Q6OtherName = p6Q6OtherName;
+    }
+
+    public String getP6Q6OtherUnit() {
+        return p6Q6OtherUnit;
+    }
+
+    public void setP6Q6OtherUnit(String p6Q6OtherUnit) {
+        this.p6Q6OtherUnit = p6Q6OtherUnit;
+    }
+
+    public String getP6Q6OtherCurr() {
+        return p6Q6OtherCurr;
+    }
+
+    public void setP6Q6OtherCurr(String p6Q6OtherCurr) {
+        this.p6Q6OtherCurr = p6Q6OtherCurr;
+    }
+
+    public String getP6Q6OtherPrev() {
+        return p6Q6OtherPrev;
+    }
+
+    public void setP6Q6OtherPrev(String p6Q6OtherPrev) {
+        this.p6Q6OtherPrev = p6Q6OtherPrev;
+    }
+
+    public String getP6Q6AssuranceNote() {
+        return p6Q6AssuranceNote;
+    }
+
+    public void setP6Q6AssuranceNote(String p6Q6AssuranceNote) {
+        this.p6Q6AssuranceNote = p6Q6AssuranceNote;
+    }
+
+    private String p6Q6PopUnit; private String p6Q6PopCurr; private String p6Q6PopPrev;
+    private String p6Q6VocUnit; private String p6Q6VocCurr; private String p6Q6VocPrev;
+    private String p6Q6HapUnit; private String p6Q6HapCurr; private String p6Q6HapPrev;
+    private String p6Q6OtherName; private String p6Q6OtherUnit; private String p6Q6OtherCurr; private String p6Q6OtherPrev;
+    private String p6Q6AssuranceNote;
+
+    // --- Principle 6 : Q7 GHG Emissions ---
+    private String p6Q7Scope1Unit; private String p6Q7Scope1Curr; private String p6Q7Scope1Prev;
+    private String p6Q7Scope2Unit; private String p6Q7Scope2Curr; private String p6Q7Scope2Prev;
+    private String p6Q7IntTurnoverCurr; private String p6Q7IntTurnoverPrev;
+    private String p6Q7IntPppCurr;
+
+    public String getP6Q7IntPppPrev() {
+        return p6Q7IntPppPrev;
+    }
+
+    public void setP6Q7IntPppPrev(String p6Q7IntPppPrev) {
+        this.p6Q7IntPppPrev = p6Q7IntPppPrev;
+    }
+
+    public String getP6Q7Scope1Unit() {
+        return p6Q7Scope1Unit;
+    }
+
+    public void setP6Q7Scope1Unit(String p6Q7Scope1Unit) {
+        this.p6Q7Scope1Unit = p6Q7Scope1Unit;
+    }
+
+    public String getP6Q7Scope1Curr() {
+        return p6Q7Scope1Curr;
+    }
+
+    public void setP6Q7Scope1Curr(String p6Q7Scope1Curr) {
+        this.p6Q7Scope1Curr = p6Q7Scope1Curr;
+    }
+
+    public String getP6Q7Scope1Prev() {
+        return p6Q7Scope1Prev;
+    }
+
+    public void setP6Q7Scope1Prev(String p6Q7Scope1Prev) {
+        this.p6Q7Scope1Prev = p6Q7Scope1Prev;
+    }
+
+    public String getP6Q7Scope2Unit() {
+        return p6Q7Scope2Unit;
+    }
+
+    public void setP6Q7Scope2Unit(String p6Q7Scope2Unit) {
+        this.p6Q7Scope2Unit = p6Q7Scope2Unit;
+    }
+
+    public String getP6Q7Scope2Curr() {
+        return p6Q7Scope2Curr;
+    }
+
+    public void setP6Q7Scope2Curr(String p6Q7Scope2Curr) {
+        this.p6Q7Scope2Curr = p6Q7Scope2Curr;
+    }
+
+    public String getP6Q7Scope2Prev() {
+        return p6Q7Scope2Prev;
+    }
+
+    public void setP6Q7Scope2Prev(String p6Q7Scope2Prev) {
+        this.p6Q7Scope2Prev = p6Q7Scope2Prev;
+    }
+
+    public String getP6Q7IntTurnoverCurr() {
+        return p6Q7IntTurnoverCurr;
+    }
+
+    public void setP6Q7IntTurnoverCurr(String p6Q7IntTurnoverCurr) {
+        this.p6Q7IntTurnoverCurr = p6Q7IntTurnoverCurr;
+    }
+
+    public String getP6Q7IntTurnoverPrev() {
+        return p6Q7IntTurnoverPrev;
+    }
+
+    public void setP6Q7IntTurnoverPrev(String p6Q7IntTurnoverPrev) {
+        this.p6Q7IntTurnoverPrev = p6Q7IntTurnoverPrev;
+    }
+
+    public String getP6Q7IntPppCurr() {
+        return p6Q7IntPppCurr;
+    }
+
+    public void setP6Q7IntPppCurr(String p6Q7IntPppCurr) {
+        this.p6Q7IntPppCurr = p6Q7IntPppCurr;
+    }
+
+    public String getP6Q7IntPhysCurr() {
+        return p6Q7IntPhysCurr;
+    }
+
+    public void setP6Q7IntPhysCurr(String p6Q7IntPhysCurr) {
+        this.p6Q7IntPhysCurr = p6Q7IntPhysCurr;
+    }
+
+    public String getP6Q7IntPhysPrev() {
+        return p6Q7IntPhysPrev;
+    }
+
+    public void setP6Q7IntPhysPrev(String p6Q7IntPhysPrev) {
+        this.p6Q7IntPhysPrev = p6Q7IntPhysPrev;
+    }
+
+    public String getP6Q7IntOptCurr() {
+        return p6Q7IntOptCurr;
+    }
+
+    public void setP6Q7IntOptCurr(String p6Q7IntOptCurr) {
+        this.p6Q7IntOptCurr = p6Q7IntOptCurr;
+    }
+
+    public String getP6Q7IntOptPrev() {
+        return p6Q7IntOptPrev;
+    }
+
+    public void setP6Q7IntOptPrev(String p6Q7IntOptPrev) {
+        this.p6Q7IntOptPrev = p6Q7IntOptPrev;
+    }
+
+    public String getP6Q7AssuranceNote() {
+        return p6Q7AssuranceNote;
+    }
+
+    public void setP6Q7AssuranceNote(String p6Q7AssuranceNote) {
+        this.p6Q7AssuranceNote = p6Q7AssuranceNote;
+    }
+
+    public String getP6Q8GhgProjectDetails() {
+        return p6Q8GhgProjectDetails;
+    }
+
+    public void setP6Q8GhgProjectDetails(String p6Q8GhgProjectDetails) {
+        this.p6Q8GhgProjectDetails = p6Q8GhgProjectDetails;
+    }
+
+    public String getP6Q9GenPlastCurr() {
+        return p6Q9GenPlastCurr;
+    }
+
+    public void setP6Q9GenPlastCurr(String p6Q9GenPlastCurr) {
+        this.p6Q9GenPlastCurr = p6Q9GenPlastCurr;
+    }
+
+    public String getP6Q9GenPlastPrev() {
+        return p6Q9GenPlastPrev;
+    }
+
+    public void setP6Q9GenPlastPrev(String p6Q9GenPlastPrev) {
+        this.p6Q9GenPlastPrev = p6Q9GenPlastPrev;
+    }
+
+    public String getP6Q9GenEwasteCurr() {
+        return p6Q9GenEwasteCurr;
+    }
+
+    public void setP6Q9GenEwasteCurr(String p6Q9GenEwasteCurr) {
+        this.p6Q9GenEwasteCurr = p6Q9GenEwasteCurr;
+    }
+
+    public String getP6Q9GenEwastePrev() {
+        return p6Q9GenEwastePrev;
+    }
+
+    public void setP6Q9GenEwastePrev(String p6Q9GenEwastePrev) {
+        this.p6Q9GenEwastePrev = p6Q9GenEwastePrev;
+    }
+
+    public String getP6Q9GenBioCurr() {
+        return p6Q9GenBioCurr;
+    }
+
+    public void setP6Q9GenBioCurr(String p6Q9GenBioCurr) {
+        this.p6Q9GenBioCurr = p6Q9GenBioCurr;
+    }
+
+    public String getP6Q9GenBioPrev() {
+        return p6Q9GenBioPrev;
+    }
+
+    public void setP6Q9GenBioPrev(String p6Q9GenBioPrev) {
+        this.p6Q9GenBioPrev = p6Q9GenBioPrev;
+    }
+
+    public String getP6Q9GenConstCurr() {
+        return p6Q9GenConstCurr;
+    }
+
+    public void setP6Q9GenConstCurr(String p6Q9GenConstCurr) {
+        this.p6Q9GenConstCurr = p6Q9GenConstCurr;
+    }
+
+    public String getP6Q9GenConstPrev() {
+        return p6Q9GenConstPrev;
+    }
+
+    public void setP6Q9GenConstPrev(String p6Q9GenConstPrev) {
+        this.p6Q9GenConstPrev = p6Q9GenConstPrev;
+    }
+
+    public String getP6Q9GenBattCurr() {
+        return p6Q9GenBattCurr;
+    }
+
+    public void setP6Q9GenBattCurr(String p6Q9GenBattCurr) {
+        this.p6Q9GenBattCurr = p6Q9GenBattCurr;
+    }
+
+    public String getP6Q9GenBattPrev() {
+        return p6Q9GenBattPrev;
+    }
+
+    public void setP6Q9GenBattPrev(String p6Q9GenBattPrev) {
+        this.p6Q9GenBattPrev = p6Q9GenBattPrev;
+    }
+
+    public String getP6Q9GenRadioCurr() {
+        return p6Q9GenRadioCurr;
+    }
+
+    public void setP6Q9GenRadioCurr(String p6Q9GenRadioCurr) {
+        this.p6Q9GenRadioCurr = p6Q9GenRadioCurr;
+    }
+
+    public String getP6Q9GenRadioPrev() {
+        return p6Q9GenRadioPrev;
+    }
+
+    public void setP6Q9GenRadioPrev(String p6Q9GenRadioPrev) {
+        this.p6Q9GenRadioPrev = p6Q9GenRadioPrev;
+    }
+
+    public String getP6Q9GenHazCurr() {
+        return p6Q9GenHazCurr;
+    }
+
+    public void setP6Q9GenHazCurr(String p6Q9GenHazCurr) {
+        this.p6Q9GenHazCurr = p6Q9GenHazCurr;
+    }
+
+    public String getP6Q9GenHazPrev() {
+        return p6Q9GenHazPrev;
+    }
+
+    public void setP6Q9GenHazPrev(String p6Q9GenHazPrev) {
+        this.p6Q9GenHazPrev = p6Q9GenHazPrev;
+    }
+
+    public String getP6Q9GenNonHazCurr() {
+        return p6Q9GenNonHazCurr;
+    }
+
+    public void setP6Q9GenNonHazCurr(String p6Q9GenNonHazCurr) {
+        this.p6Q9GenNonHazCurr = p6Q9GenNonHazCurr;
+    }
+
+    public String getP6Q9GenNonHazPrev() {
+        return p6Q9GenNonHazPrev;
+    }
+
+    public void setP6Q9GenNonHazPrev(String p6Q9GenNonHazPrev) {
+        this.p6Q9GenNonHazPrev = p6Q9GenNonHazPrev;
+    }
+
+    public String getP6Q9GenTotalCurr() {
+        return p6Q9GenTotalCurr;
+    }
+
+    public void setP6Q9GenTotalCurr(String p6Q9GenTotalCurr) {
+        this.p6Q9GenTotalCurr = p6Q9GenTotalCurr;
+    }
+
+    public String getP6Q9GenTotalPrev() {
+        return p6Q9GenTotalPrev;
+    }
+
+    public void setP6Q9GenTotalPrev(String p6Q9GenTotalPrev) {
+        this.p6Q9GenTotalPrev = p6Q9GenTotalPrev;
+    }
+
+    public String getP6Q9IntTurnCurr() {
+        return p6Q9IntTurnCurr;
+    }
+
+    public void setP6Q9IntTurnCurr(String p6Q9IntTurnCurr) {
+        this.p6Q9IntTurnCurr = p6Q9IntTurnCurr;
+    }
+
+    public String getP6Q9IntTurnPrev() {
+        return p6Q9IntTurnPrev;
+    }
+
+    public void setP6Q9IntTurnPrev(String p6Q9IntTurnPrev) {
+        this.p6Q9IntTurnPrev = p6Q9IntTurnPrev;
+    }
+
+    public String getP6Q9IntPppCurr() {
+        return p6Q9IntPppCurr;
+    }
+
+    public void setP6Q9IntPppCurr(String p6Q9IntPppCurr) {
+        this.p6Q9IntPppCurr = p6Q9IntPppCurr;
+    }
+
+    public String getP6Q9IntPppPrev() {
+        return p6Q9IntPppPrev;
+    }
+
+    public void setP6Q9IntPppPrev(String p6Q9IntPppPrev) {
+        this.p6Q9IntPppPrev = p6Q9IntPppPrev;
+    }
+
+    public String getP6Q9IntPhysCurr() {
+        return p6Q9IntPhysCurr;
+    }
+
+    public void setP6Q9IntPhysCurr(String p6Q9IntPhysCurr) {
+        this.p6Q9IntPhysCurr = p6Q9IntPhysCurr;
+    }
+
+    public String getP6Q9IntPhysPrev() {
+        return p6Q9IntPhysPrev;
+    }
+
+    public void setP6Q9IntPhysPrev(String p6Q9IntPhysPrev) {
+        this.p6Q9IntPhysPrev = p6Q9IntPhysPrev;
+    }
+
+    public String getP6Q9IntOptCurr() {
+        return p6Q9IntOptCurr;
+    }
+
+    public void setP6Q9IntOptCurr(String p6Q9IntOptCurr) {
+        this.p6Q9IntOptCurr = p6Q9IntOptCurr;
+    }
+
+    public String getP6Q9IntOptPrev() {
+        return p6Q9IntOptPrev;
+    }
+
+    public void setP6Q9IntOptPrev(String p6Q9IntOptPrev) {
+        this.p6Q9IntOptPrev = p6Q9IntOptPrev;
+    }
+
+    public String getP6Q9RecRecyCurr() {
+        return p6Q9RecRecyCurr;
+    }
+
+    public void setP6Q9RecRecyCurr(String p6Q9RecRecyCurr) {
+        this.p6Q9RecRecyCurr = p6Q9RecRecyCurr;
+    }
+
+    public String getP6Q9RecRecyPrev() {
+        return p6Q9RecRecyPrev;
+    }
+
+    public void setP6Q9RecRecyPrev(String p6Q9RecRecyPrev) {
+        this.p6Q9RecRecyPrev = p6Q9RecRecyPrev;
+    }
+
+    public String getP6Q9RecReuseCurr() {
+        return p6Q9RecReuseCurr;
+    }
+
+    public void setP6Q9RecReuseCurr(String p6Q9RecReuseCurr) {
+        this.p6Q9RecReuseCurr = p6Q9RecReuseCurr;
+    }
+
+    public String getP6Q9RecReusePrev() {
+        return p6Q9RecReusePrev;
+    }
+
+    public void setP6Q9RecReusePrev(String p6Q9RecReusePrev) {
+        this.p6Q9RecReusePrev = p6Q9RecReusePrev;
+    }
+
+    public String getP6Q9RecOthCurr() {
+        return p6Q9RecOthCurr;
+    }
+
+    public void setP6Q9RecOthCurr(String p6Q9RecOthCurr) {
+        this.p6Q9RecOthCurr = p6Q9RecOthCurr;
+    }
+
+    public String getP6Q9RecOthPrev() {
+        return p6Q9RecOthPrev;
+    }
+
+    public void setP6Q9RecOthPrev(String p6Q9RecOthPrev) {
+        this.p6Q9RecOthPrev = p6Q9RecOthPrev;
+    }
+
+    public String getP6Q9RecTotalCurr() {
+        return p6Q9RecTotalCurr;
+    }
+
+    public void setP6Q9RecTotalCurr(String p6Q9RecTotalCurr) {
+        this.p6Q9RecTotalCurr = p6Q9RecTotalCurr;
+    }
+
+    public String getP6Q9RecTotalPrev() {
+        return p6Q9RecTotalPrev;
+    }
+
+    public void setP6Q9RecTotalPrev(String p6Q9RecTotalPrev) {
+        this.p6Q9RecTotalPrev = p6Q9RecTotalPrev;
+    }
+
+    public String getP6Q9DispIncCurr() {
+        return p6Q9DispIncCurr;
+    }
+
+    public void setP6Q9DispIncCurr(String p6Q9DispIncCurr) {
+        this.p6Q9DispIncCurr = p6Q9DispIncCurr;
+    }
+
+    public String getP6Q9DispIncPrev() {
+        return p6Q9DispIncPrev;
+    }
+
+    public void setP6Q9DispIncPrev(String p6Q9DispIncPrev) {
+        this.p6Q9DispIncPrev = p6Q9DispIncPrev;
+    }
+
+    public String getP6Q9DispLandCurr() {
+        return p6Q9DispLandCurr;
+    }
+
+    public void setP6Q9DispLandCurr(String p6Q9DispLandCurr) {
+        this.p6Q9DispLandCurr = p6Q9DispLandCurr;
+    }
+
+    public String getP6Q9DispLandPrev() {
+        return p6Q9DispLandPrev;
+    }
+
+    public void setP6Q9DispLandPrev(String p6Q9DispLandPrev) {
+        this.p6Q9DispLandPrev = p6Q9DispLandPrev;
+    }
+
+    public String getP6Q9DispOthCurr() {
+        return p6Q9DispOthCurr;
+    }
+
+    public void setP6Q9DispOthCurr(String p6Q9DispOthCurr) {
+        this.p6Q9DispOthCurr = p6Q9DispOthCurr;
+    }
+
+    public String getP6Q9DispOthPrev() {
+        return p6Q9DispOthPrev;
+    }
+
+    public void setP6Q9DispOthPrev(String p6Q9DispOthPrev) {
+        this.p6Q9DispOthPrev = p6Q9DispOthPrev;
+    }
+
+    public String getP6Q9DispTotalCurr() {
+        return p6Q9DispTotalCurr;
+    }
+
+    public void setP6Q9DispTotalCurr(String p6Q9DispTotalCurr) {
+        this.p6Q9DispTotalCurr = p6Q9DispTotalCurr;
+    }
+
+    public String getP6Q9DispTotalPrev() {
+        return p6Q9DispTotalPrev;
+    }
+
+    public void setP6Q9DispTotalPrev(String p6Q9DispTotalPrev) {
+        this.p6Q9DispTotalPrev = p6Q9DispTotalPrev;
+    }
+
+    public String getP6Q9AssuranceNote() {
+        return p6Q9AssuranceNote;
+    }
+
+    public void setP6Q9AssuranceNote(String p6Q9AssuranceNote) {
+        this.p6Q9AssuranceNote = p6Q9AssuranceNote;
+    }
+
+    private String p6Q7IntPppPrev;
+    private String p6Q7IntPhysCurr; private String p6Q7IntPhysPrev;
+    private String p6Q7IntOptCurr; private String p6Q7IntOptPrev;
+    private String p6Q7AssuranceNote;
+
+    // --- Principle 6 : Q8 GHG Projects ---
+    private String p6Q8GhgProjectDetails;
+
+    // --- Principle 6 : Q9 Waste Management ---
+    private String p6Q9GenPlastCurr; private String p6Q9GenPlastPrev;
+    private String p6Q9GenEwasteCurr; private String p6Q9GenEwastePrev;
+    private String p6Q9GenBioCurr; private String p6Q9GenBioPrev;
+    private String p6Q9GenConstCurr; private String p6Q9GenConstPrev;
+    private String p6Q9GenBattCurr; private String p6Q9GenBattPrev;
+    private String p6Q9GenRadioCurr; private String p6Q9GenRadioPrev;
+    private String p6Q9GenHazCurr; private String p6Q9GenHazPrev;
+    private String p6Q9GenNonHazCurr; private String p6Q9GenNonHazPrev;
+    private String p6Q9GenTotalCurr; private String p6Q9GenTotalPrev;
+    private String p6Q9IntTurnCurr; private String p6Q9IntTurnPrev;
+    private String p6Q9IntPppCurr; private String p6Q9IntPppPrev;
+    private String p6Q9IntPhysCurr; private String p6Q9IntPhysPrev;
+    private String p6Q9IntOptCurr; private String p6Q9IntOptPrev;
+    private String p6Q9RecRecyCurr; private String p6Q9RecRecyPrev;
+    private String p6Q9RecReuseCurr; private String p6Q9RecReusePrev;
+    private String p6Q9RecOthCurr; private String p6Q9RecOthPrev;
+    private String p6Q9RecTotalCurr; private String p6Q9RecTotalPrev;
+    private String p6Q9DispIncCurr; private String p6Q9DispIncPrev;
+    private String p6Q9DispLandCurr; private String p6Q9DispLandPrev;
+    private String p6Q9DispOthCurr; private String p6Q9DispOthPrev;
+    private String p6Q9DispTotalCurr; private String p6Q9DispTotalPrev;
+    private String p6Q9AssuranceNote;
+
+    // --- Principle 6: Q10 - Q13 ---
+    private String p6Q10WastePractices;
+    private List<P6Q11Eco> p6Q11EcoList;
+    private List<P6Q12Eia> p6Q12EiaList;
+    private List<P6Q13NonComp> p6Q13NonCompList;
+
+    // --- Inner Classes for Dynamic Tables ---
+    @Data
+    public static class P6Q11Eco {
+        private String sNo;
+        private String location;
+        private String type;
+        private String compliance;
+    }
+
+    @Data
+    public static class P6Q12Eia {
+        private String name;
+        private String notifNo;
+        private String date;
+        private String independent;
+        private String publicDomain;
+        private String link;
+    }
+
+    @Data
+    public static class P6Q13NonComp {
+        private String sNo;
+        private String law;
+        private String details;
+        private String fines;
+        private String action;
+    }
+
+    // --- Getters and Setters for P6 Q10-Q13 ---
+    public String getP6Q10WastePractices() { return p6Q10WastePractices; }
+    public void setP6Q10WastePractices(String p6Q10WastePractices) { this.p6Q10WastePractices = p6Q10WastePractices; }
+
+    public List<P6Q11Eco> getP6Q11EcoList() { return p6Q11EcoList; }
+    public void setP6Q11EcoList(List<P6Q11Eco> p6Q11EcoList) { this.p6Q11EcoList = p6Q11EcoList; }
+
+    public List<P6Q12Eia> getP6Q12EiaList() { return p6Q12EiaList; }
+    public void setP6Q12EiaList(List<P6Q12Eia> p6Q12EiaList) { this.p6Q12EiaList = p6Q12EiaList; }
+
+    public List<P6Q13NonComp> getP6Q13NonCompList() { return p6Q13NonCompList; }
+    public void setP6Q13NonCompList(List<P6Q13NonComp> p6Q13NonCompList) { this.p6Q13NonCompList = p6Q13NonCompList; }
+
+    // --- P6 Leadership Q1 ---
+    private String p6LeadQ1Facilities;
+    private String p6LeadQ1WithSurfCurr; private String p6LeadQ1WithSurfPrev;
+    private String p6LeadQ1WithGroundCurr; private String p6LeadQ1WithGroundPrev;
+    private String p6LeadQ1WithThirdCurr; private String p6LeadQ1WithThirdPrev;
+    private String p6LeadQ1WithSeaCurr; private String p6LeadQ1WithSeaPrev;
+    private String p6LeadQ1WithOtherCurr; private String p6LeadQ1WithOtherPrev;
+    private String p6LeadQ1WithTotalCurr; private String p6LeadQ1WithTotalPrev;
+    private String p6LeadQ1ConsTotalCurr; private String p6LeadQ1ConsTotalPrev;
+    private String p6LeadQ1IntTurnCurr; private String p6LeadQ1IntTurnPrev;
+    private String p6LeadQ1IntOptCurr; private String p6LeadQ1IntOptPrev;
+    private String p6LeadQ1DisSurfNoCurr; private String p6LeadQ1DisSurfNoPrev;
+    private String p6LeadQ1DisSurfWithCurr; private String p6LeadQ1DisSurfWithPrev; private String p6LeadQ1DisSurfLevel;
+    private String p6LeadQ1DisGroundNoCurr; private String p6LeadQ1DisGroundNoPrev;
+    private String p6LeadQ1DisGroundWithCurr; private String p6LeadQ1DisGroundWithPrev; private String p6LeadQ1DisGroundLevel;
+    private String p6LeadQ1DisSeaNoCurr; private String p6LeadQ1DisSeaNoPrev;
+    private String p6LeadQ1DisSeaWithCurr; private String p6LeadQ1DisSeaWithPrev; private String p6LeadQ1DisSeaLevel;
+    private String p6LeadQ1DisThirdNoCurr; private String p6LeadQ1DisThirdNoPrev;
+    private String p6LeadQ1DisThirdWithCurr; private String p6LeadQ1DisThirdWithPrev; private String p6LeadQ1DisThirdLevel;
+    private String p6LeadQ1DisOtherNoCurr; private String p6LeadQ1DisOtherNoPrev;
+    private String p6LeadQ1DisOtherWithCurr; private String p6LeadQ1DisOtherWithPrev; private String p6LeadQ1DisOtherLevel;
+    private String p6LeadQ1DisTotalCurr; private String p6LeadQ1DisTotalPrev;
+    private String p6LeadQ1AssuranceNote;
+
+    // --- P6 Leadership Q2-Q7 ---
+    private String p6LeadQ2Scope3Curr; private String p6LeadQ2Scope3Prev;
+    private String p6LeadQ2IntTurnCurr; private String p6LeadQ2IntTurnPrev;
+
+    public String getP6LeadQ2IntTurnPrev() {
+        return p6LeadQ2IntTurnPrev;
+    }
+
+    public void setP6LeadQ2IntTurnPrev(String p6LeadQ2IntTurnPrev) {
+        this.p6LeadQ2IntTurnPrev = p6LeadQ2IntTurnPrev;
+    }
+
+    public String getP6LeadQ1Facilities() {
+        return p6LeadQ1Facilities;
+    }
+
+    public void setP6LeadQ1Facilities(String p6LeadQ1Facilities) {
+        this.p6LeadQ1Facilities = p6LeadQ1Facilities;
+    }
+
+    public String getP6LeadQ1WithSurfCurr() {
+        return p6LeadQ1WithSurfCurr;
+    }
+
+    public void setP6LeadQ1WithSurfCurr(String p6LeadQ1WithSurfCurr) {
+        this.p6LeadQ1WithSurfCurr = p6LeadQ1WithSurfCurr;
+    }
+
+    public String getP6LeadQ1WithSurfPrev() {
+        return p6LeadQ1WithSurfPrev;
+    }
+
+    public void setP6LeadQ1WithSurfPrev(String p6LeadQ1WithSurfPrev) {
+        this.p6LeadQ1WithSurfPrev = p6LeadQ1WithSurfPrev;
+    }
+
+    public String getP6LeadQ1WithGroundCurr() {
+        return p6LeadQ1WithGroundCurr;
+    }
+
+    public void setP6LeadQ1WithGroundCurr(String p6LeadQ1WithGroundCurr) {
+        this.p6LeadQ1WithGroundCurr = p6LeadQ1WithGroundCurr;
+    }
+
+    public String getP6LeadQ1WithGroundPrev() {
+        return p6LeadQ1WithGroundPrev;
+    }
+
+    public void setP6LeadQ1WithGroundPrev(String p6LeadQ1WithGroundPrev) {
+        this.p6LeadQ1WithGroundPrev = p6LeadQ1WithGroundPrev;
+    }
+
+    public String getP6LeadQ1WithThirdCurr() {
+        return p6LeadQ1WithThirdCurr;
+    }
+
+    public void setP6LeadQ1WithThirdCurr(String p6LeadQ1WithThirdCurr) {
+        this.p6LeadQ1WithThirdCurr = p6LeadQ1WithThirdCurr;
+    }
+
+    public String getP6LeadQ1WithThirdPrev() {
+        return p6LeadQ1WithThirdPrev;
+    }
+
+    public void setP6LeadQ1WithThirdPrev(String p6LeadQ1WithThirdPrev) {
+        this.p6LeadQ1WithThirdPrev = p6LeadQ1WithThirdPrev;
+    }
+
+    public String getP6LeadQ1WithSeaCurr() {
+        return p6LeadQ1WithSeaCurr;
+    }
+
+    public void setP6LeadQ1WithSeaCurr(String p6LeadQ1WithSeaCurr) {
+        this.p6LeadQ1WithSeaCurr = p6LeadQ1WithSeaCurr;
+    }
+
+    public String getP6LeadQ1WithSeaPrev() {
+        return p6LeadQ1WithSeaPrev;
+    }
+
+    public void setP6LeadQ1WithSeaPrev(String p6LeadQ1WithSeaPrev) {
+        this.p6LeadQ1WithSeaPrev = p6LeadQ1WithSeaPrev;
+    }
+
+    public String getP6LeadQ1WithOtherCurr() {
+        return p6LeadQ1WithOtherCurr;
+    }
+
+    public void setP6LeadQ1WithOtherCurr(String p6LeadQ1WithOtherCurr) {
+        this.p6LeadQ1WithOtherCurr = p6LeadQ1WithOtherCurr;
+    }
+
+    public String getP6LeadQ1WithOtherPrev() {
+        return p6LeadQ1WithOtherPrev;
+    }
+
+    public void setP6LeadQ1WithOtherPrev(String p6LeadQ1WithOtherPrev) {
+        this.p6LeadQ1WithOtherPrev = p6LeadQ1WithOtherPrev;
+    }
+
+    public String getP6LeadQ1WithTotalCurr() {
+        return p6LeadQ1WithTotalCurr;
+    }
+
+    public void setP6LeadQ1WithTotalCurr(String p6LeadQ1WithTotalCurr) {
+        this.p6LeadQ1WithTotalCurr = p6LeadQ1WithTotalCurr;
+    }
+
+    public String getP6LeadQ1WithTotalPrev() {
+        return p6LeadQ1WithTotalPrev;
+    }
+
+    public void setP6LeadQ1WithTotalPrev(String p6LeadQ1WithTotalPrev) {
+        this.p6LeadQ1WithTotalPrev = p6LeadQ1WithTotalPrev;
+    }
+
+    public String getP6LeadQ1ConsTotalCurr() {
+        return p6LeadQ1ConsTotalCurr;
+    }
+
+    public void setP6LeadQ1ConsTotalCurr(String p6LeadQ1ConsTotalCurr) {
+        this.p6LeadQ1ConsTotalCurr = p6LeadQ1ConsTotalCurr;
+    }
+
+    public String getP6LeadQ1ConsTotalPrev() {
+        return p6LeadQ1ConsTotalPrev;
+    }
+
+    public void setP6LeadQ1ConsTotalPrev(String p6LeadQ1ConsTotalPrev) {
+        this.p6LeadQ1ConsTotalPrev = p6LeadQ1ConsTotalPrev;
+    }
+
+    public String getP6LeadQ1IntTurnCurr() {
+        return p6LeadQ1IntTurnCurr;
+    }
+
+    public void setP6LeadQ1IntTurnCurr(String p6LeadQ1IntTurnCurr) {
+        this.p6LeadQ1IntTurnCurr = p6LeadQ1IntTurnCurr;
+    }
+
+    public String getP6LeadQ1IntTurnPrev() {
+        return p6LeadQ1IntTurnPrev;
+    }
+
+    public void setP6LeadQ1IntTurnPrev(String p6LeadQ1IntTurnPrev) {
+        this.p6LeadQ1IntTurnPrev = p6LeadQ1IntTurnPrev;
+    }
+
+    public String getP6LeadQ1IntOptCurr() {
+        return p6LeadQ1IntOptCurr;
+    }
+
+    public void setP6LeadQ1IntOptCurr(String p6LeadQ1IntOptCurr) {
+        this.p6LeadQ1IntOptCurr = p6LeadQ1IntOptCurr;
+    }
+
+    public String getP6LeadQ1IntOptPrev() {
+        return p6LeadQ1IntOptPrev;
+    }
+
+    public void setP6LeadQ1IntOptPrev(String p6LeadQ1IntOptPrev) {
+        this.p6LeadQ1IntOptPrev = p6LeadQ1IntOptPrev;
+    }
+
+    public String getP6LeadQ1DisSurfNoCurr() {
+        return p6LeadQ1DisSurfNoCurr;
+    }
+
+    public void setP6LeadQ1DisSurfNoCurr(String p6LeadQ1DisSurfNoCurr) {
+        this.p6LeadQ1DisSurfNoCurr = p6LeadQ1DisSurfNoCurr;
+    }
+
+    public String getP6LeadQ1DisSurfNoPrev() {
+        return p6LeadQ1DisSurfNoPrev;
+    }
+
+    public void setP6LeadQ1DisSurfNoPrev(String p6LeadQ1DisSurfNoPrev) {
+        this.p6LeadQ1DisSurfNoPrev = p6LeadQ1DisSurfNoPrev;
+    }
+
+    public String getP6LeadQ1DisSurfWithCurr() {
+        return p6LeadQ1DisSurfWithCurr;
+    }
+
+    public void setP6LeadQ1DisSurfWithCurr(String p6LeadQ1DisSurfWithCurr) {
+        this.p6LeadQ1DisSurfWithCurr = p6LeadQ1DisSurfWithCurr;
+    }
+
+    public String getP6LeadQ1DisSurfWithPrev() {
+        return p6LeadQ1DisSurfWithPrev;
+    }
+
+    public void setP6LeadQ1DisSurfWithPrev(String p6LeadQ1DisSurfWithPrev) {
+        this.p6LeadQ1DisSurfWithPrev = p6LeadQ1DisSurfWithPrev;
+    }
+
+    public String getP6LeadQ1DisSurfLevel() {
+        return p6LeadQ1DisSurfLevel;
+    }
+
+    public void setP6LeadQ1DisSurfLevel(String p6LeadQ1DisSurfLevel) {
+        this.p6LeadQ1DisSurfLevel = p6LeadQ1DisSurfLevel;
+    }
+
+    public String getP6LeadQ1DisGroundNoCurr() {
+        return p6LeadQ1DisGroundNoCurr;
+    }
+
+    public void setP6LeadQ1DisGroundNoCurr(String p6LeadQ1DisGroundNoCurr) {
+        this.p6LeadQ1DisGroundNoCurr = p6LeadQ1DisGroundNoCurr;
+    }
+
+    public String getP6LeadQ1DisGroundNoPrev() {
+        return p6LeadQ1DisGroundNoPrev;
+    }
+
+    public void setP6LeadQ1DisGroundNoPrev(String p6LeadQ1DisGroundNoPrev) {
+        this.p6LeadQ1DisGroundNoPrev = p6LeadQ1DisGroundNoPrev;
+    }
+
+    public String getP6LeadQ1DisGroundWithCurr() {
+        return p6LeadQ1DisGroundWithCurr;
+    }
+
+    public void setP6LeadQ1DisGroundWithCurr(String p6LeadQ1DisGroundWithCurr) {
+        this.p6LeadQ1DisGroundWithCurr = p6LeadQ1DisGroundWithCurr;
+    }
+
+    public String getP6LeadQ1DisGroundWithPrev() {
+        return p6LeadQ1DisGroundWithPrev;
+    }
+
+    public void setP6LeadQ1DisGroundWithPrev(String p6LeadQ1DisGroundWithPrev) {
+        this.p6LeadQ1DisGroundWithPrev = p6LeadQ1DisGroundWithPrev;
+    }
+
+    public String getP6LeadQ1DisGroundLevel() {
+        return p6LeadQ1DisGroundLevel;
+    }
+
+    public void setP6LeadQ1DisGroundLevel(String p6LeadQ1DisGroundLevel) {
+        this.p6LeadQ1DisGroundLevel = p6LeadQ1DisGroundLevel;
+    }
+
+    public String getP6LeadQ1DisSeaNoCurr() {
+        return p6LeadQ1DisSeaNoCurr;
+    }
+
+    public void setP6LeadQ1DisSeaNoCurr(String p6LeadQ1DisSeaNoCurr) {
+        this.p6LeadQ1DisSeaNoCurr = p6LeadQ1DisSeaNoCurr;
+    }
+
+    public String getP6LeadQ1DisSeaNoPrev() {
+        return p6LeadQ1DisSeaNoPrev;
+    }
+
+    public void setP6LeadQ1DisSeaNoPrev(String p6LeadQ1DisSeaNoPrev) {
+        this.p6LeadQ1DisSeaNoPrev = p6LeadQ1DisSeaNoPrev;
+    }
+
+    public String getP6LeadQ1DisSeaWithCurr() {
+        return p6LeadQ1DisSeaWithCurr;
+    }
+
+    public void setP6LeadQ1DisSeaWithCurr(String p6LeadQ1DisSeaWithCurr) {
+        this.p6LeadQ1DisSeaWithCurr = p6LeadQ1DisSeaWithCurr;
+    }
+
+    public String getP6LeadQ1DisSeaWithPrev() {
+        return p6LeadQ1DisSeaWithPrev;
+    }
+
+    public void setP6LeadQ1DisSeaWithPrev(String p6LeadQ1DisSeaWithPrev) {
+        this.p6LeadQ1DisSeaWithPrev = p6LeadQ1DisSeaWithPrev;
+    }
+
+    public String getP6LeadQ1DisSeaLevel() {
+        return p6LeadQ1DisSeaLevel;
+    }
+
+    public void setP6LeadQ1DisSeaLevel(String p6LeadQ1DisSeaLevel) {
+        this.p6LeadQ1DisSeaLevel = p6LeadQ1DisSeaLevel;
+    }
+
+    public String getP6LeadQ1DisThirdNoCurr() {
+        return p6LeadQ1DisThirdNoCurr;
+    }
+
+    public void setP6LeadQ1DisThirdNoCurr(String p6LeadQ1DisThirdNoCurr) {
+        this.p6LeadQ1DisThirdNoCurr = p6LeadQ1DisThirdNoCurr;
+    }
+
+    public String getP6LeadQ1DisThirdNoPrev() {
+        return p6LeadQ1DisThirdNoPrev;
+    }
+
+    public void setP6LeadQ1DisThirdNoPrev(String p6LeadQ1DisThirdNoPrev) {
+        this.p6LeadQ1DisThirdNoPrev = p6LeadQ1DisThirdNoPrev;
+    }
+
+    public String getP6LeadQ1DisThirdWithCurr() {
+        return p6LeadQ1DisThirdWithCurr;
+    }
+
+    public void setP6LeadQ1DisThirdWithCurr(String p6LeadQ1DisThirdWithCurr) {
+        this.p6LeadQ1DisThirdWithCurr = p6LeadQ1DisThirdWithCurr;
+    }
+
+    public String getP6LeadQ1DisThirdWithPrev() {
+        return p6LeadQ1DisThirdWithPrev;
+    }
+
+    public void setP6LeadQ1DisThirdWithPrev(String p6LeadQ1DisThirdWithPrev) {
+        this.p6LeadQ1DisThirdWithPrev = p6LeadQ1DisThirdWithPrev;
+    }
+
+    public String getP6LeadQ1DisThirdLevel() {
+        return p6LeadQ1DisThirdLevel;
+    }
+
+    public void setP6LeadQ1DisThirdLevel(String p6LeadQ1DisThirdLevel) {
+        this.p6LeadQ1DisThirdLevel = p6LeadQ1DisThirdLevel;
+    }
+
+    public String getP6LeadQ1DisOtherNoCurr() {
+        return p6LeadQ1DisOtherNoCurr;
+    }
+
+    public void setP6LeadQ1DisOtherNoCurr(String p6LeadQ1DisOtherNoCurr) {
+        this.p6LeadQ1DisOtherNoCurr = p6LeadQ1DisOtherNoCurr;
+    }
+
+    public String getP6LeadQ1DisOtherNoPrev() {
+        return p6LeadQ1DisOtherNoPrev;
+    }
+
+    public void setP6LeadQ1DisOtherNoPrev(String p6LeadQ1DisOtherNoPrev) {
+        this.p6LeadQ1DisOtherNoPrev = p6LeadQ1DisOtherNoPrev;
+    }
+
+    public String getP6LeadQ1DisOtherWithCurr() {
+        return p6LeadQ1DisOtherWithCurr;
+    }
+
+    public void setP6LeadQ1DisOtherWithCurr(String p6LeadQ1DisOtherWithCurr) {
+        this.p6LeadQ1DisOtherWithCurr = p6LeadQ1DisOtherWithCurr;
+    }
+
+    public String getP6LeadQ1DisOtherWithPrev() {
+        return p6LeadQ1DisOtherWithPrev;
+    }
+
+    public void setP6LeadQ1DisOtherWithPrev(String p6LeadQ1DisOtherWithPrev) {
+        this.p6LeadQ1DisOtherWithPrev = p6LeadQ1DisOtherWithPrev;
+    }
+
+    public String getP6LeadQ1DisOtherLevel() {
+        return p6LeadQ1DisOtherLevel;
+    }
+
+    public void setP6LeadQ1DisOtherLevel(String p6LeadQ1DisOtherLevel) {
+        this.p6LeadQ1DisOtherLevel = p6LeadQ1DisOtherLevel;
+    }
+
+    public String getP6LeadQ1DisTotalCurr() {
+        return p6LeadQ1DisTotalCurr;
+    }
+
+    public void setP6LeadQ1DisTotalCurr(String p6LeadQ1DisTotalCurr) {
+        this.p6LeadQ1DisTotalCurr = p6LeadQ1DisTotalCurr;
+    }
+
+    public String getP6LeadQ1DisTotalPrev() {
+        return p6LeadQ1DisTotalPrev;
+    }
+
+    public void setP6LeadQ1DisTotalPrev(String p6LeadQ1DisTotalPrev) {
+        this.p6LeadQ1DisTotalPrev = p6LeadQ1DisTotalPrev;
+    }
+
+    public String getP6LeadQ1AssuranceNote() {
+        return p6LeadQ1AssuranceNote;
+    }
+
+    public void setP6LeadQ1AssuranceNote(String p6LeadQ1AssuranceNote) {
+        this.p6LeadQ1AssuranceNote = p6LeadQ1AssuranceNote;
+    }
+
+    public String getP6LeadQ2Scope3Curr() {
+        return p6LeadQ2Scope3Curr;
+    }
+
+    public void setP6LeadQ2Scope3Curr(String p6LeadQ2Scope3Curr) {
+        this.p6LeadQ2Scope3Curr = p6LeadQ2Scope3Curr;
+    }
+
+    public String getP6LeadQ2Scope3Prev() {
+        return p6LeadQ2Scope3Prev;
+    }
+
+    public void setP6LeadQ2Scope3Prev(String p6LeadQ2Scope3Prev) {
+        this.p6LeadQ2Scope3Prev = p6LeadQ2Scope3Prev;
+    }
+
+    public String getP6LeadQ2IntTurnCurr() {
+        return p6LeadQ2IntTurnCurr;
+    }
+
+    public void setP6LeadQ2IntTurnCurr(String p6LeadQ2IntTurnCurr) {
+        this.p6LeadQ2IntTurnCurr = p6LeadQ2IntTurnCurr;
+    }
+
+    public String getP6LeadQ2IntOptCurr() {
+        return p6LeadQ2IntOptCurr;
+    }
+
+    public void setP6LeadQ2IntOptCurr(String p6LeadQ2IntOptCurr) {
+        this.p6LeadQ2IntOptCurr = p6LeadQ2IntOptCurr;
+    }
+
+    public String getP6LeadQ2IntOptPrev() {
+        return p6LeadQ2IntOptPrev;
+    }
+
+    public void setP6LeadQ2IntOptPrev(String p6LeadQ2IntOptPrev) {
+        this.p6LeadQ2IntOptPrev = p6LeadQ2IntOptPrev;
+    }
+
+    public String getP6LeadQ2AssuranceNote() {
+        return p6LeadQ2AssuranceNote;
+    }
+
+    public void setP6LeadQ2AssuranceNote(String p6LeadQ2AssuranceNote) {
+        this.p6LeadQ2AssuranceNote = p6LeadQ2AssuranceNote;
+    }
+
+    public String getP6LeadQ3EcoImpact() {
+        return p6LeadQ3EcoImpact;
+    }
+
+    public void setP6LeadQ3EcoImpact(String p6LeadQ3EcoImpact) {
+        this.p6LeadQ3EcoImpact = p6LeadQ3EcoImpact;
+    }
+
+    public List<P6LeadQ4Initiative> getP6LeadQ4InitiativesList() {
+        return p6LeadQ4InitiativesList;
+    }
+
+    public void setP6LeadQ4InitiativesList(List<P6LeadQ4Initiative> p6LeadQ4InitiativesList) {
+        this.p6LeadQ4InitiativesList = p6LeadQ4InitiativesList;
+    }
+
+    public String getP6LeadQ5DisasterPlan() {
+        return p6LeadQ5DisasterPlan;
+    }
+
+    public void setP6LeadQ5DisasterPlan(String p6LeadQ5DisasterPlan) {
+        this.p6LeadQ5DisasterPlan = p6LeadQ5DisasterPlan;
+    }
+
+    public String getP6LeadQ6ValueChainImpact() {
+        return p6LeadQ6ValueChainImpact;
+    }
+
+    public void setP6LeadQ6ValueChainImpact(String p6LeadQ6ValueChainImpact) {
+        this.p6LeadQ6ValueChainImpact = p6LeadQ6ValueChainImpact;
+    }
+
+    public String getP6LeadQ7ValueChainAssessed() {
+        return p6LeadQ7ValueChainAssessed;
+    }
+
+    public void setP6LeadQ7ValueChainAssessed(String p6LeadQ7ValueChainAssessed) {
+        this.p6LeadQ7ValueChainAssessed = p6LeadQ7ValueChainAssessed;
+    }
+
+    private String p6LeadQ2IntOptCurr; private String p6LeadQ2IntOptPrev;
+    private String p6LeadQ2AssuranceNote;
+    private String p6LeadQ3EcoImpact;
+    private List<P6LeadQ4Initiative> p6LeadQ4InitiativesList;
+    private String p6LeadQ5DisasterPlan;
+    private String p6LeadQ6ValueChainImpact;
+    private String p6LeadQ7ValueChainAssessed;
+
+    @Data
+    public static class P6LeadQ4Initiative {
+        private String sNo;
+        private String initiative;
+        private String details;
+        private String outcome;
+    }
+
+    // ================= PRINCIPLE 7 =================
+    private String p7Q1aAffiliations;
+    private List<P7Q1bAssociation> p7Q1bList;
+
+    public List<P7Q2CorrectiveAction> getP7Q2List() {
+        return p7Q2List;
+    }
+
+    public void setP7Q2List(List<P7Q2CorrectiveAction> p7Q2List) {
+        this.p7Q2List = p7Q2List;
+    }
+
+    public String getP7Q1aAffiliations() {
+        return p7Q1aAffiliations;
+    }
+
+    public void setP7Q1aAffiliations(String p7Q1aAffiliations) {
+        this.p7Q1aAffiliations = p7Q1aAffiliations;
+    }
+
+    public List<P7Q1bAssociation> getP7Q1bList() {
+        return p7Q1bList;
+    }
+
+    public void setP7Q1bList(List<P7Q1bAssociation> p7Q1bList) {
+        this.p7Q1bList = p7Q1bList;
+    }
+
+    public List<P7LeadQ1Policy> getP7LeadQ1List() {
+        return p7LeadQ1List;
+    }
+
+    public void setP7LeadQ1List(List<P7LeadQ1Policy> p7LeadQ1List) {
+        this.p7LeadQ1List = p7LeadQ1List;
+    }
+
+    private List<P7Q2CorrectiveAction> p7Q2List;
+    private List<P7LeadQ1Policy> p7LeadQ1List;
+
+    @Data
+    public static class P7Q1bAssociation {
+        private String sNo;
+        private String name;
+        private String reach;
+    }
+
+    @Data
+    public static class P7Q2CorrectiveAction {
+        private String authority;
+        private String brief;
+        private String correctiveAction;
+    }
+
+    @Data
+    public static class P7LeadQ1Policy {
+        private String sNo;
+        private String policy;
+        private String method;
+        private String publicDomain;
+        private String frequency;
+        private String link;
+    }
+
+    // ================= PRINCIPLE 8 =================
+    private List<P8Q1Sia> p8Q1SiaList;
+    private List<P8Q2Rr> p8Q2RrList;
+    private String p8Q3GrievanceMech;
+    private String p8Q4MsmeCurr; private String p8Q4MsmePrev;
+    private String p8Q4IndiaCurr; private String p8Q4IndiaPrev;
+    private String p8Q5RuralCurr; private String p8Q5RuralPrev;
+    private String p8Q5SemiCurr; private String p8Q5SemiPrev;
+    private String p8Q5UrbanCurr; private String p8Q5UrbanPrev;
+    private String p8Q5MetroCurr; private String p8Q5MetroPrev;
+
+    public static class P8Q1Sia {
+        private String name; private String notifNo; private String date;
+        private String independent; private String publicDomain; private String link;
+        public String getName() { return name; } public void setName(String name) { this.name = name; }
+        public String getNotifNo() { return notifNo; } public void setNotifNo(String notifNo) { this.notifNo = notifNo; }
+        public String getDate() { return date; } public void setDate(String date) { this.date = date; }
+        public String getIndependent() { return independent; } public void setIndependent(String independent) { this.independent = independent; }
+        public String getPublicDomain() { return publicDomain; } public void setPublicDomain(String publicDomain) { this.publicDomain = publicDomain; }
+        public String getLink() { return link; } public void setLink(String link) { this.link = link; }
+    }
+
+    public static class P8Q2Rr {
+        private String sNo; private String name; private String state; private String district;
+        private String pafs; private String perc; private String amount;
+        public String getSNo() { return sNo; } public void setSNo(String sNo) { this.sNo = sNo; }
+        public String getName() { return name; } public void setName(String name) { this.name = name; }
+        public String getState() { return state; } public void setState(String state) { this.state = state; }
+        public String getDistrict() { return district; } public void setDistrict(String district) { this.district = district; }
+        public String getPafs() { return pafs; } public void setPafs(String pafs) { this.pafs = pafs; }
+        public String getPerc() { return perc; } public void setPerc(String perc) { this.perc = perc; }
+        public String getAmount() { return amount; } public void setAmount(String amount) { this.amount = amount; }
+    }
+
+    // Main Field Getters and Setters
+    public List<P8Q1Sia> getP8Q1SiaList() { return p8Q1SiaList; } public void setP8Q1SiaList(List<P8Q1Sia> p8Q1SiaList) { this.p8Q1SiaList = p8Q1SiaList; }
+    public List<P8Q2Rr> getP8Q2RrList() { return p8Q2RrList; } public void setP8Q2RrList(List<P8Q2Rr> p8Q2RrList) { this.p8Q2RrList = p8Q2RrList; }
+    public String getP8Q3GrievanceMech() { return p8Q3GrievanceMech; } public void setP8Q3GrievanceMech(String p8Q3GrievanceMech) { this.p8Q3GrievanceMech = p8Q3GrievanceMech; }
+    public String getP8Q4MsmeCurr() { return p8Q4MsmeCurr; } public void setP8Q4MsmeCurr(String p8Q4MsmeCurr) { this.p8Q4MsmeCurr = p8Q4MsmeCurr; }
+    public String getP8Q4MsmePrev() { return p8Q4MsmePrev; } public void setP8Q4MsmePrev(String p8Q4MsmePrev) { this.p8Q4MsmePrev = p8Q4MsmePrev; }
+    public String getP8Q4IndiaCurr() { return p8Q4IndiaCurr; } public void setP8Q4IndiaCurr(String p8Q4IndiaCurr) { this.p8Q4IndiaCurr = p8Q4IndiaCurr; }
+    public String getP8Q4IndiaPrev() { return p8Q4IndiaPrev; } public void setP8Q4IndiaPrev(String p8Q4IndiaPrev) { this.p8Q4IndiaPrev = p8Q4IndiaPrev; }
+    public String getP8Q5RuralCurr() { return p8Q5RuralCurr; } public void setP8Q5RuralCurr(String p8Q5RuralCurr) { this.p8Q5RuralCurr = p8Q5RuralCurr; }
+    public String getP8Q5RuralPrev() { return p8Q5RuralPrev; } public void setP8Q5RuralPrev(String p8Q5RuralPrev) { this.p8Q5RuralPrev = p8Q5RuralPrev; }
+    public String getP8Q5SemiCurr() { return p8Q5SemiCurr; } public void setP8Q5SemiCurr(String p8Q5SemiCurr) { this.p8Q5SemiCurr = p8Q5SemiCurr; }
+    public String getP8Q5SemiPrev() { return p8Q5SemiPrev; } public void setP8Q5SemiPrev(String p8Q5SemiPrev) { this.p8Q5SemiPrev = p8Q5SemiPrev; }
+    public String getP8Q5UrbanCurr() { return p8Q5UrbanCurr; } public void setP8Q5UrbanCurr(String p8Q5UrbanCurr) { this.p8Q5UrbanCurr = p8Q5UrbanCurr; }
+    public String getP8Q5UrbanPrev() { return p8Q5UrbanPrev; } public void setP8Q5UrbanPrev(String p8Q5UrbanPrev) { this.p8Q5UrbanPrev = p8Q5UrbanPrev; }
+    public String getP8Q5MetroCurr() { return p8Q5MetroCurr; } public void setP8Q5MetroCurr(String p8Q5MetroCurr) { this.p8Q5MetroCurr = p8Q5MetroCurr; }
+    public String getP8Q5MetroPrev() { return p8Q5MetroPrev; } public void setP8Q5MetroPrev(String p8Q5MetroPrev) { this.p8Q5MetroPrev = p8Q5MetroPrev; }
+
+    //p6 old fields
     public String getP6ElecConsumCurr() { return p6ElecConsumCurr; } public void setP6ElecConsumCurr(String s) { this.p6ElecConsumCurr = s; }
     public String getP6ElecConsumPrev() { return p6ElecConsumPrev; } public void setP6ElecConsumPrev(String s) { this.p6ElecConsumPrev = s; }
     public String getP6FuelConsumCurr() { return p6FuelConsumCurr; } public void setP6FuelConsumCurr(String s) { this.p6FuelConsumCurr = s; }
@@ -4880,4 +6955,7 @@ public class BrsrReportRequest {
     public String getP9DisruptionInfo() { return p9DisruptionInfo; } public void setP9DisruptionInfo(String s) { this.p9DisruptionInfo = s; }
     public String getP9ProductInfoDisplay() { return p9ProductInfoDisplay; } public void setP9ProductInfoDisplay(String s) { this.p9ProductInfoDisplay = s; }
     public String getP9CustomerSatSurvey() { return p9CustomerSatSurvey; } public void setP9CustomerSatSurvey(String s) { this.p9CustomerSatSurvey = s; }
+
+    //p6 old fields
+
 }

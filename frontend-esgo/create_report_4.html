@@ -20,161 +20,730 @@
 
         <!-- ================= PRINCIPLE 6: ENVIRONMENT ================= -->
         <div class="form-section">
-            <div class="section-header">Principle 6: Environment</div>
+            <div class="section-header" style="color: #548235;">Principle 6: Environment</div>
+            <div style="font-size: 14px; font-weight: bold; margin-bottom: 20px;">Essential Indicators</div>
 
-            <!-- 1. Energy -->
-            <label class="sub-label">1. Energy Consumption (GJ/PJ)</label>
+            <label class="sub-label">1. Details of total energy consumption (in Joules or multiples) and energy intensity:</label>
+
             <div style="overflow-x:auto;">
                 <table class="input-table">
-                    <thead><tr><th>Parameter</th><th>Current FY</th><th>Previous FY</th></tr></thead>
-                    <tbody>
-                    <tr><td>Electricity</td><td><input type="text" id="p6ElecConsumCurr"></td><td><input type="text" id="p6ElecConsumPrev"></td></tr>
-                    <tr><td>Fuel</td><td><input type="text" id="p6FuelConsumCurr"></td><td><input type="text" id="p6FuelConsumPrev"></td></tr>
-                    <tr><td>Other Sources</td><td><input type="text" id="p6EnergyOtherCurr"></td><td><input type="text" id="p6EnergyOtherPrev"></td></tr>
-                    <tr><td><b>Total Energy</b></td><td><input type="text" id="p6EnergyTotalCurr"></td><td><input type="text" id="p6EnergyTotalPrev"></td></tr>
-                    <tr><td>Energy Intensity</td><td><input type="text" id="p6EnergyIntensityCurr"></td><td><input type="text" id="p6EnergyIntensityPrev"></td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="form-group"><textarea id="p6EnergyNote" rows="2" placeholder="Note on Energy..."></textarea></div>
-
-            <!-- 2. Emissions -->
-            <label class="sub-label">2. Emissions (Scope 1 & 2)</label>
-            <div style="overflow-x:auto;">
-                <table class="input-table">
-                    <thead><tr><th>Parameter</th><th>Current FY</th><th>Previous FY</th></tr></thead>
-                    <tbody>
-                    <tr><td>Scope 1</td><td><input type="text" id="p6Scope1Curr"></td><td><input type="text" id="p6Scope1Prev"></td></tr>
-                    <tr><td>Scope 2</td><td><input type="text" id="p6Scope2Curr"></td><td><input type="text" id="p6Scope2Prev"></td></tr>
-                    <tr><td><b>Total</b></td><td><input type="text" id="p6ScopeTotalCurr"></td><td><input type="text" id="p6ScopeTotalPrev"></td></tr>
-                    <tr><td>Intensity</td><td><input type="text" id="p6EmissionIntensityCurr"></td><td><input type="text" id="p6EmissionIntensityPrev"></td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="form-group"><textarea id="p6EmissionNote" rows="2" placeholder="Note on Emissions..."></textarea></div>
-
-            <!-- 3. Water -->
-            <label class="sub-label">3. Water</label>
-            <div class="grid-2">
-                <div class="form-group"><label>Withdrawal (Current)</label><input type="text" id="p6WaterWithdrawalCurr"></div>
-                <div class="form-group"><label>Withdrawal (Previous)</label><input type="text" id="p6WaterWithdrawalPrev"></div>
-                <div class="form-group"><label>Consumption (Current)</label><input type="text" id="p6WaterConsumCurr"></div>
-                <div class="form-group"><label>Consumption (Previous)</label><input type="text" id="p6WaterConsumPrev"></div>
-            </div>
-            <div class="form-group"><textarea id="p6WaterNote" rows="2" placeholder="Note on Water..."></textarea></div>
-
-            <!-- 4. Waste -->
-            <label class="sub-label">4. Waste Management</label>
-            <div style="overflow-x:auto;">
-                <table class="input-table" id="p6WasteTable">
                     <thead>
                     <tr>
-                        <th rowspan="2">Category</th>
-                        <th colspan="3">Current FY</th>
-                        <th colspan="3">Previous FY</th>
-                        <th rowspan="2">Action</th>
+                        <th style="width:50%">Parameter</th>
+                        <th style="width:25%; background:#e0f2fe;">FY Current Financial Year</th>
+                        <th style="width:25%; background:#f0fdf4;">FY Previous Financial Year</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr><td colspan="3" style="background-color: #f8fafc; font-weight: bold;">From renewable sources</td></tr>
+                    <tr><td>Total electricity consumption (A)</td><td><input type="number" id="p6Q1RenElecCurr"></td><td><input type="number" id="p6Q1RenElecPrev"></td></tr>
+                    <tr><td>Total fuel consumption (B)</td><td><input type="number" id="p6Q1RenFuelCurr"></td><td><input type="number" id="p6Q1RenFuelPrev"></td></tr>
+                    <tr><td>Energy consumption through other sources (C)</td><td><input type="number" id="p6Q1RenOtherCurr"></td><td><input type="number" id="p6Q1RenOtherPrev"></td></tr>
+                    <tr><td style="font-weight:bold;">Total energy consumed from renewable sources (A+B+C)</td><td><input type="number" id="p6Q1RenTotalCurr"></td><td><input type="number" id="p6Q1RenTotalPrev"></td></tr>
+
+                    <tr><td colspan="3" style="background-color: #f8fafc; font-weight: bold;">From non-renewable sources</td></tr>
+                    <tr><td>Total electricity consumption (D)</td><td><input type="number" id="p6Q1NonRenElecCurr"></td><td><input type="number" id="p6Q1NonRenElecPrev"></td></tr>
+                    <tr><td>Total fuel consumption (E)</td><td><input type="number" id="p6Q1NonRenFuelCurr"></td><td><input type="number" id="p6Q1NonRenFuelPrev"></td></tr>
+                    <tr><td>Energy consumption through other sources (F)</td><td><input type="number" id="p6Q1NonRenOtherCurr"></td><td><input type="number" id="p6Q1NonRenOtherPrev"></td></tr>
+                    <tr><td style="font-weight:bold;">Total energy consumed from non-renewable sources (D+E+F)</td><td><input type="number" id="p6Q1NonRenTotalCurr"></td><td><input type="number" id="p6Q1NonRenTotalPrev"></td></tr>
+
+                    <tr><td style="font-weight:bold;">Total energy consumed (A+B+C+D+E+F)</td><td><input type="number" id="p6Q1GrandTotalCurr"></td><td><input type="number" id="p6Q1GrandTotalPrev"></td></tr>
+                    <tr><td style="font-weight:bold;">Energy intensity per rupee of turnover</td><td><input type="text" id="p6Q1IntTurnoverCurr"></td><td><input type="text" id="p6Q1IntTurnoverPrev"></td></tr>
+                    <tr><td style="font-weight:bold;">Energy intensity per rupee of turnover adjusted for PPP</td><td><input type="text" id="p6Q1IntPppCurr"></td><td><input type="text" id="p6Q1IntPppPrev"></td></tr>
+                    <tr><td style="font-weight:bold;">Energy intensity in terms of physical output</td><td><input type="text" id="p6Q1IntPhysicalCurr"></td><td><input type="text" id="p6Q1IntPhysicalPrev"></td></tr>
+                    <tr><td>Energy intensity (optional) – relevant metric</td><td><input type="text" id="p6Q1IntOptCurr"></td><td><input type="text" id="p6Q1IntOptPrev"></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group">
+                <label style="font-size:12px; color:#64748b;">Note: Indicate if any independent assessment/evaluation/assurance has been carried out by an external agency? (Y/N)</label>
+                <textarea id="p6Q1AssuranceNote" rows="2" placeholder="e.g. Yes, assured by XYZ Certifications..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+            <label class="sub-label">2. Does the entity have any sites / facilities identified as designated consumers (DCs) under the PAT Scheme? (Y/N) Provide details/remedial action.</label>
+            <div class="form-group" style="margin-top: 10px;">
+                <textarea id="p6Q2PatDetails" rows="3" placeholder="e.g. Yes, targets have been fully achieved..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+            <label class="sub-label">3. Provide details of the following disclosures related to water, in the following format:</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th style="width:50%">Parameter</th>
+                        <th style="width:25%; background:#e0f2fe;">FY Current Financial Year</th>
+                        <th style="width:25%; background:#f0fdf4;">FY Previous Financial Year</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr><td colspan="3" style="background-color: #f8fafc; font-weight: bold;">Water withdrawal by source (in kilolitres)</td></tr>
+                    <tr><td>(i) Surface water</td><td><input type="number" id="p6Q3SurfaceCurr"></td><td><input type="number" id="p6Q3SurfacePrev"></td></tr>
+                    <tr><td>(ii) Groundwater</td><td><input type="number" id="p6Q3GroundCurr"></td><td><input type="number" id="p6Q3GroundPrev"></td></tr>
+                    <tr><td>(iii) Third party water</td><td><input type="number" id="p6Q3ThirdPartyCurr"></td><td><input type="number" id="p6Q3ThirdPartyPrev"></td></tr>
+                    <tr><td>(iv) Seawater / desalinated water</td><td><input type="number" id="p6Q3SeaCurr"></td><td><input type="number" id="p6Q3SeaPrev"></td></tr>
+                    <tr><td>(v) Others</td><td><input type="number" id="p6Q3OthersCurr"></td><td><input type="number" id="p6Q3OthersPrev"></td></tr>
+                    <tr><td style="font-weight:bold; font-style:italic;">Total volume of water withdrawal (i + ii + iii + iv + v)</td><td><input type="number" id="p6Q3TotalWithCurr"></td><td><input type="number" id="p6Q3TotalWithPrev"></td></tr>
+                    <tr><td style="font-weight:bold;">Total volume of water consumption (in kilolitres)</td><td><input type="number" id="p6Q3TotalConsCurr"></td><td><input type="number" id="p6Q3TotalConsPrev"></td></tr>
+                    <tr><td style="font-weight:bold;">Water intensity per rupee of turnover</td><td><input type="text" id="p6Q3IntTurnoverCurr"></td><td><input type="text" id="p6Q3IntTurnoverPrev"></td></tr>
+                    <tr><td style="font-weight:bold;">Water intensity per rupee of turnover adjusted for PPP</td><td><input type="text" id="p6Q3IntPppCurr"></td><td><input type="text" id="p6Q3IntPppPrev"></td></tr>
+                    <tr><td style="font-weight:bold;">Water intensity in terms of physical output</td><td><input type="text" id="p6Q3IntPhysicalCurr"></td><td><input type="text" id="p6Q3IntPhysicalPrev"></td></tr>
+                    <tr><td>Water intensity (optional)</td><td><input type="text" id="p6Q3IntOptCurr"></td><td><input type="text" id="p6Q3IntOptPrev"></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group">
+                <label style="font-size:12px; color:#64748b;">Note: Indicate if any independent assessment/evaluation/assurance has been carried out by an external agency? (Y/N)</label>
+                <textarea id="p6Q3AssuranceNote" rows="2" placeholder="e.g. Yes, assured by ABC Water Auditors..."></textarea>
+            </div>
+            <!-- 4. Waste -->
+            <label class="sub-label">4. Provide the following details related to water discharged:</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th style="width:50%">Parameter</th>
+                        <th style="width:25%; background:#e0f2fe;">FY Current Financial Year</th>
+                        <th style="width:25%; background:#f0fdf4;">FY Previous Financial Year</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr><td colspan="3" style="background-color: #f8fafc; font-weight: bold;">Water discharge by destination and level of treatment (in kilolitres)</td></tr>
+
+                    <tr><td colspan="3" style="font-weight:600;">(i) To Surface water</td></tr>
+                    <tr>
+                        <td style="padding-left: 20px;">- No treatment</td>
+                        <td><input type="number" id="p6Q4SurfNoCurr"></td>
+                        <td><input type="number" id="p6Q4SurfNoPrev"></td>
                     </tr>
                     <tr>
-                        <th>Gen</th><th>Rec</th><th>Disp</th>
-                        <th>Gen</th><th>Rec</th><th>Disp</th>
+                        <td style="padding-left: 20px;">- With treatment – please specify level: <br><input type="text" id="p6Q4SurfLevel" placeholder="e.g. Primary treatment" style="margin-top:5px; width:90%;"></td>
+                        <td style="vertical-align: top;"><input type="number" id="p6Q4SurfWithCurr"></td>
+                        <td style="vertical-align: top;"><input type="number" id="p6Q4SurfWithPrev"></td>
+                    </tr>
+
+                    <tr><td colspan="3" style="font-weight:600;">(ii) To Groundwater</td></tr>
+                    <tr>
+                        <td style="padding-left: 20px;">- No treatment</td>
+                        <td><input type="number" id="p6Q4GroundNoCurr"></td>
+                        <td><input type="number" id="p6Q4GroundNoPrev"></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 20px;">- With treatment – please specify level: <br><input type="text" id="p6Q4GroundLevel" placeholder="Specify level..." style="margin-top:5px; width:90%;"></td>
+                        <td style="vertical-align: top;"><input type="number" id="p6Q4GroundWithCurr"></td>
+                        <td style="vertical-align: top;"><input type="number" id="p6Q4GroundWithPrev"></td>
+                    </tr>
+
+                    <tr><td colspan="3" style="font-weight:600;">(iii) To Seawater</td></tr>
+                    <tr>
+                        <td style="padding-left: 20px;">- No treatment</td>
+                        <td><input type="number" id="p6Q4SeaNoCurr"></td>
+                        <td><input type="number" id="p6Q4SeaNoPrev"></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 20px;">- With treatment – please specify level: <br><input type="text" id="p6Q4SeaLevel" placeholder="Specify level..." style="margin-top:5px; width:90%;"></td>
+                        <td style="vertical-align: top;"><input type="number" id="p6Q4SeaWithCurr"></td>
+                        <td style="vertical-align: top;"><input type="number" id="p6Q4SeaWithPrev"></td>
+                    </tr>
+
+                    <tr><td colspan="3" style="font-weight:600;">(iv) Sent to third-parties</td></tr>
+                    <tr>
+                        <td style="padding-left: 20px;">- No treatment</td>
+                        <td><input type="number" id="p6Q4ThirdNoCurr"></td>
+                        <td><input type="number" id="p6Q4ThirdNoPrev"></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 20px;">- With treatment – please specify level: <br><input type="text" id="p6Q4ThirdLevel" placeholder="Specify level..." style="margin-top:5px; width:90%;"></td>
+                        <td style="vertical-align: top;"><input type="number" id="p6Q4ThirdWithCurr"></td>
+                        <td style="vertical-align: top;"><input type="number" id="p6Q4ThirdWithPrev"></td>
+                    </tr>
+
+                    <tr><td colspan="3" style="font-weight:600;">(v) Others</td></tr>
+                    <tr>
+                        <td style="padding-left: 20px;">- No treatment</td>
+                        <td><input type="number" id="p6Q4OtherNoCurr"></td>
+                        <td><input type="number" id="p6Q4OtherNoPrev"></td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 20px;">- With treatment – please specify level: <br><input type="text" id="p6Q4OtherLevel" placeholder="Specify level..." style="margin-top:5px; width:90%;"></td>
+                        <td style="vertical-align: top;"><input type="number" id="p6Q4OtherWithCurr"></td>
+                        <td style="vertical-align: top;"><input type="number" id="p6Q4OtherWithPrev"></td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-weight:bold;">Total water discharged (in kilolitres)</td>
+                        <td><input type="number" id="p6Q4TotalCurr"></td>
+                        <td><input type="number" id="p6Q4TotalPrev"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group">
+                <label style="font-size:12px; color:#64748b;">Note: Indicate if any independent assessment/evaluation/assurance has been carried out by an external agency? (Y/N)</label>
+                <textarea id="p6Q4AssuranceNote" rows="2" placeholder="e.g. Yes, assured by XYZ Certifications..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+            <label class="sub-label">5. Has the entity implemented a mechanism for Zero Liquid Discharge? If yes, provide details of its coverage and implementation.</label>
+            <div class="form-group" style="margin-top: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom:5px;">
+                    <label style="margin:0; font-size:12px; color:#64748b;">Zero Liquid Discharge Details</label>
+                    <button type="button" class="btn-ai-mini" onclick="generateNoteFromInput('p6Q5ZldDetails', 'Details of Zero Liquid Discharge mechanisms coverage and implementation')">✨ AI Generate</button>
+                </div>
+                <textarea id="p6Q5ZldDetails" rows="4" placeholder="e.g. Yes, the company has implemented a closed-loop Zero Liquid Discharge system..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+            <label class="sub-label">6. Please provide details of air emissions (other than GHG emissions) by the entity, in the following format:</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th style="width:30%">Parameter</th>
+                        <th style="width:20%">Please specify unit</th>
+                        <th style="width:25%; background:#e0f2fe;">FY Current Financial Year</th>
+                        <th style="width:25%; background:#f0fdf4;">FY Previous Financial Year</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>NOx</td>
+                        <td><input type="text" id="p6Q6NoxUnit" placeholder="e.g. Metric tonnes"></td>
+                        <td><input type="number" id="p6Q6NoxCurr"></td>
+                        <td><input type="number" id="p6Q6NoxPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>SOx</td>
+                        <td><input type="text" id="p6Q6SoxUnit" placeholder="e.g. Metric tonnes"></td>
+                        <td><input type="number" id="p6Q6SoxCurr"></td>
+                        <td><input type="number" id="p6Q6SoxPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Particulate matter (PM)</td>
+                        <td><input type="text" id="p6Q6PmUnit" placeholder="e.g. Metric tonnes"></td>
+                        <td><input type="number" id="p6Q6PmCurr"></td>
+                        <td><input type="number" id="p6Q6PmPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Persistent organic pollutants (POP)</td>
+                        <td><input type="text" id="p6Q6PopUnit" placeholder="e.g. Metric tonnes"></td>
+                        <td><input type="number" id="p6Q6PopCurr"></td>
+                        <td><input type="number" id="p6Q6PopPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Volatile organic compounds (VOC)</td>
+                        <td><input type="text" id="p6Q6VocUnit" placeholder="e.g. Metric tonnes"></td>
+                        <td><input type="number" id="p6Q6VocCurr"></td>
+                        <td><input type="number" id="p6Q6VocPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Hazardous air pollutants (HAP)</td>
+                        <td><input type="text" id="p6Q6HapUnit" placeholder="e.g. Metric tonnes"></td>
+                        <td><input type="number" id="p6Q6HapCurr"></td>
+                        <td><input type="number" id="p6Q6HapPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Others – please specify <br><input type="text" id="p6Q6OtherName" placeholder="Specify name..." style="margin-top:5px;"></td>
+                        <td style="vertical-align:top;"><input type="text" id="p6Q6OtherUnit"></td>
+                        <td style="vertical-align:top;"><input type="number" id="p6Q6OtherCurr"></td>
+                        <td style="vertical-align:top;"><input type="number" id="p6Q6OtherPrev"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group">
+                <label style="font-size:12px; color:#64748b;">Note: Indicate if any independent assessment/evaluation/assurance has been carried out by an external agency? (Y/N)</label>
+                <textarea id="p6Q6AssuranceNote" rows="2" placeholder="e.g. Yes, assured by XYZ Certifications..."></textarea>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addWasteRow()">+ Add Waste Category</button>
+            <div class="form-group" style="margin-top:10px;"><textarea id="p6WasteNote" rows="2" placeholder="Note on Waste..."></textarea></div>
+            <!-- 7,8,9 -->
+            <label class="sub-label">7. Provide details of greenhouse gas emissions (Scope 1 and Scope 2 emissions) & its intensity, in the following format:</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th style="width:30%">Parameter</th>
+                        <th style="width:20%">Unit</th>
+                        <th style="width:25%; background:#e0f2fe;">FY Current Financial Year</th>
+                        <th style="width:25%; background:#f0fdf4;">FY Previous Financial Year</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td style="font-weight:bold;">Total Scope 1 emissions <br><span style="font-weight:normal; font-size:11px;">(Break-up of the GHG into CO2, CH4, N2O, HFCs, PFCs, SF6, NF3, if available)</span></td>
+                        <td><input type="text" id="p6Q7Scope1Unit" value="Metric tonnes of CO2 equivalent"></td>
+                        <td><input type="number" id="p6Q7Scope1Curr"></td>
+                        <td><input type="number" id="p6Q7Scope1Prev"></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;">Total Scope 2 emissions <br><span style="font-weight:normal; font-size:11px;">(Break-up of the GHG into CO2, CH4, N2O, HFCs, PFCs, SF6, NF3, if available)</span></td>
+                        <td><input type="text" id="p6Q7Scope2Unit" value="Metric tonnes of CO2 equivalent"></td>
+                        <td><input type="number" id="p6Q7Scope2Curr"></td>
+                        <td><input type="number" id="p6Q7Scope2Prev"></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;">Total Scope 1 and Scope 2 emission intensity per rupee of turnover</td>
+                        <td></td>
+                        <td><input type="text" id="p6Q7IntTurnoverCurr"></td>
+                        <td><input type="text" id="p6Q7IntTurnoverPrev"></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;">Total Scope 1 and Scope 2 emission intensity per rupee of turnover adjusted for PPP</td>
+                        <td></td>
+                        <td><input type="text" id="p6Q7IntPppCurr"></td>
+                        <td><input type="text" id="p6Q7IntPppPrev"></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;">Total Scope 1 and Scope 2 emission intensity in terms of physical output</td>
+                        <td></td>
+                        <td><input type="text" id="p6Q7IntPhysCurr"></td>
+                        <td><input type="text" id="p6Q7IntPhysPrev"></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;">Total Scope 1 and Scope 2 emission intensity (optional)</td>
+                        <td></td>
+                        <td><input type="text" id="p6Q7IntOptCurr"></td>
+                        <td><input type="text" id="p6Q7IntOptPrev"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group">
+                <label style="font-size:12px; color:#64748b;">Note: Indicate if any independent assessment/evaluation/assurance has been carried out by an external agency? (Y/N)</label>
+                <textarea id="p6Q7AssuranceNote" rows="2" placeholder="e.g. Yes, assured by XYZ Certifications..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+            <label class="sub-label">8. Does the entity have any project related to reducing Green House Gas emission? If Yes, then provide details.</label>
+            <div class="form-group" style="margin-top: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom:5px;">
+                    <label style="margin:0; font-size:12px; color:#64748b;">GHG Reduction Project Details</label>
+                    <button type="button" class="btn-ai-mini" onclick="generateNoteFromInput('p6Q8GhgProjectDetails', 'Details of projects related to reducing Greenhouse Gas emissions')">✨ AI Generate</button>
+                </div>
+                <textarea id="p6Q8GhgProjectDetails" rows="4" placeholder="e.g. Yes, the company has transitioned 40% of its fleet to electric vehicles..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+            <label class="sub-label">9. Provide details related to waste management by the entity, in the following format:</label>
+
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th style="width:50%">Parameter</th>
+                        <th style="width:25%; background:#e0f2fe;">FY Current Financial Year</th>
+                        <th style="width:25%; background:#f0fdf4;">FY Previous Financial Year</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr><td colspan="3" style="background-color: #f8fafc; font-weight: bold; text-align:center;">Total Waste generated (in metric tonnes)</td></tr>
+                    <tr><td>Plastic waste (A)</td><td><input type="number" id="p6Q9GenPlastCurr"></td><td><input type="number" id="p6Q9GenPlastPrev"></td></tr>
+                    <tr><td>E-waste (B)</td><td><input type="number" id="p6Q9GenEwasteCurr"></td><td><input type="number" id="p6Q9GenEwastePrev"></td></tr>
+                    <tr><td>Bio-medical waste (C)</td><td><input type="number" id="p6Q9GenBioCurr"></td><td><input type="number" id="p6Q9GenBioPrev"></td></tr>
+                    <tr><td>Construction and demolition waste (D)</td><td><input type="number" id="p6Q9GenConstCurr"></td><td><input type="number" id="p6Q9GenConstPrev"></td></tr>
+                    <tr><td>Battery waste (E)</td><td><input type="number" id="p6Q9GenBattCurr"></td><td><input type="number" id="p6Q9GenBattPrev"></td></tr>
+                    <tr><td>Radioactive waste (F)</td><td><input type="number" id="p6Q9GenRadioCurr"></td><td><input type="number" id="p6Q9GenRadioPrev"></td></tr>
+                    <tr><td>Other Hazardous waste. Please specify, if any. (G)</td><td><input type="text" id="p6Q9GenHazCurr"></td><td><input type="text" id="p6Q9GenHazPrev"></td></tr>
+                    <tr><td>Other Non-hazardous waste generated (H). Please specify, if any.</td><td><input type="text" id="p6Q9GenNonHazCurr"></td><td><input type="text" id="p6Q9GenNonHazPrev"></td></tr>
+                    <tr><td style="font-weight:bold; font-style:italic;">Total (A+B + C + D + E + F + G + H)</td><td><input type="number" id="p6Q9GenTotalCurr"></td><td><input type="number" id="p6Q9GenTotalPrev"></td></tr>
+
+                    <tr><td style="font-weight:bold;">Waste intensity per rupee of turnover</td><td><input type="text" id="p6Q9IntTurnCurr"></td><td><input type="text" id="p6Q9IntTurnPrev"></td></tr>
+                    <tr><td style="font-weight:bold;">Waste intensity per rupee of turnover adjusted for PPP</td><td><input type="text" id="p6Q9IntPppCurr"></td><td><input type="text" id="p6Q9IntPppPrev"></td></tr>
+                    <tr><td style="font-weight:bold;">Waste intensity in terms of physical output</td><td><input type="text" id="p6Q9IntPhysCurr"></td><td><input type="text" id="p6Q9IntPhysPrev"></td></tr>
+                    <tr><td style="font-weight:bold;">Waste intensity (optional)</td><td><input type="text" id="p6Q9IntOptCurr"></td><td><input type="text" id="p6Q9IntOptPrev"></td></tr>
+
+                    <tr><td colspan="3" style="background-color: #f8fafc; font-weight: bold; text-align:center;">For each category of waste generated, total waste recovered through recycling, re-using or other recovery operations (in metric tonnes)</td></tr>
+                    <tr><td colspan="3" style="font-weight:bold;">Category of waste</td></tr>
+                    <tr><td>(i) Recycled</td><td><input type="number" id="p6Q9RecRecyCurr"></td><td><input type="number" id="p6Q9RecRecyPrev"></td></tr>
+                    <tr><td>(ii) Re-used</td><td><input type="number" id="p6Q9RecReuseCurr"></td><td><input type="number" id="p6Q9RecReusePrev"></td></tr>
+                    <tr><td>(iii) Other recovery operations</td><td><input type="number" id="p6Q9RecOthCurr"></td><td><input type="number" id="p6Q9RecOthPrev"></td></tr>
+                    <tr><td style="font-weight:bold; font-style:italic;">Total</td><td><input type="number" id="p6Q9RecTotalCurr"></td><td><input type="number" id="p6Q9RecTotalPrev"></td></tr>
+
+                    <tr><td colspan="3" style="background-color: #f8fafc; font-weight: bold; text-align:center;">For each category of waste generated, total waste disposed by nature of disposal method (in metric tonnes)</td></tr>
+                    <tr><td colspan="3" style="font-weight:bold;">Category of waste</td></tr>
+                    <tr><td>(i) Incineration</td><td><input type="number" id="p6Q9DispIncCurr"></td><td><input type="number" id="p6Q9DispIncPrev"></td></tr>
+                    <tr><td>(ii) Landfilling</td><td><input type="number" id="p6Q9DispLandCurr"></td><td><input type="number" id="p6Q9DispLandPrev"></td></tr>
+                    <tr><td>(iii) Other disposal operations</td><td><input type="number" id="p6Q9DispOthCurr"></td><td><input type="number" id="p6Q9DispOthPrev"></td></tr>
+                    <tr><td style="font-weight:bold; font-style:italic;">Total</td><td><input type="number" id="p6Q9DispTotalCurr"></td><td><input type="number" id="p6Q9DispTotalPrev"></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group">
+                <label style="font-size:12px; color:#64748b;">Note: Indicate if any independent assessment/evaluation/assurance has been carried out by an external agency? (Y/N)</label>
+                <textarea id="p6Q9AssuranceNote" rows="2" placeholder="e.g. Yes, assured by XYZ Certifications..."></textarea>
+            </div>
+            <!-- 10,11,12,13 -->
+            <label class="sub-label">10. Briefly describe the waste management practices adopted in your establishments. Describe the strategy adopted by your company to reduce usage of hazardous and toxic chemicals in your products and processes and the practices adopted to manage such wastes.</label>
+            <div class="form-group" style="margin-top: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom:5px;">
+                    <label style="margin:0; font-size:12px; color:#64748b;">Waste Management Strategy</label>
+                    <button type="button" class="btn-ai-mini" onclick="generateNoteFromInput('p6Q10WastePractices', 'Waste management practices and strategy to reduce hazardous/toxic chemicals')">✨ AI Generate</button>
+                </div>
+                <textarea id="p6Q10WastePractices" rows="4" placeholder="e.g. Our strategy involves source reduction, recycling, and safe disposal..."></textarea>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+            <label class="sub-label">11. If the entity has operations/offices in/around ecologically sensitive areas (such as national parks, wildlife sanctuaries, biosphere reserves, wetlands, biodiversity hotspots, forests, coastal regulation zones etc.) where environmental approvals / clearances are required, please specify details in the following format:</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="p6Q11EcoTable">
+                    <thead>
+                    <tr>
+                        <th>S. No.</th>
+                        <th>Location of operations/offices</th>
+                        <th>Type of operations</th>
+                        <th>Whether conditions of environmental approval/clearance are being complied with? (Y/N) If no, reasons & corrective action</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
             </div>
-            <button type="button" class="btn-add-row" onclick="addWasteRow()">+ Add Waste Category</button>
-            <div class="form-group" style="margin-top:10px;"><textarea id="p6WasteNote" rows="2" placeholder="Note on Waste..."></textarea></div>
+            <button type="button" class="btn-add-row" onclick="addP6Q11Row()">+ Add Location</button>
+
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+            <label class="sub-label">12. Details of environmental impact assessments of projects undertaken by the entity based on applicable laws, in the current financial year:</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="p6Q12EiaTable">
+                    <thead>
+                    <tr>
+                        <th>Name and brief details of project</th>
+                        <th>EIA Notification No.</th>
+                        <th>Date</th>
+                        <th>Conducted by independent external agency (Yes / No)</th>
+                        <th>Results communicated in public domain (Yes / No)</th>
+                        <th>Relevant Web link</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addP6Q12Row()">+ Add EIA Project</button>
+
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+            <label class="sub-label">13. Is the entity compliant with the applicable environmental law/ regulations/ guidelines in India... (Y/N). If not, provide details of all such non-compliances, in the following format:</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="p6Q13NonCompTable">
+                    <thead>
+                    <tr>
+                        <th>S. No.</th>
+                        <th>Specify the law / regulation / guidelines which was not complied with</th>
+                        <th>Provide details of the non-compliance</th>
+                        <th>Any fines / penalties / action taken by regulatory agencies</th>
+                        <th>Corrective action taken, if any</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addP6Q13Row()">+ Add Non-Compliance</button>
         </div>
 
-        <!-- ================= PRINCIPLE 7: PUBLIC POLICY ================= -->
+        <!--p6 leadership -->
         <div class="form-section">
-            <div class="section-header">Principle 7: Public Policy</div>
+        <div class="section-header" style="color: #548235; margin-top: 40px;">Leadership Indicators</div>
+        <label class="sub-label">1. Water withdrawal, consumption and discharge in areas of water stress (in kilolitres):</label>
+        <div class="form-group">
+            <label>For each facility / plant located in areas of water stress, provide: (i) Name of the area (ii) Nature of operations</label>
+            <textarea id="p6LeadQ1Facilities" rows="2" placeholder="e.g. Facility A (Chennai) - Manufacturing..."></textarea>
+        </div>
 
-            <div class="form-group">
-                <label>1.a Number of affiliations</label>
-                <input type="text" id="p7AffiliationsCount" placeholder="e.g. 28">
+        <label style="font-weight:bold; font-size:13px; margin-top:10px; display:block;">(iii) Water withdrawal, consumption and discharge in the following format:</label>
+        <div style="overflow-x:auto;">
+            <table class="input-table">
+                <thead>
+                <tr>
+                    <th style="width:50%">Parameter</th>
+                    <th style="width:25%; background:#e0f2fe;">FY Current Financial Year</th>
+                    <th style="width:25%; background:#f0fdf4;">FY Previous Financial Year</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr><td colspan="3" style="background-color: #f8fafc; font-weight: bold;">Water withdrawal by source (in kilolitres)</td></tr>
+                <tr><td>(i) Surface water</td><td><input type="number" id="p6LeadQ1WithSurfCurr"></td><td><input type="number" id="p6LeadQ1WithSurfPrev"></td></tr>
+                <tr><td>(ii) Groundwater</td><td><input type="number" id="p6LeadQ1WithGroundCurr"></td><td><input type="number" id="p6LeadQ1WithGroundPrev"></td></tr>
+                <tr><td>(iii) Third party water</td><td><input type="number" id="p6LeadQ1WithThirdCurr"></td><td><input type="number" id="p6LeadQ1WithThirdPrev"></td></tr>
+                <tr><td>(iv) Seawater / desalinated water</td><td><input type="number" id="p6LeadQ1WithSeaCurr"></td><td><input type="number" id="p6LeadQ1WithSeaPrev"></td></tr>
+                <tr><td>(v) Others</td><td><input type="number" id="p6LeadQ1WithOtherCurr"></td><td><input type="number" id="p6LeadQ1WithOtherPrev"></td></tr>
+                <tr><td style="font-weight:bold; font-style:italic;">Total volume of water withdrawal</td><td><input type="number" id="p6LeadQ1WithTotalCurr"></td><td><input type="number" id="p6LeadQ1WithTotalPrev"></td></tr>
+
+                <tr><td style="font-weight:bold;">Total volume of water consumption (in kilolitres)</td><td><input type="number" id="p6LeadQ1ConsTotalCurr"></td><td><input type="number" id="p6LeadQ1ConsTotalPrev"></td></tr>
+                <tr><td style="font-weight:bold;">Water intensity per rupee of turnover</td><td><input type="text" id="p6LeadQ1IntTurnCurr"></td><td><input type="text" id="p6LeadQ1IntTurnPrev"></td></tr>
+                <tr><td>Water intensity (optional)</td><td><input type="text" id="p6LeadQ1IntOptCurr"></td><td><input type="text" id="p6LeadQ1IntOptPrev"></td></tr>
+
+                <tr><td colspan="3" style="background-color: #f8fafc; font-weight: bold;">Water discharge by destination and level of treatment (in kilolitres)</td></tr>
+
+                <tr><td colspan="3" style="font-weight:600;">(i) Into Surface water</td></tr>
+                <tr><td style="padding-left: 20px;">- No treatment</td><td><input type="number" id="p6LeadQ1DisSurfNoCurr"></td><td><input type="number" id="p6LeadQ1DisSurfNoPrev"></td></tr>
+                <tr><td style="padding-left: 20px;">- With treatment – level: <input type="text" id="p6LeadQ1DisSurfLevel" style="width:80%;"></td><td><input type="number" id="p6LeadQ1DisSurfWithCurr"></td><td><input type="number" id="p6LeadQ1DisSurfWithPrev"></td></tr>
+
+                <tr><td colspan="3" style="font-weight:600;">(ii) Into Groundwater</td></tr>
+                <tr><td style="padding-left: 20px;">- No treatment</td><td><input type="number" id="p6LeadQ1DisGroundNoCurr"></td><td><input type="number" id="p6LeadQ1DisGroundNoPrev"></td></tr>
+                <tr><td style="padding-left: 20px;">- With treatment – level: <input type="text" id="p6LeadQ1DisGroundLevel" style="width:80%;"></td><td><input type="number" id="p6LeadQ1DisGroundWithCurr"></td><td><input type="number" id="p6LeadQ1DisGroundWithPrev"></td></tr>
+
+                <tr><td colspan="3" style="font-weight:600;">(iii) Into Seawater</td></tr>
+                <tr><td style="padding-left: 20px;">- No treatment</td><td><input type="number" id="p6LeadQ1DisSeaNoCurr"></td><td><input type="number" id="p6LeadQ1DisSeaNoPrev"></td></tr>
+                <tr><td style="padding-left: 20px;">- With treatment – level: <input type="text" id="p6LeadQ1DisSeaLevel" style="width:80%;"></td><td><input type="number" id="p6LeadQ1DisSeaWithCurr"></td><td><input type="number" id="p6LeadQ1DisSeaWithPrev"></td></tr>
+
+                <tr><td colspan="3" style="font-weight:600;">(iv) Sent to third-parties</td></tr>
+                <tr><td style="padding-left: 20px;">- No treatment</td><td><input type="number" id="p6LeadQ1DisThirdNoCurr"></td><td><input type="number" id="p6LeadQ1DisThirdNoPrev"></td></tr>
+                <tr><td style="padding-left: 20px;">- With treatment – level: <input type="text" id="p6LeadQ1DisThirdLevel" style="width:80%;"></td><td><input type="number" id="p6LeadQ1DisThirdWithCurr"></td><td><input type="number" id="p6LeadQ1DisThirdWithPrev"></td></tr>
+
+                <tr><td colspan="3" style="font-weight:600;">(v) Others</td></tr>
+                <tr><td style="padding-left: 20px;">- No treatment</td><td><input type="number" id="p6LeadQ1DisOtherNoCurr"></td><td><input type="number" id="p6LeadQ1DisOtherNoPrev"></td></tr>
+                <tr><td style="padding-left: 20px;">- With treatment – level: <input type="text" id="p6LeadQ1DisOtherLevel" style="width:80%;"></td><td><input type="number" id="p6LeadQ1DisOtherWithCurr"></td><td><input type="number" id="p6LeadQ1DisOtherWithPrev"></td></tr>
+
+                <tr><td style="font-weight:bold;">Total water discharged (in kilolitres)</td><td><input type="number" id="p6LeadQ1DisTotalCurr"></td><td><input type="number" id="p6LeadQ1DisTotalPrev"></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group"><label style="font-size:12px;">Note: Independent assessment? (Y/N)</label><input type="text" id="p6LeadQ1AssuranceNote"></div>
+
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+        <label class="sub-label">2. Provide details of total Scope 3 emissions & its intensity:</label>
+        <div style="overflow-x:auto;">
+            <table class="input-table">
+                <thead><tr><th>Parameter</th><th>Unit</th><th>FY Current</th><th>FY Previous</th></tr></thead>
+                <tbody>
+                <tr><td>Total Scope 3 emissions</td><td><input type="text" value="Metric tonnes of CO2 equivalent" readonly></td><td><input type="number" id="p6LeadQ2Scope3Curr"></td><td><input type="number" id="p6LeadQ2Scope3Prev"></td></tr>
+                <tr><td>Total Scope 3 emissions per rupee of turnover</td><td></td><td><input type="text" id="p6LeadQ2IntTurnCurr"></td><td><input type="text" id="p6LeadQ2IntTurnPrev"></td></tr>
+                <tr><td>Total Scope 3 emission intensity (optional)</td><td></td><td><input type="text" id="p6LeadQ2IntOptCurr"></td><td><input type="text" id="p6LeadQ2IntOptPrev"></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group"><label style="font-size:12px;">Note: Independent assessment? (Y/N)</label><input type="text" id="p6LeadQ2AssuranceNote"></div>
+
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+        <label class="sub-label">3. With respect to the ecologically sensitive areas reported at Question 11, provide details of significant direct & indirect impact on biodiversity along-with prevention and remediation activities.</label>
+        <div class="form-group"><textarea id="p6LeadQ3EcoImpact" rows="3"></textarea></div>
+
+        <label class="sub-label">4. Specific initiatives or innovative technology for resource efficiency / reduce impact:</label>
+        <div style="overflow-x:auto;">
+            <table class="input-table" id="p6LeadQ4Table">
+                <thead><tr><th>Sr. No</th><th>Initiative undertaken</th><th>Details (Web-link, summary)</th><th>Outcome</th><th>Action</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <button type="button" class="btn-add-row" onclick="addP6LeadQ4Row()">+ Add Initiative</button>
+
+        <label class="sub-label" style="margin-top:20px;">5. Business continuity and disaster management plan? Give details in 100 words/ web link.</label>
+        <div class="form-group"><textarea id="p6LeadQ5DisasterPlan" rows="2"></textarea></div>
+
+        <label class="sub-label">6. Disclose any significant adverse impact to the environment from the value chain. Mitigation measures taken?</label>
+        <div class="form-group"><textarea id="p6LeadQ6ValueChainImpact" rows="2"></textarea></div>
+
+        <label class="sub-label">7. Percentage of value chain partners assessed for environmental impacts.</label>
+        <div class="form-group"><input type="text" id="p6LeadQ7ValueChainAssessed" placeholder="e.g. 45%"></div>
+        </div>
+
+        <!-- ================= PRINCIPLE 7: INCLUSIVE GROWTH ================= -->
+        <div class="form-section" style="margin-top: 40px;">
+            <div class="section-header" style="color: #548235;">Principle 7: Public Policy</div>
+
+            <div style="font-size: 14px; font-weight: bold; margin-bottom: 20px;">Essential Indicators</div>
+
+            <div class="form-group" style="margin-top:20px;">
+                <label class="sub-label">1. a. Number of affiliations with trade and industry chambers/ associations.</label>
+                <input type="text" id="p7Q1aAffiliations" placeholder="e.g. 15" style="width: 200px; padding: 6px;">
             </div>
 
-            <label class="sub-label">1.b Top 10 Trade Chambers/Associations</label>
+            <label class="sub-label">b. List the top 10 trade and industry chambers/ associations (determined based on the total members of such body) the entity is a member of/ affiliated to.</label>
             <div style="overflow-x:auto;">
-                <table class="input-table" id="p7AssocTable">
-                    <thead><tr><th>Name</th><th>Reach</th><th>Action</th></tr></thead>
+                <table class="input-table" id="p7Q1bTable">
+                    <thead>
+                    <tr>
+                        <th style="width:10%">S. No.</th>
+                        <th style="width:60%">Name of the trade and industry chambers/ associations</th>
+                        <th style="width:25%">Reach of trade and industry chambers/ associations (State/National)</th>
+                        <th style="width:5%">Action</th>
+                    </tr>
+                    </thead>
                     <tbody></tbody>
                 </table>
             </div>
-            <button type="button" class="btn-add-row" onclick="addP7Row()">+ Add Association</button>
+            <button type="button" class="btn-add-row" onclick="addP7Q1bRow()">+ Add Association</button>
 
-            <div class="form-group" style="margin-top:15px;">
-                <label>2. Corrective actions on anti-competitive conduct</label>
-                <textarea id="p7AntiCompetitiveDetails" rows="2" placeholder="e.g. Not Applicable"></textarea>
-            </div>
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
 
-            <label class="sub-label">Leadership: Public Policy Positions</label>
+            <label class="sub-label">2. Provide details of corrective action taken or underway on any issues related to anti-competitive conduct by the entity, based on adverse orders from regulatory authorities.</label>
             <div style="overflow-x:auto;">
-                <table class="input-table" id="p7PolicyTable">
-                    <thead><tr><th>Policy Advocated</th><th>Method</th><th>Web Link</th><th>Action</th></tr></thead>
+                <table class="input-table" id="p7Q2Table">
+                    <thead>
+                    <tr>
+                        <th style="width:30%">Name of authority</th>
+                        <th style="width:35%">Brief of the case</th>
+                        <th style="width:30%">Corrective action taken</th>
+                        <th style="width:5%">Action</th>
+                    </tr>
+                    </thead>
                     <tbody></tbody>
                 </table>
             </div>
-            <button type="button" class="btn-add-row" onclick="addP7PolicyRow()">+ Add Position</button>
+            <button type="button" class="btn-add-row" onclick="addP7Q2Row()">+ Add Case Details</button>
+
+        </div>
+
+            <!-- ================= PRINCIPLE 7: LEADERSHIP  ================= -->
+            <div class="form-section">
+
+            <div style="font-size: 14px; font-weight: bold; margin-bottom: 20px;">Leadership Indicators</div>
+
+            <label class="sub-label">1. Details of public policy positions advocated by the entity:</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table" id="p7LeadQ1Table">
+                    <thead>
+                    <tr>
+                        <th style="width:5%">S. No.</th>
+                        <th style="width:20%">Public policy advocated</th>
+                        <th style="width:20%">Method resorted for such advocacy</th>
+                        <th style="width:15%">Whether information available in public domain? (Yes/No)</th>
+                        <th style="width:20%">Frequency of Review by Board (Annually/ Half yearly/ Quarterly / Others)</th>
+                        <th style="width:15%">Web Link, if available</th>
+                        <th style="width:5%">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <button type="button" class="btn-add-row" onclick="addP7LeadQ1Row()">+ Add Policy Position</button>
         </div>
 
         <!-- ================= PRINCIPLE 8: INCLUSIVE GROWTH ================= -->
-        <div class="form-section">
-            <div class="section-header">Principle 8: Inclusive Growth</div>
+        <div class="form-section" style="margin-top: 40px;">
+            <div class="section-header" style="color: #548235;">PRINCIPLE 8: Businesses should promote inclusive growth and equitable development</div>
 
-            <div class="form-group">
-                <label>1. Social Impact Assessments (SIA)</label>
-                <textarea id="p8SiaDetails" rows="2" placeholder="Details..."></textarea>
-            </div>
+            <div style="font-size: 14px; font-weight: bold; margin-bottom: 20px;">Essential Indicators</div>
 
-            <label class="sub-label">2. Rehabilitation & Resettlement (R&R)</label>
+            <label class="sub-label">1. Details of Social Impact Assessments (SIA) of projects undertaken by the entity based on applicable laws, in the current financial year.</label>
             <div style="overflow-x:auto;">
-                <table class="input-table" id="p8RrTable">
-                    <thead><tr><th>Project</th><th>State</th><th>District</th><th>PAFs</th><th>% Covered</th><th>Action</th></tr></thead>
+                <table class="input-table" id="p8Q1SiaTable">
+                    <thead>
+                    <tr>
+                        <th style="width:25%">Name and brief details of project</th>
+                        <th style="width:15%">SIA Notification No.</th>
+                        <th style="width:15%">Date of notification</th>
+                        <th style="width:15%">Whether conducted by independent external agency (Yes/No)</th>
+                        <th style="width:15%">Results communicated in public domain (Yes/No)</th>
+                        <th style="width:10%">Relevant Web link</th>
+                        <th style="width:5%">Action</th>
+                    </tr>
+                    </thead>
                     <tbody></tbody>
                 </table>
             </div>
-            <button type="button" class="btn-add-row" onclick="addP8RrRow()">+ Add R&R Project</button>
+            <button type="button" class="btn-add-row" onclick="addP8Q1Row()">+ Add SIA Project</button>
 
-            <div class="form-group" style="margin-top:15px;">
-                <label>3. Grievance Redressal (Community)</label>
-                <textarea id="p8GrievanceMechanism" rows="2" placeholder="Details..."></textarea>
-            </div>
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
 
-            <label class="sub-label">4. Input Material Sourcing (%)</label>
-            <div class="grid-2">
-                <div class="form-group"><label>MSME (Current)</label><input type="text" id="p8InputMsmeCurr"></div>
-                <div class="form-group"><label>India (Current)</label><input type="text" id="p8InputIndiaCurr"></div>
-                <input type="hidden" id="p8InputMsmePrev"><input type="hidden" id="p8InputIndiaPrev">
-            </div>
-
-            <label class="sub-label">Leadership: Aspirational Districts (CSR)</label>
+            <label class="sub-label">2. Provide information on project(s) for which ongoing Rehabilitation and Resettlement (R&R) is being undertaken by your entity, in the following format:</label>
             <div style="overflow-x:auto;">
-                <table class="input-table" id="p8AspTable">
-                    <thead><tr><th>State</th><th>District</th><th>Amount Spent</th><th>Action</th></tr></thead>
+                <table class="input-table" id="p8Q2RrTable">
+                    <thead>
+                    <tr>
+                        <th style="width:5%">S. No.</th>
+                        <th style="width:25%">Name of Project for which R&R is ongoing</th>
+                        <th style="width:15%">State</th>
+                        <th style="width:15%">District</th>
+                        <th style="width:10%">No. of Project Affected Families (PAFs)</th>
+                        <th style="width:10%">% of PAFs covered by R&R</th>
+                        <th style="width:15%">Amounts paid to PAFs in the FY (In INR)</th>
+                        <th style="width:5%">Action</th>
+                    </tr>
+                    </thead>
                     <tbody></tbody>
                 </table>
             </div>
-            <button type="button" class="btn-add-row" onclick="addP8AspRow()">+ Add District</button>
+            <button type="button" class="btn-add-row" onclick="addP8Q2Row()">+ Add R&R Project</button>
 
-            <div class="form-group" style="margin-top:15px;">
-                <label>Leadership: Preferential Procurement Policy</label>
-                <textarea id="p8PreferentialProcurement" rows="2" placeholder="Yes/No + Details"></textarea>
-            </div>
-            <div class="grid-2">
-                <div class="form-group"><label>Marginalized Groups</label><input type="text" id="p8MarginalizedGroups"></div>
-                <div class="form-group"><label>% Procurement</label><input type="text" id="p8ProcurementPercentage"></div>
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+            <label class="sub-label">3. Describe the mechanisms to receive and redress grievances of the community.</label>
+            <div class="form-group" style="margin-top: 10px;">
+                <textarea id="p8Q3GrievanceMech" rows="3" placeholder="Describe community grievance mechanisms..."></textarea>
             </div>
 
-            <label class="sub-label">Leadership: CSR Beneficiaries</label>
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+            <label class="sub-label">4. Percentage of input material (inputs to total inputs by value) sourced from suppliers:</label>
             <div style="overflow-x:auto;">
-                <table class="input-table" id="p8BenTable">
-                    <thead><tr><th>Project</th><th>Beneficiaries</th><th>% Vulnerable</th><th>Action</th></tr></thead>
-                    <tbody></tbody>
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th style="width:50%">Parameter</th>
+                        <th style="width:25%; background:#e0f2fe;">FY Current Financial Year</th>
+                        <th style="width:25%; background:#f0fdf4;">FY Previous Financial Year</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Directly sourced from MSMEs/ small producers</td>
+                        <td><input type="text" id="p8Q4MsmeCurr"></td>
+                        <td><input type="text" id="p8Q4MsmePrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Directly from within India</td>
+                        <td><input type="text" id="p8Q4IndiaCurr"></td>
+                        <td><input type="text" id="p8Q4IndiaPrev"></td>
+                    </tr>
+                    </tbody>
                 </table>
             </div>
-            <button type="button" class="btn-add-row" onclick="addP8BenRow()">+ Add Beneficiary</button>
+
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+            <label class="sub-label">5. Job creation in smaller towns – Disclose wages paid to persons employed (including employees or workers employed on a permanent or non-permanent / on contract basis) in the following locations, as % of total wage cost:</label>
+            <div style="overflow-x:auto;">
+                <table class="input-table">
+                    <thead>
+                    <tr>
+                        <th style="width:50%">Location</th>
+                        <th style="width:25%; background:#e0f2fe;">FY Current Financial Year</th>
+                        <th style="width:25%; background:#f0fdf4;">FY Previous Financial Year</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Rural</td>
+                        <td><input type="text" id="p8Q5RuralCurr"></td>
+                        <td><input type="text" id="p8Q5RuralPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Semi-urban</td>
+                        <td><input type="text" id="p8Q5SemiCurr"></td>
+                        <td><input type="text" id="p8Q5SemiPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Urban</td>
+                        <td><input type="text" id="p8Q5UrbanCurr"></td>
+                        <td><input type="text" id="p8Q5UrbanPrev"></td>
+                    </tr>
+                    <tr>
+                        <td>Metropolitan</td>
+                        <td><input type="text" id="p8Q5MetroCurr"></td>
+                        <td><input type="text" id="p8Q5MetroPrev"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="font-size:11px; color:#666;">(Place to be categorized as per RBI Classification System - rural / semi-urban / urban / metropolitan)</p>
         </div>
 
         <!-- ================= PRINCIPLE 9: CONSUMER ================= -->
